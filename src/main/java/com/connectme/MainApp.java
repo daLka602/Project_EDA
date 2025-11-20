@@ -10,14 +10,12 @@ import com.connectme.view.LoginScreen;
 public class MainApp {
 
     public static void main(String[] args) {
-
-        // Define tema moderno
         FlatLightLaf.setup();
         UserController userController =  new UserController();
 
         SwingUtilities.invokeLater(() -> {
-            //new LoginScreen().setVisible(true);
-            new DashboardScreen(userController).setVisible(true);
+            new LoginScreen().setVisible(true);
+            //new DashboardScreen(userController).setVisible(true);
         });
     }
 }
