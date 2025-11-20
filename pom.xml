@@ -25,30 +25,58 @@
             </plugin>
         </plugins>
     </build>
+    
+    <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.1.2</version>
+            <configuration>
+                <useModulePath>false</useModulePath>
+            </configuration>
+        </plugin>
+        
+        <!-- Plugin para executar a aplicação -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <version>3.1.0</version>
+            <configuration>
+                <mainClass>com.connectme.MainApp</mainClass>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
 
     <dependencies>
-
+        <!-- MySQL Connector -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>8.3.0</version>
         </dependency>
 
-  <!-- iText 7 kernel -->
-<dependency>
-  <groupId>com.itextpdf</groupId>
-  <artifactId>kernel</artifactId>
-  <version>7.2.5</version>
-</dependency>
+        <!-- HikariCP Connection Pool -->
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>5.0.1</version>
+        </dependency>
 
-<!-- iText 7 layout (OBRIGATÓRIO) -->
-<dependency>
-  <groupId>com.itextpdf</groupId>
-  <artifactId>layout</artifactId>
-  <version>7.2.5</version>
-</dependency>
+        <!-- iText 7 kernel -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>kernel</artifactId>
+            <version>7.2.5</version>
+        </dependency>
 
-
+        <!-- iText 7 layout -->
+        <dependency>
+            <groupId>com.itextpdf</groupId>
+            <artifactId>layout</artifactId>
+            <version>7.2.5</version>
+        </dependency>
 
         <!-- MigLayout -->
         <dependency>
@@ -79,7 +107,5 @@
             <version>2.2.224</version>
             <scope>test</scope>
         </dependency>
-
     </dependencies>
-
 </project>
