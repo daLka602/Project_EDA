@@ -5,26 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/MainApp.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/MainApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/MainApp.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/controller/UserController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/controller/UserController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/dao/ContactDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/dao/IUserDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/dao/UserDAO.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/eda/ContactBST$Node.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/eda/ContactBST.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/eda/ContactHashTable$Entry.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/eda/ContactHashTable.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/eda/ContactLinkedList$Node.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/eda/ContactLinkedList.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/Contact.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/User.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/service/AuthService.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/util/HashUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/util/PdfUtil.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactFormScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactFormScreen.class" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/encodings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/config/DbConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/config/DbConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/aplication.properties" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/aplication.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/aplication.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/aplication.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/config/DbConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/config/DbConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService$PasswordStrength.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService$PasswordStrength.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactListScreen$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactListScreen$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactListScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactListScreen.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/DashboardScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/DashboardScreen.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,17 +41,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.MainApp.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;dalton&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/mirrine/Projectos/EDA/Project_EDA&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.MainApp.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "main",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "/home/mirrine/Projectos/EDA/Project_EDA",
+    "project.structure.last.edited": "Project",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.lookFeel"
   }
-}</component>
+}]]></component>
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
       <changelist id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="" />
