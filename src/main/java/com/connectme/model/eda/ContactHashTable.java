@@ -1,6 +1,6 @@
-package com.connectme.eda;
+package com.connectme.model.eda;
 
-import com.connectme.model.Contact;
+import com.connectme.model.entities.Contact;
 
 /**
  * HashTable simples (chave = numero de telefone).

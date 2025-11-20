@@ -1,23 +1,24 @@
-package com.connectme.service;
+package com.connectme.model.service;
 
-import com.connectme.dao.IUserDAO;
-import com.connectme.dao.UserDAO;
-import com.connectme.model.User;
-import com.connectme.util.HashUtil;
-
-import java.sql.Connection;
-import com.connectme.config.DbConnection;
+import com.connectme.model.dao.IUserDAO;
+import com.connectme.model.dao.UserDAO;
+import com.connectme.model.entities.User;
+import com.connectme.model.util.HashUtil;
 
 /**
  * Serviço de autenticação: encapsula regras de negócio ligadas a login e registo.
  */
 public class AuthService {
 
-    private final IUserDAO userDAO;
+    private IUserDAO userDAO;
 
     public AuthService(UserDAO userDAO2) {
         // implementa a criação direta do DAO usando a conexão centralizada
         this.userDAO = new UserDAO();
+    }
+
+    public AuthService() {
+
     }
 
     /**

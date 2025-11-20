@@ -3,7 +3,7 @@ package com.connectme.view;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import com.connectme.controller.UserController;
-import com.connectme.model.Contact;
+import com.connectme.model.entities.Contact;
 
 public class ContactFormScreen extends JFrame {
 

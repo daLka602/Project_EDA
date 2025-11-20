@@ -6,7 +6,7 @@ import java.util.List;
 
 import net.miginfocom.swing.MigLayout;
 import com.connectme.controller.UserController;
-import com.connectme.model.Contact;
+import com.connectme.model.entities.Contact;
 
 public class ContactListScreen extends JFrame {
 

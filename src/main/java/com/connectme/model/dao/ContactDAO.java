@@ -1,6 +1,6 @@
-package com.connectme.dao;
+package com.connectme.model.dao;
 
-import com.connectme.model.Contact;
+import com.connectme.model.entities.Contact;
 import com.connectme.config.DbConnection;
 
 import java.sql.*;

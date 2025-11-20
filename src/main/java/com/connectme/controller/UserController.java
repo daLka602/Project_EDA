@@ -1,12 +1,12 @@
 package com.connectme.controller;
 
-import com.connectme.model.User;
-import com.connectme.model.Contact;
-import com.connectme.service.AuthService;
-import com.connectme.dao.ContactDAO;
-import com.connectme.eda.ContactLinkedList;
-import com.connectme.eda.ContactBST;
-import com.connectme.eda.ContactHashTable;
+import com.connectme.model.entities.User;
+import com.connectme.model.entities.Contact;
+import com.connectme.model.service.AuthService;
+import com.connectme.model.dao.ContactDAO;
+import com.connectme.model.eda.ContactLinkedList;
+import com.connectme.model.eda.ContactBST;
+import com.connectme.model.eda.ContactHashTable;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-import com.connectme.util.PdfUtil;
+import com.connectme.model.util.PdfUtil;
 
 /**
  * Controller que orquestra Auth, ContactDAO e estruturas EDA em memória.
@@ -29,9 +29,11 @@ public class UserController {
     private ContactLinkedList linkedList;
     private ContactBST bst;
     private ContactHashTable hashTable;
-    private List<Contact> cachedList; // master list for sorting/filter
+    private List<Contact> cachedList;
+    //private UserDAO userDAO;
 
     public UserController() {
+        //userDAO = new
         this.authService = new AuthService();
         this.contactDAO = new ContactDAO();
     }

@@ -1,11 +1,9 @@
-package com.connectme.dao;
+package com.connectme.model.dao;
 
-import com.connectme.model.User;
+import com.connectme.model.entities.User;
 import com.connectme.config.DbConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserDAO implements IUserDAO {
 

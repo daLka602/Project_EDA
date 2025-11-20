@@ -1,6 +1,6 @@
-package com.connectme.util;
+package com.connectme.model.util;
 
-import com.connectme.model.Contact;
+import com.connectme.model.entities.Contact;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;

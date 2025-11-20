@@ -1,4 +1,4 @@
-package com.connectme.model;
+package com.connectme.model.entities;
 
 public class Contact {
 

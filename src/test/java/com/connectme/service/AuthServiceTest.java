@@ -1,9 +1,9 @@
 package com.connectme.service;
 
-import com.connectme.config.DbConnection;
-import com.connectme.dao.UserDAO;
-import com.connectme.model.User;
-import com.connectme.util.HashUtil;
+import com.connectme.model.dao.UserDAO;
+import com.connectme.model.entities.User;
+import com.connectme.model.service.AuthService;
+import com.connectme.model.util.HashUtil;
 
 import org.junit.jupiter.api.*;
 

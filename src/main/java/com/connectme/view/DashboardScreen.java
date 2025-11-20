@@ -8,7 +8,7 @@ import java.awt.Component;
 import javax.swing.*;
 import net.miginfocom.swing.MigLayout;
 import com.connectme.controller.UserController;
-import com.connectme.model.User;
+import com.connectme.model.entities.User;
 
 public class DashboardScreen extends JFrame {
 

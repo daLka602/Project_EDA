@@ -1,4 +1,4 @@
-package com.connectme.util;
+package com.connectme.model.util;
 
 import java.security.MessageDigest;
 

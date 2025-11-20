@@ -1,6 +1,6 @@
-package com.connectme.eda;
+package com.connectme.model.eda;
 
-import com.connectme.model.Contact;
+import com.connectme.model.entities.Contact;
 
 /**
  * Implementação simples de lista ligada para armazenar contactos em memória.

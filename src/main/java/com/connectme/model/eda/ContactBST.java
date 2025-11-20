@@ -1,10 +1,7 @@
-package com.connectme.eda;
+package com.connectme.model.eda;
 
-import com.connectme.model.Contact;
+import com.connectme.model.entities.Contact;
 
-/**
- * Binary Search Tree usada para pesquisa eficiente de contactos por nome.
- */
 public class ContactBST {
 
     private static class Node {
