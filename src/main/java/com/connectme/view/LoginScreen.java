@@ -1,15 +1,18 @@
 package com.connectme.view;
 
 import javax.swing.*;
+
+import com.connectme.view.componet.*;
 import net.miginfocom.swing.MigLayout;
 import com.connectme.controller.UserController;
-import com.connectme.model.service.AuthService;
+
+import java.awt.*;
 
 public class LoginScreen extends JFrame {
 
-    private JTextField txtUsername;
-    private JPasswordField txtPassword;
-    private JButton btnLogin, btnRegister;
+    private MyTextField txtUsername;
+    private MyPasswordField txtPassword;
+    private MyButton btnLogin;
     private JLabel lblUsernameError, lblPasswordError;
 
     private UserController controller;
@@ -18,9 +21,9 @@ public class LoginScreen extends JFrame {
         super("ConnectMe - Login");
         controller = new UserController();
 
-        setLayout(new MigLayout("wrap 1", "[300]", "[]20[]10[]10[]10[]"));
+        setLayout(new MigLayout("wrap 1", "[400]", "[]20[]10[]10[]20[]"));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 320);
+        setSize(600, 420);
         setLocationRelativeTo(null);
         setResizable(false);
 
@@ -34,7 +37,7 @@ public class LoginScreen extends JFrame {
         add(lblTitle, "align center, gapbottom 20");
 
         // Campo username com validação
-        txtUsername = new JTextField();
+        txtUsername = new MyTextField();
         txtUsername.setBorder(BorderFactory.createTitledBorder("Usuário"));
         add(txtUsername, "growx");
         
@@ -42,7 +45,7 @@ public class LoginScreen extends JFrame {
         add(lblUsernameError, "growx");
 
         // Campo password com validação
-        txtPassword = new JPasswordField();
+        txtPassword = new MyPasswordField();
         txtPassword.setBorder(BorderFactory.createTitledBorder("Senha"));
         add(txtPassword, "growx");
         
@@ -50,18 +53,18 @@ public class LoginScreen extends JFrame {
         add(lblPasswordError, "growx");
 
         // Botões
-        btnLogin = new JButton("Entrar");
-        btnRegister = new JButton("Registrar");
+        btnLogin = new MyButton();
+        btnLogin.setText("Entrar");
+        btnLogin.setBackground(new Color(35, 60, 121));
+        btnLogin.setForeground(new Color(250, 250, 250));
         
         JPanel buttonPanel = new JPanel(new MigLayout("insets 0", "[grow][grow]"));
         buttonPanel.add(btnLogin, "growx");
-        buttonPanel.add(btnRegister, "growx");
         
-        add(buttonPanel, "growx");
+        add(buttonPanel, "w 40%, h 40");
 
         // Ações
         btnLogin.addActionListener(e -> login());
-        btnRegister.addActionListener(e -> register());
         
         // Enter para login
         getRootPane().setDefaultButton(btnLogin);
@@ -135,7 +138,7 @@ public class LoginScreen extends JFrame {
         boolean success = controller.login(username, password);
 
         if (success) {
-            DashboardScreen dash = new DashboardScreen(controller);
+            HomepageView dash = new HomepageView(controller);
             dash.setVisible(true);
             this.dispose();
         } else {
@@ -146,51 +149,6 @@ public class LoginScreen extends JFrame {
             // Limpar senha
             txtPassword.setText("");
             txtPassword.requestFocus();
-        }
-    }
-
-    private void register() {
-        if (!isFormValid()) {
-            JOptionPane.showMessageDialog(this, 
-                "Por favor, corrija os erros no formulário.", 
-                "Erro de Validação", 
-                JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        String username = txtUsername.getText().trim();
-        String password = new String(txtPassword.getPassword());
-
-        // Verificar força da senha
-        AuthService.PasswordStrength strength = controller.getAuthService().checkPasswordStrength(password);
-        if (strength == AuthService.PasswordStrength.WEAK) {
-            int confirm = JOptionPane.showConfirmDialog(this,
-                "Esta senha é considerada fraca. Deseja continuar?",
-                "Senha Fraca",
-                JOptionPane.YES_NO_OPTION);
-                
-            if (confirm != JOptionPane.YES_OPTION) {
-                return;
-            }
-        }
-
-        boolean success = controller.getAuthService().register(username, password);
-
-        if (success) {
-            JOptionPane.showMessageDialog(this,
-                "Registro realizado com sucesso!\nAgora faça login.",
-                "Sucesso",
-                JOptionPane.INFORMATION_MESSAGE);
-                
-            // Limpar campos
-            txtUsername.setText("");
-            txtPassword.setText("");
-            txtUsername.requestFocus();
-        } else {
-            JOptionPane.showMessageDialog(this,
-                "Erro ao registrar. Usuário já existe ou dados inválidos.",
-                "Erro",
-                JOptionPane.ERROR_MESSAGE);
         }
     }
 }

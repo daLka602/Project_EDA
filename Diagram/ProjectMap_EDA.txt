@@ -1,0 +1,39 @@
+src
+├── main
+│   ├── java
+│   │   └── com
+│   │       └── connectme
+│   │           ├── config
+│   │           │   └── DbConnection.java
+│   │           ├── controller
+│   │           │   └── UserController.java
+│   │           ├── MainApp.java
+│   │           ├── model
+│   │           │   ├── dao
+│   │           │   │   ├── ContactDAO.java
+│   │           │   │   ├── IUserDAO.java
+│   │           │   │   └── UserDAO.java
+│   │           │   ├── eda
+│   │           │   │   ├── ContactBST.java
+│   │           │   │   ├── ContactHashTable.java
+│   │           │   │   └── ContactLinkedList.java
+│   │           │   ├── entities
+│   │           │   │   ├── Contact.java
+│   │           │   │   └── User.java
+│   │           │   ├── service
+│   │           │   │   └── AuthService.java
+│   │           │   └── util
+│   │           │       ├── HashUtil.java
+│   │           │       └── PdfUtil.java
+│   │           └── view
+│   │               ├── componet
+│   │               │   ├── MyButton.java
+│   │               │   ├── MyPasswordField.java
+│   │               │   └── MyTextField.java
+│   │               ├── ContactFormScreen.java
+│   │               ├── ContactListScreen.java
+│   │               ├── HomepageView.java
+│   │               └── LoginScreen.java
+│   └── resources
+│       └── aplication.properties
+

@@ -16,7 +16,6 @@ public class DbConnection {
 
     public static Connection getConnection() throws SQLException {
         try {
-            // Carrega o driver JDBC do MySQL (necessário para versões mais antigas do JDBC)
             Class.forName("com.mysql.cj.jdbc.Driver");
             return DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (ClassNotFoundException e) {
@@ -29,18 +28,6 @@ public class DbConnection {
         if (dataSource != null && !dataSource.isClosed()) {
             dataSource.close();
             logger.info("✅ DataSource HikariCP fechado");
-        }
-    }
-
-    public static void printPoolStats() {
-        if (dataSource != null) {
-            logger.info(String.format(
-                    "🏊 HikariCP Stats - Active: %d, Idle: %d, Total: %d, Waiting: %d",
-                    dataSource.getHikariPoolMXBean().getActiveConnections(),
-                    dataSource.getHikariPoolMXBean().getIdleConnections(),
-                    dataSource.getHikariPoolMXBean().getTotalConnections(),
-                    dataSource.getHikariPoolMXBean().getThreadsAwaitingConnection()
-            ));
         }
     }
 }

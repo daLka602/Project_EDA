@@ -5,6 +5,7 @@ import net.miginfocom.swing.MigLayout;
 import com.connectme.controller.UserController;
 import com.connectme.model.entities.Contact;
 import java.util.regex.Pattern;
+import java.awt.*;
 
 public class ContactFormScreen extends JFrame {
 
@@ -15,10 +16,10 @@ public class ContactFormScreen extends JFrame {
     private JLabel lblNameError, lblPhoneError, lblEmailError;
 
     // Patterns para validação
-    private static final Pattern EMAIL_PATTERN = 
-        Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
-    private static final Pattern PHONE_PATTERN = 
-        Pattern.compile("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$");
+    private static final Pattern EMAIL_PATTERN =
+            Pattern.compile("^[A-Za-z0-9+_.-]+@(.+)$");
+    private static final Pattern PHONE_PATTERN =
+            Pattern.compile("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$");
 
     public ContactFormScreen(UserController controller, Contact editingContact) {
         super(editingContact == null ? "Novo Contacto" : "Editar Contacto");
@@ -30,47 +31,97 @@ public class ContactFormScreen extends JFrame {
         loadData();
     }
 
+    public ContactFormScreen() {
+        initUI();
+        loadData();
+    }
+
     private void initUI() {
-        setLayout(new MigLayout("wrap 2", "[grow][grow]", "[][][][][][][][][]"));
-        setSize(500, 400);
+        // Layout otimizado para 1920x1080
+        setLayout(new MigLayout("wrap 2", "[400!][400!]", "[30!][30!][15!][30!][15!][30!][15!][30!][40!]"));
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
-        // Campos com labels de erro
-        txtName = new JTextField(20);
+        // Título centralizado
+        JLabel lblTitle = new JLabel(editingContact == null ? "NOVO CONTACTO" : "EDITAR CONTACTO");
+        lblTitle.setFont(new Font("Segoe UI", Font.BOLD, 24));
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        add(lblTitle, "span 2, growx, gapbottom 30");
+
+        // Campos com labels de erro - tamanhos otimizados
+        txtName = new JTextField(30);
+        txtName.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtName.setPreferredSize(new Dimension(400, 35));
         lblNameError = createErrorLabel();
-        
-        txtPhone = new JTextField(20);
+
+        txtPhone = new JTextField(30);
+        txtPhone.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtPhone.setPreferredSize(new Dimension(400, 35));
         lblPhoneError = createErrorLabel();
-        
-        txtEmail = new JTextField(20);
+
+        txtEmail = new JTextField(30);
+        txtEmail.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtEmail.setPreferredSize(new Dimension(400, 35));
         lblEmailError = createErrorLabel();
-        
-        txtAddress = new JTextField(20);
 
-        add(new JLabel("Nome:*"));
+        txtAddress = new JTextField(30);
+        txtAddress.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        txtAddress.setPreferredSize(new Dimension(400, 35));
+
+        // Labels com fonte maior
+        JLabel lblName = new JLabel("Nome:*");
+        JLabel lblPhone = new JLabel("Telefone:*");
+        JLabel lblEmail = new JLabel("Email:");
+        JLabel lblAddress = new JLabel("Morada:");
+
+        Font labelFont = new Font("Segoe UI", Font.BOLD, 16);
+        lblName.setFont(labelFont);
+        lblPhone.setFont(labelFont);
+        lblEmail.setFont(labelFont);
+        lblAddress.setFont(labelFont);
+
+        // Adicionar componentes ao layout
+        add(lblName, "align right");
         add(txtName, "growx");
-        add(lblNameError, "span 2, growx");
+        add(lblNameError, "span 2, growx, h 15!");
 
-        add(new JLabel("Telefone:*"));
+        add(lblPhone, "align right");
         add(txtPhone, "growx");
-        add(lblPhoneError, "span 2, growx");
+        add(lblPhoneError, "span 2, growx, h 15!");
 
-        add(new JLabel("Email:"));
+        add(lblEmail, "align right");
         add(txtEmail, "growx");
-        add(lblEmailError, "span 2, growx");
+        add(lblEmailError, "span 2, growx, h 15!");
 
-        add(new JLabel("Morada:"));
-        add(txtAddress, "growx, wrap 10");
+        add(lblAddress, "align right");
+        add(txtAddress, "growx, wrap 40");
 
         // Listeners para validação em tempo real
         setupValidationListeners();
 
-        JButton btnSave = new JButton("Salvar");
-        JButton btnCancel = new JButton("Cancelar");
+        // Botões maiores e melhor posicionados
+        JButton btnSave = new JButton("SALVAR");
+        JButton btnCancel = new JButton("CANCELAR");
 
-        add(btnSave, "growx, span 2, split 2");
-        add(btnCancel, "growx");
+        btnSave.setFont(new Font("Segoe UI", Font.BOLD, 16));
+        btnCancel.setFont(new Font("Segoe UI", Font.BOLD, 16));
+
+        btnSave.setPreferredSize(new Dimension(200, 45));
+        btnCancel.setPreferredSize(new Dimension(200, 45));
+
+        btnSave.setBackground(new Color(70, 130, 180));
+        btnSave.setForeground(Color.WHITE);
+        btnCancel.setBackground(new Color(220, 80, 60));
+        btnCancel.setForeground(Color.WHITE);
+
+        // Painel para centralizar botões
+        JPanel buttonPanel = new JPanel(new MigLayout("insets 0", "[][100!][]", "[]"));
+        buttonPanel.add(btnSave, "w 200!, h 45!");
+        buttonPanel.add(Box.createHorizontalStrut(20));
+        buttonPanel.add(btnCancel, "w 200!, h 45!");
+
+        add(buttonPanel, "span 2, align center, gaptop 20");
 
         btnSave.addActionListener(e -> save());
         btnCancel.addActionListener(e -> {
@@ -81,8 +132,8 @@ public class ContactFormScreen extends JFrame {
 
     private JLabel createErrorLabel() {
         JLabel label = new JLabel();
-        label.setForeground(java.awt.Color.RED);
-        label.setFont(label.getFont().deriveFont(10f));
+        label.setForeground(Color.RED);
+        label.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         return label;
     }
 
@@ -146,7 +197,7 @@ public class ContactFormScreen extends JFrame {
             txtPhone.setText(editingContact.getPhone());
             txtEmail.setText(editingContact.getEmail());
             txtAddress.setText(editingContact.getAddress());
-            
+
             // Validar dados carregados
             validateName();
             validatePhone();
@@ -159,17 +210,17 @@ public class ContactFormScreen extends JFrame {
         validatePhone();
         validateEmail();
 
-        return lblNameError.getText().isEmpty() && 
-               lblPhoneError.getText().isEmpty() && 
-               lblEmailError.getText().isEmpty();
+        return lblNameError.getText().isEmpty() &&
+                lblPhoneError.getText().isEmpty() &&
+                lblEmailError.getText().isEmpty();
     }
 
     private void save() {
         if (!isFormValid()) {
-            JOptionPane.showMessageDialog(this, 
-                "Por favor, corrija os erros no formulário.", 
-                "Erro de Validação", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Por favor, corrija os erros no formulário.",
+                    "Erro de Validação",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
 
@@ -206,10 +257,10 @@ public class ContactFormScreen extends JFrame {
             new ContactListScreen(controller).setVisible(true);
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, 
-                "Erro ao guardar. Verifique se o telefone já existe.", 
-                "Erro", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao guardar. Verifique se o telefone já existe.",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
         }
     }
 }
