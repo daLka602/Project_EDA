@@ -1,62 +1,93 @@
--- ConnectMe Database Schema
--- Versão 2.0 - Com índices e otimizações
+-- MySQL dump 10.13  Distrib 8.0.38, for Linux (x86_64)
+--
+-- Host: localhost    Database: connectme
+-- ------------------------------------------------------
+-- Server version	8.4.6-0ubuntu3
 
-CREATE DATABASE IF NOT EXISTS connectme_db;
-USE connectme_db;
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!50503 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
--- Tabela de usuários com melhorias
-CREATE TABLE IF NOT EXISTS users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(50) UNIQUE NOT NULL,
-    password_hash VARCHAR(64) NOT NULL, -- SHA-256 = 64 chars hex
-    status ENUM('ativo', 'bloqueado') DEFAULT 'ativo',
-    failed_attempts INT DEFAULT 0,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    last_login TIMESTAMP NULL,
-    INDEX idx_username (username),
-    INDEX idx_status (status)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--
+-- Table structure for table `contacts`
+--
 
--- Tabela de contactos com melhorias
-CREATE TABLE IF NOT EXISTS contacts (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT NOT NULL,
-    name VARCHAR(100) NOT NULL,
-    phone VARCHAR(20) NOT NULL,
-    email VARCHAR(100),
-    address TEXT,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
-    INDEX idx_user_id (user_id),
-    INDEX idx_name (name),
-    INDEX idx_phone (phone),
-    INDEX idx_email (email),
-    INDEX idx_created_at (created_at),
-    UNIQUE KEY unique_user_phone (user_id, phone) -- Evita telefones duplicados por usuário
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+DROP TABLE IF EXISTS `contacts`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `contacts` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `company` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `phone` varchar(20) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `type` enum('CUSTOMER','PARTNER','SUPPLIER') COLLATE utf8mb4_unicode_ci DEFAULT 'CUSTOMER',
+  `address` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `description` text COLLATE utf8mb4_unicode_ci,
+  `createDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `idx_name` (`name`),
+  KEY `idx_type` (`type`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
--- Tabela de logs do sistema (opcional)
-CREATE TABLE IF NOT EXISTS system_logs (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    level ENUM('INFO', 'WARNING', 'ERROR') NOT NULL,
-    message TEXT NOT NULL,
-    user_id INT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    INDEX idx_level (level),
-    INDEX idx_created_at (created_at),
-    INDEX idx_user_id (user_id),
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+--
+-- Dumping data for table `contacts`
+--
 
--- Inserir usuário de exemplo (senha: "admin123")
-INSERT IGNORE INTO users (username, password_hash) VALUES 
-('admin', '240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9');
+LOCK TABLES `contacts` WRITE;
+/*!40000 ALTER TABLE `contacts` DISABLE KEYS */;
+INSERT INTO `contacts` VALUES (1,'João Silva','Tech Solutions','+258843123456','joao@tech.mz','CUSTOMER','Maputo','Cliente importante','2025-11-23 22:33:12'),(2,'Maria Santos','Global Partners','+258843654321','maria@global.mz','PARTNER','Beira','Parceiro estratégico','2025-11-23 22:33:12'),(3,'Carlos Pereira','Supply Co','+258843789012','carlos@supply.mz','SUPPLIER','Gaza','Fornecedor de materiais','2025-11-23 22:33:12'),(4,'Luis Alves','MNE','846842846','lui@email.com','CUSTOMER','Maputo','melhor cliente desde 2018. \nfiel\nobediente','2025-11-23 23:45:32'),(5,'Elvis Big','MNE','+258852145369','big@email.mz','SUPPLIER','Beira','Nosso fornecedor','2025-11-23 23:45:32'),(9,'Melo','MNE','+258 84 123 4567','melo@email.com','CUSTOMER','Beira','','2025-11-24 02:29:05');
+/*!40000 ALTER TABLE `contacts` ENABLE KEYS */;
+UNLOCK TABLES;
 
--- Inserir contactos de exemplo
-INSERT IGNORE INTO contacts (user_id, name, phone, email, address) VALUES 
-(1, 'Dalton Falaque', '+258878600296', 'lauterdaltongomes@gmail.com', 'Av. karl max, Maputo'),
-(1, 'Maria Santos', '+351923456789', 'maria.santos@email.com', 'Avenida Central, 456, Porto'),
-(1, 'Carlos Oliveira', '+351934567890', NULL, NULL),
-(1, 'Ana Costa', '+351945678901', 'ana.costa@email.com', 'Travessa do Comércio, 789, Braga'),
-(1, 'Pedro Martins', '+351956789012', NULL, 'Praça da Liberdade, 321, Coimbra');
+--
+-- Table structure for table `users`
+--
+
+DROP TABLE IF EXISTS `users`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `users` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `email` varchar(100) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `passwordHash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `role` enum('STAFF','MANAGER','ADMIN') COLLATE utf8mb4_unicode_ci DEFAULT 'STAFF',
+  `status` enum('ATIVE','BLOCKED') COLLATE utf8mb4_unicode_ci DEFAULT 'ATIVE',
+  `createDate` datetime DEFAULT CURRENT_TIMESTAMP,
+  `lastLogin` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`),
+  KEY `idx_username` (`username`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `users`
+--
+
+LOCK TABLES `users` WRITE;
+/*!40000 ALTER TABLE `users` DISABLE KEYS */;
+INSERT INTO `users` VALUES (4,'admin','admin@connectme.mz','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9','ADMIN','ATIVE','2025-11-23 23:44:27','2025-11-24 06:47:28'),(5,'usuario','usuario@connectme.mz','240be518fabd2724ddb6f04eeb1da5967483060701e9c5a3c7456ca8343ec7a','STAFF','ATIVE','2025-11-23 23:44:27',NULL),(6,'manager','manager@connectme.mz','c0bd8f9dfb73aa0c18e3614b5f2deae1f6a8bbe8e0844e0ac89e61e8d96ae3c3','MANAGER','ATIVE','2025-11-23 23:44:27',NULL),(7,'staff','staff@connectme.mz','0de7b23c5b2cdb6ae20dcb8a40ef6ea825d88dcc9dafad5c44dd37cce84e52e3','STAFF','ATIVE','2025-11-23 23:44:27',NULL);
+/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2025-11-24  7:39:36

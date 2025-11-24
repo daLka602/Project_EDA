@@ -3,10 +3,13 @@ package com.connectme.view;
 import com.connectme.controller.AuthController;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.AccessLevel;
+import com.connectme.view.componet.MyButton;
+import com.connectme.view.componet.NavButton;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class MainFrame extends JFrame {
     private User currentUser;
@@ -15,8 +18,8 @@ public class MainFrame extends JFrame {
     private JPanel contentPanel;
     private ContactPanel contactPanel;
     private AdminPanel adminPanel;
-    private JButton contactsBtn;
-    private JButton adminBtn;
+    private NavButton contactsBtn;
+    private NavButton adminBtn;
 
     public MainFrame(User user, AuthController authController) {
         this.currentUser = user;
@@ -24,7 +27,6 @@ public class MainFrame extends JFrame {
 
         setTitle("ConnectMe - Sistema de Gestão de Contactos");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(1200, 750);
         setLocationRelativeTo(null);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
 
@@ -32,7 +34,7 @@ public class MainFrame extends JFrame {
     }
 
     private void initComponents() {
-        JPanel mainPanel = new JPanel(new MigLayout("fill, insets 0", "[fill]", "[]0[fill]"));
+        JPanel mainPanel = new JPanel(new MigLayout("fill, insets 0", "[]", "Center"));
         mainPanel.setBackground(new Color(248, 249, 252));
 
         mainPanel.add(createNavBar(), "grow, wrap");
@@ -58,78 +60,66 @@ public class MainFrame extends JFrame {
     }
 
     private JPanel createNavBar() {
-        JPanel navPanel = new JPanel(new MigLayout("fill, insets 12 25", "[]20[]push", "[]"));
+        JPanel navPanel = new JPanel(new MigLayout("fill, insets 12 25", "[]", "[]"));
         navPanel.setBackground(Color.WHITE);
         navPanel.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(220, 220, 225)));
 
         // Logo
+        JPanel navInfo = new JPanel(new MigLayout("fill, insets 0 35 5 35", "[]20[]10[]", "[]"));
+        navInfo.setBackground(Color.WHITE);
+
         JLabel title = new JLabel("ConnectMe");
         title.setFont(new Font("Segoe UI", Font.BOLD, 18));
-        title.setForeground(new Color(33, 150, 243));
-        navPanel.add(title);
+        title.setForeground(new Color(5, 17, 27, 245));
+        navInfo.add(title);
 
         // Navigation Buttons
-        contactsBtn = createNavButton("Contactos", true);
+        contactsBtn = new NavButton("Contactos", true);
         contactsBtn.addActionListener(e -> showContactPanel());
-        navPanel.add(contactsBtn);
+        navInfo.add(contactsBtn,"grow");
 
         if (currentUser.getRole() == AccessLevel.ADMIN || currentUser.getRole() == AccessLevel.MANAGER) {
-            adminBtn = createNavButton("Administração", false);
+            adminBtn = new NavButton("Administração", false);
             adminBtn.addActionListener(e -> showAdminPanel());
-            navPanel.add(adminBtn);
+            navInfo.add(adminBtn, "grow");
         }
 
-        // User Info Panel
-        JPanel userInfoPanel = new JPanel(new MigLayout("wrap, insets 0", "[fill]", "[]2[]"));
-        userInfoPanel.setBackground(Color.WHITE);
+        navPanel.add(navInfo);
 
-        JLabel userLabel = new JLabel(currentUser.getUsername());
-        userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        userLabel.setForeground(new Color(33, 33, 33));
-        userInfoPanel.add(userLabel, "align right");
+        // User Info Panel
+        JPanel info = new JPanel(new MigLayout("fill, insets 0 20","[]30[]", "[]"));
+        info.setBackground(Color.WHITE);
+
+        JPanel userInfoPanel = new JPanel(new MigLayout("wrap, insets 0", "[]", "[]2[]"));
+        userInfoPanel.setBackground(Color.WHITE);
 
         String roleDisplay = getRoleDisplay(currentUser.getRole());
         JLabel roleLabel = new JLabel(roleDisplay);
-        roleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        roleLabel.setForeground(new Color(120, 120, 120));
-        userInfoPanel.add(roleLabel, "align right");
+        roleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 18));
+        roleLabel.setForeground(new Color(33, 33, 33));
+        userInfoPanel.add(roleLabel);
 
-        navPanel.add(userInfoPanel, "gap 20");
+        JLabel userLabel = new JLabel(currentUser.getUsername());
+        userLabel.setFont(new Font("Segoe UI", Font.PLAIN, 16));
+        userLabel.setForeground(new Color(120, 120, 120));
+        userInfoPanel.add(userLabel,"gapleft 5");
+
+        info.add(userInfoPanel);
 
         // Logout Button
-        JButton logoutBtn = new JButton("Sair");
-        logoutBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        MyButton logoutBtn = new MyButton();
+        logoutBtn.setText("SAIR");
+        logoutBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         logoutBtn.setBackground(new Color(244, 67, 54));
-        logoutBtn.setForeground(Color.WHITE);
-        logoutBtn.setFocusPainted(false);
-        logoutBtn.setBorder(BorderFactory.createEmptyBorder());
-        logoutBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        logoutBtn.setPreferredSize(new Dimension(80, 36));
+        logoutBtn.setPreferredSize(new Dimension(160, 30));
         logoutBtn.addActionListener(e -> handleLogout());
-        navPanel.add(logoutBtn, "gap 15");
+        info.add(logoutBtn, "right");
+
+        navPanel.add(info, "right");
 
         return navPanel;
     }
 
-    private JButton createNavButton(String text, boolean isActive) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-        btn.setPreferredSize(new Dimension(120, 36));
-        btn.setFocusPainted(false);
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        if (isActive) {
-            btn.setBackground(new Color(33, 150, 243));
-            btn.setForeground(Color.WHITE);
-            btn.setBorder(BorderFactory.createEmptyBorder());
-        } else {
-            btn.setBackground(Color.WHITE);
-            btn.setForeground(new Color(100, 100, 100));
-            btn.setBorder(BorderFactory.createLineBorder(new Color(200, 200, 205), 1));
-        }
-
-        return btn;
-    }
 
     private String getRoleDisplay(AccessLevel role) {
         switch (role) {
@@ -155,16 +145,16 @@ public class MainFrame extends JFrame {
     }
 
     private void updateNavButtons(boolean isContactsActive) {
-        contactsBtn.setBackground(isContactsActive ? new Color(33, 150, 243) : Color.WHITE);
-        contactsBtn.setForeground(isContactsActive ? Color.WHITE : new Color(100, 100, 100));
+        contactsBtn.setBackground(isContactsActive ? new Color(46, 17, 233) : new Color(225,220,220));
+        contactsBtn.setForeground(isContactsActive ? Color.WHITE : new Color(30, 34, 44, 255));
         contactsBtn.setBorder(isContactsActive ? BorderFactory.createEmptyBorder()
-                : BorderFactory.createLineBorder(new Color(200, 200, 205), 1));
+                : BorderFactory.createEmptyBorder(15,20,15,20));
 
         if (adminBtn != null) {
-            adminBtn.setBackground(!isContactsActive ? new Color(33, 150, 243) : Color.WHITE);
-            adminBtn.setForeground(!isContactsActive ? Color.WHITE : new Color(100, 100, 100));
+            adminBtn.setBackground(!isContactsActive ? new Color(46, 17, 233) : new Color(225, 220, 220));
+            adminBtn.setForeground(!isContactsActive ? Color.WHITE : new Color(5, 17, 27, 232));
             adminBtn.setBorder(!isContactsActive ? BorderFactory.createEmptyBorder()
-                    : BorderFactory.createLineBorder(new Color(200, 200, 205), 1));
+                    : BorderFactory.createEmptyBorder(15,20,15,20));
         }
     }
 

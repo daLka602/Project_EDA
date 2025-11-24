@@ -1,16 +1,12 @@
 package com.connectme.view.componet;
 
-import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 import org.jdesktop.animation.timing.Animator;
-import org.jdesktop.animation.timing.TimingTarget;
-import org.jdesktop.animation.timing.TimingTargetAdapter;
 
-public class MyButton extends JButton {
+import javax.swing.*;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class NavButton extends JButton {
 
     private Animator animator;
     private int targetSize;
@@ -19,44 +15,24 @@ public class MyButton extends JButton {
     private float alpha;
     private Color effectColor = new Color(255, 255, 255);
 
-    public MyButton() {
+    public NavButton(String text, boolean isActive) {
         setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        setText(text);
         setFocusPainted(false);
         setContentAreaFilled(false);
-        setBackground(Color.BLUE);
-        setForeground(Color.WHITE);
         setFont(new Font("Segoe UI", Font.BOLD, 16));
+        setPreferredSize(new Dimension(180, 46));
         setCursor(new Cursor(Cursor.HAND_CURSOR));
-        addMouseListener(new MouseAdapter() {
-            @Override
-            public void mousePressed(MouseEvent me) {
-                targetSize = Math.max(getWidth(), getHeight()) * 2;
-                animatSize = 0;
-                pressedPoint = me.getPoint();
-                alpha = 0.5f;
-                if (animator.isRunning()) {
-                    animator.stop();
-                }
-                animator.start();
-            }
-        });
-        TimingTarget target = new TimingTargetAdapter() {
-            @Override
-            public void timingEvent(float fraction) {
-                if (fraction > 0.5f) {
-                    alpha = 1 - fraction;
-                }
-                animatSize = fraction * targetSize;
-                repaint();
-            }
-        };
-        animator = new Animator(700, target);
-        animator.setAcceleration(0.5f);
-        animator.setDeceleration(0.5f);
-        animator.setResolution(0);
+        if (isActive) {
+            setBackground(new Color(73, 80, 249));
+            setForeground(Color.WHITE);
+        } else {
+            setBackground(Color.WHITE);
+            setForeground(new Color(9, 9, 30));
+        }
     }
 
-    @Override
+   @Override
     protected void paintComponent(Graphics grphcs) {
         int width = getWidth();
         int height = getHeight();

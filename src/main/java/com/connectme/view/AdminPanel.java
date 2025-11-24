@@ -2,10 +2,10 @@ package com.connectme.view;
 
 import com.connectme.controller.AdminController;
 import com.connectme.model.entities.User;
+import com.connectme.view.componet.RoundedFormBorder;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class AdminPanel extends JPanel {
@@ -332,7 +332,7 @@ public class AdminPanel extends JPanel {
                         () -> new UserFormDialog((JFrame) SwingUtilities.getWindowAncestor(this), user, adminController, this::refreshUsers).setVisible(true),
                         this::refreshUsers
                 );
-                cardsPanel.add(userCard);
+                cardsPanel.add(userCard, BorderLayout.CENTER);
             }
         }
 

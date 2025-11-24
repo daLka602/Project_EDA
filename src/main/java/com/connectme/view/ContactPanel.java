@@ -6,6 +6,9 @@ import com.connectme.controller.ExportController;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.ContactType;
+import com.connectme.view.componet.NavButton;
+import com.connectme.view.componet.RoundedBorder;
+import com.connectme.view.icons.IconUtils;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -63,18 +66,15 @@ public class ContactPanel extends JPanel {
         headerPanel.add(new JLabel(), "grow");
 
         JButton anteriorBtn = createNavButton("Anterior");
-        headerPanel.add(anteriorBtn, "w 90!, h 38!");
+        headerPanel.add(anteriorBtn, "w 120!, h 45!");
 
         JButton depoisBtn = createNavButton("Depois");
-        headerPanel.add(depoisBtn, "w 90!, h 38!, gapleft 10");
+        headerPanel.add(depoisBtn, "w 120!, h 45!, gapleft 10");
 
-        JButton exportBtn = createActionButton("Exportar");
+        JButton exportBtn = new NavButton("Exportar", true);
+        exportBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         exportBtn.addActionListener(e -> handleExport());
-        headerPanel.add(exportBtn, "w 100!, h 38!, gapleft 10");
-
-        JButton importBtn = createActionButton("Importar");
-        importBtn.addActionListener(e -> handleImport());
-        headerPanel.add(importBtn, "w 100!, h 38!, gapleft 10");
+        headerPanel.add(exportBtn, "w 140!, h 45!, gapleft 10");
 
         add(headerPanel, BorderLayout.NORTH);
 
@@ -84,17 +84,22 @@ public class ContactPanel extends JPanel {
         searchPanel.setBorder(new RoundedBorder(1, new Color(220, 220, 225)));
         searchPanel.setMaximumSize(new Dimension(1500, 160));
 
-        searchField = new JTextField();
+        ImageIcon originalSearchIcon = new ImageIcon("src/main/java/com/connectme/view/icons/search.png");
+        ImageIcon searchIcon = IconUtils.colorizeIcon(originalSearchIcon, Color.WHITE);
+
+        searchField = new JTextField(" Pesquisar contactos...");
         searchField.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        searchField.setText("Pesquisar contactos...");
         searchField.setForeground(new Color(150, 150, 150));
         setupPlaceholder(searchField, " Pesquisar contactos...");
-        searchPanel.add(searchField, "w 230!, h 40!");
+        searchPanel.add(Box.createHorizontalStrut(10));
+        searchPanel.add(searchField, "w 240!, h 40!");
 
-        JButton searchBtn = createActionButton("Pesquisar");
-        searchBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        searchPanel.add(Box.createHorizontalStrut(10));
+        NavButton searchBtn = new NavButton(" Pesquisar", true);
+        searchBtn.setIcon(searchIcon);
+        searchBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         searchBtn.addActionListener(e -> performSearch());
-        searchPanel.add(searchBtn, "w 100!, h 40!, gapleft 10");
+        searchPanel.add(searchBtn, "w 160!, h 45!, gapleft 10");
 
         searchPanel.add(new JLabel(), "w 30!");
 
@@ -119,10 +124,10 @@ public class ContactPanel extends JPanel {
         searchPanel.add(new JLabel(), "grow");
 
         // Add contact button (right)
-        JButton addBtn = createActionButton(" + Adicionar");
-        addBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        NavButton addBtn = new NavButton(" + Adicionar", true);
+        addBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         addBtn.addActionListener(e -> openContactForm(null));
-        searchPanel.add(addBtn, "w 110!, h 40!");
+        searchPanel.add(addBtn, "w 140!, h 45!");
 
         add(searchPanel, BorderLayout.CENTER);
 
@@ -140,9 +145,6 @@ public class ContactPanel extends JPanel {
         add(scrollPane, "grow, SOUTH");
     }
 
-    private void handleImport() {
-    }
-
     private JButton createNavButton(String text) {
         JButton btn = new JButton(text);
         btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -150,17 +152,6 @@ public class ContactPanel extends JPanel {
         btn.setForeground(new Color(100, 100, 100));
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 225), 1));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return btn;
-    }
-
-    private JButton createActionButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        btn.setBackground(new Color(33, 150, 243));
-        btn.setForeground(Color.WHITE);
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder());
         btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }

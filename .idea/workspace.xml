@@ -5,40 +5,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/connectme/controller/ExportController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Diagram/ProjectMap_EDA.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Diagram/ProjectMap_EDA.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/MainApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/config/DbConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/config/DbConnection.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/controller/UserController.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/ContactDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/ContactDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/IUserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/IUserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/UserDAO.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/entities/Contact.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/entities/Contact.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/entities/User.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/entities/User.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/service/AuthService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactFormScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactListScreen.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/HomepageView.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/LoginScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/LoginScreen.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/MainApp.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/config/DbConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/config/DbConnection.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/controller/UserController$DebugInfo.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/controller/UserController$UserStats.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/controller/UserController.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/dao/ContactDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/dao/ContactDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/dao/UserDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/dao/UserDAO.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService$PasswordStrength.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService$PasswordStrength.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactFormScreen$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactFormScreen$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactFormScreen$3.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactFormScreen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactListScreen$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactListScreen.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/LoginScreen$1.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/LoginScreen$2.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/LoginScreen.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/LoginScreen.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql/create_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/create_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/AdminPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/AdminPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactForm.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/MainFrame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/MainFrame.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/RoundedBorder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/componet/RoundedBorder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/RoundedFormBorder.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/componet/RoundedFormBorder.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/UserCardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/UserCardPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/UserFormDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/UserFormDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/componet/MyButton.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/componet/MyButton.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/AdminPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/AdminPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactForm.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/MainFrame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/MainFrame$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/MainFrame.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/MainFrame.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/RoundedBorder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/RoundedFormBorder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/UserCardPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/UserCardPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/UserCardPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/UserCardPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/UserFormDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/UserFormDialog.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/componet/MyButton$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/componet/MyButton$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/componet/MyButton$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/componet/MyButton$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/componet/MyButton.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/componet/MyButton.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +66,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.GenerateHashes.executor": "Run",
+    "Application.IconGeneratorPNG.executor": "Run",
     "Application.Main.executor": "Run",
     "Application.MainApp.executor": "Run",
     "ModuleVcsDetector.initialDetectionPerformed": "true",
@@ -79,7 +75,7 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "/home/mirrine/Transferências/converted_contact_app",
+    "last_opened_file_path": "/home/mirrine/Projectos/EDA/Project_EDA/src/main/java/com/connectme/view/icons",
     "project.structure.last.edited": "Project",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.0",
@@ -88,6 +84,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/com/connectme/view/icons" />
       <recent name="$PROJECT_DIR$/src/main/java/com/connectme/view" />
     </key>
   </component>

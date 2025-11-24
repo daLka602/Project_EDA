@@ -5,6 +5,7 @@ import com.connectme.controller.ContactController;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.ContactType;
+import com.connectme.view.componet.RoundedFormBorder;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;

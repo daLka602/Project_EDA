@@ -4,6 +4,7 @@ import com.connectme.controller.AdminController;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.AccessLevel;
 import com.connectme.model.enums.UserStatus;
+import com.connectme.view.componet.RoundedFormBorder;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -28,7 +29,7 @@ public class UserFormDialog extends JDialog {
         this.adminController = controller;
         this.onSaveCallback = onSave;
 
-        setSize(550, 500);
+        setSize(1050, 600);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.WHITE);
