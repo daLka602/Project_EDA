@@ -11,6 +11,7 @@ src
 │   │           ├── model
 │   │           │   ├── dao
 │   │           │   │   ├── ContactDAO.java
+│   │           │   │   ├── IContactDAO.java
 │   │           │   │   ├── IUserDAO.java
 │   │           │   │   └── UserDAO.java
 │   │           │   ├── eda
@@ -20,20 +21,23 @@ src
 │   │           │   ├── entities
 │   │           │   │   ├── Contact.java
 │   │           │   │   └── User.java
+│   │           │   ├── enums
+│   │           │   │   ├── AccessLevel.java
+│   │           │   │   ├── ContactType.java
+│   │           │   │   └── UserStatus.java
 │   │           │   ├── service
 │   │           │   │   └── AuthService.java
 │   │           │   └── util
 │   │           │       ├── HashUtil.java
 │   │           │       └── PdfUtil.java
 │   │           └── view
-│   │               ├── componet
-│   │               │   ├── MyButton.java
-│   │               │   ├── MyPasswordField.java
-│   │               │   └── MyTextField.java
-│   │               ├── ContactFormScreen.java
-│   │               ├── ContactListScreen.java
-│   │               ├── HomepageView.java
-│   │               └── LoginScreen.java
+│   │               
 │   └── resources
 │       └── aplication.properties
+└── test
+    └── java
+        └── com
+            └── connectme
+                └── dao
+                    └── ContactDAOTest.java
 

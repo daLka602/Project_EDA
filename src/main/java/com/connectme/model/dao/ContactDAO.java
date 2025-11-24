@@ -1,87 +1,97 @@
+// src/main/java/com/connectme/model/dao/ContactDAO.java
 package com.connectme.model.dao;
 
 import com.connectme.model.entities.Contact;
+import com.connectme.model.enums.ContactType;
 import com.connectme.config.DbConnection;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class ContactDAO {
+public class ContactDAO implements IContactDAO {
 
     private static final Logger logger = Logger.getLogger(ContactDAO.class.getName());
 
-    public boolean create(Contact c) {
-        if (!isValidContact(c)) {
-            logger.warning("Tentativa de criar contacto inválido: " + c);
+    @Override
+    public boolean create(Contact contact) {
+        if (!isValidContact(contact)) {
+            logger.warning("Tentativa de criar contacto inválido: " + contact);
             return false;
         }
 
-        String sql = "INSERT INTO contacts (user_id, name, phone, email, address) VALUES (?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO contacts (name, company, phone, email, type, address, description, createDate) " +
+                "VALUES (?, ?, ?, ?, ?, ?, ?, NOW())";
 
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, c.getUserId());
-            stmt.setString(2, c.getName().trim());
-            stmt.setString(3, c.getPhone() != null ? c.getPhone().trim() : null);
-            stmt.setString(4, c.getEmail() != null ? c.getEmail().trim() : null);
-            stmt.setString(5, c.getAddress() != null ? c.getAddress().trim() : null);
+            stmt.setString(1, contact.getName().trim());
+            stmt.setString(2, contact.getCompany() != null ? contact.getCompany().trim() : null);
+            stmt.setString(3, contact.getPhone() != null ? contact.getPhone().trim() : null);
+            stmt.setString(4, contact.getEmail() != null ? contact.getEmail().trim() : null);
+
+            // Usar enum.name() para salvar CUSTOMER, PARTNER, SUPPLIER
+            stmt.setString(5, contact.getType() != null ? contact.getType().name() : ContactType.CUSTOMER.name());
+
+            stmt.setString(6, contact.getAddress() != null ? contact.getAddress().trim() : null);
+            stmt.setString(7, contact.getDescription() != null ? contact.getDescription().trim() : null);
 
             int affectedRows = stmt.executeUpdate();
-            
+
             if (affectedRows > 0) {
-                // Obter o ID gerado
                 try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        c = new Contact(
-                            generatedKeys.getInt(1),
-                            c.getUserId(),
-                            c.getName(),
-                            c.getPhone(),
-                            c.getEmail(),
-                            c.getAddress()
-                        );
+                        contact.setId(generatedKeys.getInt(1));
                     }
                 }
+                logger.info("Contacto criado com sucesso: " + contact.getName());
                 return true;
             }
             return false;
 
         } catch (SQLException e) {
-            logger.severe("Erro ao criar contato: " + e.getMessage());
+            logger.severe("Erro ao criar contacto: " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
-    public boolean update(Contact c) {
-        if (!isValidContact(c) || c.getId() <= 0) {
-            logger.warning("Tentativa de atualizar contacto inválido: " + c);
+    @Override
+    public boolean update(Contact contact) {
+        if (!isValidContact(contact) || contact.getId() <= 0) {
+            logger.warning("Tentativa de atualizar contacto inválido: " + contact);
             return false;
         }
 
-        String sql = "UPDATE contacts SET name=?, phone=?, email=?, address=? WHERE id=? AND user_id=?";
+        String sql = "UPDATE contacts SET name=?, company=?, phone=?, email=?, type=?, address=?, description=? WHERE id=?";
 
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setString(1, c.getName().trim());
-            stmt.setString(2, c.getPhone() != null ? c.getPhone().trim() : null);
-            stmt.setString(3, c.getEmail() != null ? c.getEmail().trim() : null);
-            stmt.setString(4, c.getAddress() != null ? c.getAddress().trim() : null);
-            stmt.setInt(5, c.getId());
-            stmt.setInt(6, c.getUserId()); // Segurança: só atualiza se for do user
+            stmt.setString(1, contact.getName().trim());
+            stmt.setString(2, contact.getCompany() != null ? contact.getCompany().trim() : null);
+            stmt.setString(3, contact.getPhone() != null ? contact.getPhone().trim() : null);
+            stmt.setString(4, contact.getEmail() != null ? contact.getEmail().trim() : null);
+            stmt.setString(5, contact.getType() != null ? contact.getType().name() : ContactType.CUSTOMER.name());
+            stmt.setString(6, contact.getAddress() != null ? contact.getAddress().trim() : null);
+            stmt.setString(7, contact.getDescription() != null ? contact.getDescription().trim() : null);
+            stmt.setInt(8, contact.getId());
 
             int affectedRows = stmt.executeUpdate();
+            if (affectedRows > 0) {
+                logger.info("Contacto atualizado com sucesso: " + contact.getName());
+            }
             return affectedRows > 0;
 
         } catch (SQLException e) {
-            logger.severe("Erro ao atualizar contato ID " + c.getId() + ": " + e.getMessage());
+            logger.severe("Erro ao atualizar contacto ID " + contact.getId() + ": " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
+    @Override
     public boolean delete(int contactId) {
         if (contactId <= 0) return false;
 
@@ -92,14 +102,20 @@ public class ContactDAO {
 
             stmt.setInt(1, contactId);
             int affectedRows = stmt.executeUpdate();
+
+            if (affectedRows > 0) {
+                logger.info("Contacto deletado com sucesso: ID " + contactId);
+            }
             return affectedRows > 0;
 
         } catch (SQLException e) {
-            logger.severe("Erro ao deletar contato ID " + contactId + ": " + e.getMessage());
+            logger.severe("Erro ao deletar contacto ID " + contactId + ": " + e.getMessage());
+            e.printStackTrace();
             return false;
         }
     }
 
+    @Override
     public Contact findById(int id) {
         if (id <= 0) return null;
 
@@ -116,22 +132,45 @@ public class ContactDAO {
             }
 
         } catch (SQLException e) {
-            logger.severe("Erro ao buscar contato ID " + id + ": " + e.getMessage());
+            logger.severe("Erro ao buscar contacto ID " + id + ": " + e.getMessage());
+            e.printStackTrace();
         }
 
         return null;
     }
 
-    public List<Contact> findAllByUser(int userId) {
-        if (userId <= 0) return List.of();
+    @Override
+    public List<Contact> findAll() {
+        String sql = "SELECT * FROM contacts ORDER BY name ASC";
+        List<Contact> list = new ArrayList<>();
 
-        String sql = "SELECT * FROM contacts WHERE user_id=? ORDER BY name ASC";
+        try (Connection conn = DbConnection.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                list.add(mapResultSetToContact(rs));
+            }
+
+        } catch (SQLException e) {
+            logger.severe("Erro ao listar contactos: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+
+    @Override
+    public List<Contact> findByType(ContactType type) {
+        if (type == null) return new ArrayList<>();
+
+        String sql = "SELECT * FROM contacts WHERE type=? ORDER BY name ASC";
         List<Contact> list = new ArrayList<>();
 
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
+            stmt.setString(1, type.name());
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -139,28 +178,32 @@ public class ContactDAO {
             }
 
         } catch (SQLException e) {
-            logger.severe("Erro ao listar contatos do user " + userId + ": " + e.getMessage());
+            logger.severe("Erro ao buscar contactos por tipo: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return list;
     }
 
-    /**
-     * NOVO: Busca com paginação
-     */
-    public List<Contact> findPaginatedByUser(int userId, int page, int pageSize) {
-        if (userId <= 0 || page < 0 || pageSize <= 0) return List.of();
+    @Override
+    public List<Contact> search(String query) {
+        if (query == null || query.trim().isEmpty()) {
+            return findAll();
+        }
 
-        String sql = "SELECT * FROM contacts WHERE user_id=? ORDER BY name ASC LIMIT ? OFFSET ?";
+        String searchTerm = "%" + query.toLowerCase() + "%";
+        String sql = "SELECT * FROM contacts WHERE LOWER(name) LIKE ? OR LOWER(email) LIKE ? " +
+                "OR phone LIKE ? OR LOWER(company) LIKE ? ORDER BY name ASC";
         List<Contact> list = new ArrayList<>();
 
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
-            stmt.setInt(1, userId);
-            stmt.setInt(2, pageSize);
-            stmt.setInt(3, page * pageSize);
-            
+            stmt.setString(1, searchTerm);
+            stmt.setString(2, searchTerm);
+            stmt.setString(3, searchTerm);
+            stmt.setString(4, searchTerm);
+
             ResultSet rs = stmt.executeQuery();
 
             while (rs.next()) {
@@ -168,53 +211,95 @@ public class ContactDAO {
             }
 
         } catch (SQLException e) {
-            logger.severe("Erro na paginação de contatos: " + e.getMessage());
+            logger.severe("Erro ao pesquisar contactos: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return list;
     }
 
-    /**
-     * NOVO: Contar total de contactos por user
-     */
-    public int countByUser(int userId) {
-        if (userId <= 0) return 0;
-
-        String sql = "SELECT COUNT(*) FROM contacts WHERE user_id=?";
+    @Override
+    public int countAll() {
+        String sql = "SELECT COUNT(*) FROM contacts";
 
         try (Connection conn = DbConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, userId);
-            ResultSet rs = stmt.executeQuery();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
 
             if (rs.next()) {
                 return rs.getInt(1);
             }
 
         } catch (SQLException e) {
-            logger.severe("Erro ao contar contatos: " + e.getMessage());
+            logger.severe("Erro ao contar contactos: " + e.getMessage());
+            e.printStackTrace();
         }
 
         return 0;
     }
 
-    private Contact mapResultSetToContact(ResultSet rs) throws SQLException {
-        return new Contact(
-            rs.getInt("id"),
-            rs.getInt("user_id"),
-            rs.getString("name"),
-            rs.getString("phone"),
-            rs.getString("email"),
-            rs.getString("address")
-        );
+    @Override
+    public List<Contact> findPaginated(int page, int pageSize) {
+        if (page < 0 || pageSize <= 0) return new ArrayList<>();
+
+        String sql = "SELECT * FROM contacts ORDER BY name ASC LIMIT ? OFFSET ?";
+        List<Contact> list = new ArrayList<>();
+
+        try (Connection conn = DbConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, pageSize);
+            stmt.setInt(2, page * pageSize);
+
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                list.add(mapResultSetToContact(rs));
+            }
+
+        } catch (SQLException e) {
+            logger.severe("Erro na paginação de contactos: " + e.getMessage());
+            e.printStackTrace();
+        }
+
+        return list;
     }
 
-    private boolean isValidContact(Contact c) {
-        if (c == null) return false;
-        if (c.getUserId() <= 0) return false;
-        if (c.getName() == null || c.getName().trim().isEmpty()) return false;
-        if (c.getPhone() == null || c.getPhone().trim().isEmpty()) return false;
+    @Override
+    public Contact mapResultSetToContact(ResultSet rs) throws SQLException {
+        Contact contact = new Contact();
+        contact.setId(rs.getInt("id"));
+        contact.setName(rs.getString("name"));
+        contact.setCompany(rs.getString("company"));
+        contact.setPhone(rs.getString("phone"));
+        contact.setEmail(rs.getString("email"));
+
+        String typeStr = rs.getString("type");
+        if (typeStr != null) {
+            try {
+                contact.setType(ContactType.valueOf(typeStr));
+            } catch (IllegalArgumentException e) {
+                logger.warning("Tipo de contacto inválido: " + typeStr);
+                contact.setType(ContactType.CUSTOMER);
+            }
+        }
+
+        contact.setAddress(rs.getString("address"));
+        contact.setDescription(rs.getString("description"));
+
+        Timestamp createDate = rs.getTimestamp("createDate");
+        if (createDate != null) {
+            contact.setCreateDate(createDate.toLocalDateTime());
+        }
+
+        return contact;
+    }
+
+    @Override
+    public boolean isValidContact(Contact contact) {
+        if (contact == null) return false;
+        if (contact.getName() == null || contact.getName().trim().isEmpty()) return false;
+        if (contact.getPhone() == null || contact.getPhone().trim().isEmpty()) return false;
         return true;
     }
 }

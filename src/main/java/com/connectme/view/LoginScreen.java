@@ -1,154 +1,152 @@
+// src/main/java/com/connectme/view/LoginScreen.java
 package com.connectme.view;
 
-import javax.swing.*;
-
-import com.connectme.view.componet.*;
+import com.connectme.controller.AuthController;
+import com.connectme.model.entities.User;
+import com.connectme.model.util.HashUtil;
 import net.miginfocom.swing.MigLayout;
-import com.connectme.controller.UserController;
 
+import javax.swing.*;
 import java.awt.*;
+import java.util.logging.Logger;
 
 public class LoginScreen extends JFrame {
+    private static final Logger logger = Logger.getLogger(LoginScreen.class.getName());
 
-    private MyTextField txtUsername;
-    private MyPasswordField txtPassword;
-    private MyButton btnLogin;
-    private JLabel lblUsernameError, lblPasswordError;
-
-    private UserController controller;
+    private JTextField usernameField;
+    private JPasswordField senhaField;
+    private JButton loginBtn;
+    private JLabel errorLabel;
+    private AuthController authController;
+    private Runnable onLoginSuccess;
+    private User authenticatedUser;
 
     public LoginScreen() {
-        super("ConnectMe - Login");
-        controller = new UserController();
-
-        setLayout(new MigLayout("wrap 1", "[400]", "[]20[]10[]10[]20[]"));
+        setTitle("ConnectMe - Login");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(600, 420);
+        setSize(500, 650);
         setLocationRelativeTo(null);
         setResizable(false);
 
+        this.authController = new AuthController();
         initComponents();
-        setupValidation();
     }
 
     private void initComponents() {
-        JLabel lblTitle = new JLabel("ConnectMe - Acesso");
-        lblTitle.setFont(lblTitle.getFont().deriveFont(20f));
-        add(lblTitle, "align center, gapbottom 20");
+        JPanel mainPanel = new JPanel(new MigLayout("fill, insets 40", "[center]", "[center]"));
+        mainPanel.setBackground(new Color(25, 118, 210));
 
-        // Campo username com validação
-        txtUsername = new MyTextField();
-        txtUsername.setBorder(BorderFactory.createTitledBorder("Usuário"));
-        add(txtUsername, "growx");
-        
-        lblUsernameError = createErrorLabel();
-        add(lblUsernameError, "growx");
+        JPanel cardPanel = new JPanel(new MigLayout("wrap, insets 40", "[fill,450]", "[]15[]"));
+        cardPanel.setBackground(Color.WHITE);
+        cardPanel.setBorder(BorderFactory.createEmptyBorder());
 
-        // Campo password com validação
-        txtPassword = new MyPasswordField();
-        txtPassword.setBorder(BorderFactory.createTitledBorder("Senha"));
-        add(txtPassword, "growx");
-        
-        lblPasswordError = createErrorLabel();
-        add(lblPasswordError, "growx");
+        // Logo/Ícone
+        JLabel logoLabel = new JLabel("📋");
+        logoLabel.setFont(new Font("Arial", Font.PLAIN, 60));
+        cardPanel.add(logoLabel, "center, wrap 10");
 
-        // Botões
-        btnLogin = new MyButton();
-        btnLogin.setText("Entrar");
-        btnLogin.setBackground(new Color(35, 60, 121));
-        btnLogin.setForeground(new Color(250, 250, 250));
-        
-        JPanel buttonPanel = new JPanel(new MigLayout("insets 0", "[grow][grow]"));
-        buttonPanel.add(btnLogin, "growx");
-        
-        add(buttonPanel, "w 40%, h 40");
+        // Título
+        JLabel titleLabel = new JLabel("Bem-vindo ao ConnectMe");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        cardPanel.add(titleLabel, "center, wrap 3");
 
-        // Ações
-        btnLogin.addActionListener(e -> login());
-        
-        // Enter para login
-        getRootPane().setDefaultButton(btnLogin);
+        JLabel subtitleLabel = new JLabel("Sistema de Gestão de Contactos");
+        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 13));
+        subtitleLabel.setForeground(new Color(120, 120, 120));
+        cardPanel.add(subtitleLabel, "center, wrap 25");
+
+        // Username
+        cardPanel.add(new JLabel("Username"), "");
+        usernameField = new JTextField();
+        usernameField.setFont(new Font("Arial", Font.PLAIN, 12));
+        usernameField.setText("admin");
+        cardPanel.add(usernameField, "grow, wrap 15");
+
+        // Senha
+        cardPanel.add(new JLabel("Senha"), "");
+        senhaField = new JPasswordField();
+        senhaField.setFont(new Font("Arial", Font.PLAIN, 12));
+        cardPanel.add(senhaField, "grow, wrap 15");
+
+        // Erro
+        errorLabel = new JLabel();
+        errorLabel.setForeground(new Color(244, 67, 54));
+        errorLabel.setFont(new Font("Arial", Font.PLAIN, 11));
+        cardPanel.add(errorLabel, "grow, wrap 15");
+
+        // Botão Login
+        loginBtn = new JButton("Entrar");
+        loginBtn.setBackground(new Color(25, 118, 210));
+        loginBtn.setForeground(Color.WHITE);
+        loginBtn.setFont(new Font("Arial", Font.BOLD, 13));
+        loginBtn.setPreferredSize(new Dimension(0, 45));
+        loginBtn.setFocusPainted(false);
+        loginBtn.setBorder(BorderFactory.createEmptyBorder());
+        cardPanel.add(loginBtn, "grow, wrap 20");
+
+        // Credenciais de Teste
+        JPanel testPanel = new JPanel(new MigLayout("wrap, insets 15", "[fill]", "[]5[]5[]"));
+        testPanel.setBackground(new Color(230, 240, 255));
+        testPanel.setBorder(BorderFactory.createLineBorder(new Color(25, 118, 210), 1));
+
+        JLabel testTitle = new JLabel("Credenciais de teste:");
+        testTitle.setFont(new Font("Arial", Font.BOLD, 12));
+        testPanel.add(testTitle);
+
+        JLabel adminCreds = new JLabel("Admin: admin / admin123");
+        adminCreds.setFont(new Font("Arial", Font.PLAIN, 11));
+        testPanel.add(adminCreds);
+
+        JLabel userCreds = new JLabel("Usuário: usuario / user123");
+        userCreds.setFont(new Font("Arial", Font.PLAIN, 11));
+        testPanel.add(userCreds);
+
+        cardPanel.add(testPanel, "grow");
+
+        mainPanel.add(cardPanel);
+        add(mainPanel);
+
+        setupListeners();
     }
 
-    private JLabel createErrorLabel() {
-        JLabel label = new JLabel();
-        label.setForeground(java.awt.Color.RED);
-        label.setFont(label.getFont().deriveFont(10f));
-        return label;
+    private void setupListeners() {
+        loginBtn.addActionListener(e -> handleLogin());
+        senhaField.addActionListener(e -> handleLogin());
     }
 
-    private void setupValidation() {
-        // Validação em tempo real do username
-        txtUsername.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { validateUsername(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { validateUsername(); }
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { validateUsername(); }
-        });
+    private void handleLogin() {
+        String username = usernameField.getText().trim();
+        String password = new String(senhaField.getPassword());
 
-        // Validação em tempo real da senha
-        txtPassword.getDocument().addDocumentListener(new javax.swing.event.DocumentListener() {
-            public void changedUpdate(javax.swing.event.DocumentEvent e) { validatePassword(); }
-            public void removeUpdate(javax.swing.event.DocumentEvent e) { validatePassword(); }
-            public void insertUpdate(javax.swing.event.DocumentEvent e) { validatePassword(); }
-        });
-    }
-
-    private void validateUsername() {
-        String username = txtUsername.getText().trim();
-        if (username.isEmpty()) {
-            lblUsernameError.setText("Usuário é obrigatório");
-        } else if (username.length() < 3) {
-            lblUsernameError.setText("Mínimo 3 caracteres");
-        } else if (!username.matches("^[a-zA-Z0-9_]+$")) {
-            lblUsernameError.setText("Apenas letras, números e _");
-        } else {
-            lblUsernameError.setText("");
-        }
-    }
-
-    private void validatePassword() {
-        String password = new String(txtPassword.getPassword());
-        if (password.isEmpty()) {
-            lblPasswordError.setText("Senha é obrigatória");
-        } else if (password.length() < 4) {
-            lblPasswordError.setText("Mínimo 4 caracteres");
-        } else {
-            lblPasswordError.setText("");
-        }
-    }
-
-    private boolean isFormValid() {
-        validateUsername();
-        validatePassword();
-        return lblUsernameError.getText().isEmpty() && lblPasswordError.getText().isEmpty();
-    }
-
-    private void login() {
-        if (!isFormValid()) {
-            JOptionPane.showMessageDialog(this, 
-                "Por favor, corrija os erros no formulário.", 
-                "Erro de Validação", 
-                JOptionPane.ERROR_MESSAGE);
+        if (username.isEmpty() || password.isEmpty()) {
+            errorLabel.setText("Username e senha são obrigatórios");
+            logger.warning("Tentativa de login com campos vazios");
             return;
         }
 
-        String username = txtUsername.getText().trim();
-        String password = new String(txtPassword.getPassword());
+        logger.info("Tentando login com username: " + username);
 
-        boolean success = controller.login(username, password);
+        // Usar o AuthController para fazer login
+        if (authController.login(username, password)) {
+            this.authenticatedUser = authController.getLoggedInUser();
+            logger.info("Login bem-sucedido para: " + username);
 
-        if (success) {
-            HomepageView dash = new HomepageView(controller);
-            dash.setVisible(true);
-            this.dispose();
+            if (onLoginSuccess != null) {
+                onLoginSuccess.run();
+            }
+            dispose();
         } else {
-            JOptionPane.showMessageDialog(this,
-                "Usuário ou senha incorretos.\nOu conta bloqueada.",
-                "Erro", JOptionPane.ERROR_MESSAGE);
-                
-            // Limpar senha
-            txtPassword.setText("");
-            txtPassword.requestFocus();
+            errorLabel.setText("Username ou senha incorretos");
+            senhaField.setText("");
+            logger.warning("Falha no login para: " + username);
         }
+    }
+
+    public User getAuthenticatedUser() {
+        return authenticatedUser;
+    }
+
+    public void setOnLoginSuccess(Runnable callback) {
+        this.onLoginSuccess = callback;
     }
 }
