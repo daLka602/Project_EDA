@@ -33,6 +33,31 @@ public class ContactSearchAlgorithm {
     }
 
     /**
+     * Busca por telefone (parcial ou exata)
+     */
+    public static ContactArrayList searchByPhone(ContactLinkedList list, String phoneQuery) {
+        ContactArrayList results = new ContactArrayList();
+
+        if (list == null || list.isEmpty() || phoneQuery == null || phoneQuery.trim().isEmpty()) {
+            return results;
+        }
+
+        String cleanQuery = cleanPhoneNumber(phoneQuery);
+
+        ContactLinkedList.ContactIterator it = list.iterator();
+        while (it.hasNext()) {
+            Contact c = it.next();
+            if (c != null && c.getPhone() != null) {
+                String cleanPhone = cleanPhoneNumber(c.getPhone());
+                if (cleanPhone.contains(cleanQuery)) {
+                    results.add(c);
+                }
+            }
+        }
+
+        return results;
+    }
+    /**
      * Busca com ranking de relevância
      * Ordena resultados por relevância (melhor match primeiro)
      */
@@ -94,7 +119,7 @@ public class ContactSearchAlgorithm {
     /**
      * Busca por telefone (exata)
      */
-    public static Contact searchByPhone(ContactLinkedList list, String phone) {
+   /* public static Contact searchByPhone(ContactLinkedList list, String phone) {
         if (list == null || list.isEmpty() || phone == null) {
             return null;
         }
@@ -112,7 +137,7 @@ public class ContactSearchAlgorithm {
         }
 
         return null;
-    }
+    }*/
 
     /**
      * Busca com filtro de tipo
@@ -221,7 +246,7 @@ public class ContactSearchAlgorithm {
     /**
      * Remove caracteres especiais de telefone para comparação
      */
-    private static String cleanPhoneNumber(String phone) {
+    public static String cleanPhoneNumber(String phone) {
         if (phone == null) return "";
         return phone.replaceAll("[^0-9]", "");
     }

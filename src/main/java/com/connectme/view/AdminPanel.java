@@ -1,11 +1,16 @@
 package com.connectme.view;
 
+import com.connectme.model.eda.ContactArrayList;
+import com.connectme.model.eda.ContactLinkedList;
+import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.view.componet.NavButton;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
+
+import static com.connectme.model.eda.ContactSearchAlgorithm.cleanPhoneNumber;
 
 public class AdminPanel extends JPanel {
     private User currentUser;
@@ -110,6 +115,32 @@ public class AdminPanel extends JPanel {
         // Garantir que ambos os botões tenham o mesmo tamanho preferido
         statsBtn.setPreferredSize(new Dimension(180, 46));
         usersBtn.setPreferredSize(new Dimension(210, 46));
+    }
+
+    /**
+     * Busca por telefone (parcial ou exata)
+     */
+    public static ContactArrayList searchByPhone(ContactLinkedList list, String phoneQuery) {
+        ContactArrayList results = new ContactArrayList();
+
+        if (list == null || list.isEmpty() || phoneQuery == null || phoneQuery.trim().isEmpty()) {
+            return results;
+        }
+
+        String cleanQuery = cleanPhoneNumber(phoneQuery);
+
+        ContactLinkedList.ContactIterator it = list.iterator();
+        while (it.hasNext()) {
+            Contact c = it.next();
+            if (c != null && c.getPhone() != null) {
+                String cleanPhone = cleanPhoneNumber(c.getPhone());
+                if (cleanPhone.contains(cleanQuery)) {
+                    results.add(c);
+                }
+            }
+        }
+
+        return results;
     }
 
     public void refreshAll() {
