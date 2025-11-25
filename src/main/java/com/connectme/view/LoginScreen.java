@@ -4,6 +4,10 @@ package com.connectme.view;
 import com.connectme.controller.AuthController;
 import com.connectme.model.entities.User;
 import com.connectme.model.util.HashUtil;
+import com.connectme.view.componet.MyButton;
+import com.connectme.view.componet.MyPasswordField;
+import com.connectme.view.componet.MyTextField;
+import com.connectme.view.componet.RoundedBorder;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
@@ -13,9 +17,9 @@ import java.util.logging.Logger;
 public class LoginScreen extends JFrame {
     private static final Logger logger = Logger.getLogger(LoginScreen.class.getName());
 
-    private JTextField usernameField;
-    private JPasswordField senhaField;
-    private JButton loginBtn;
+    private MyTextField usernameField;
+    private MyPasswordField senhaField;
+    private MyButton loginBtn;
     private JLabel errorLabel;
     private AuthController authController;
     private Runnable onLoginSuccess;
@@ -26,7 +30,8 @@ public class LoginScreen extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(500, 650);
         setLocationRelativeTo(null);
-        setResizable(false);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setResizable(false);
 
         this.authController = new AuthController();
         initComponents();
@@ -38,33 +43,29 @@ public class LoginScreen extends JFrame {
 
         JPanel cardPanel = new JPanel(new MigLayout("wrap, insets 40", "[fill,450]", "[]15[]"));
         cardPanel.setBackground(Color.WHITE);
-        cardPanel.setBorder(BorderFactory.createEmptyBorder());
-
-        // Logo/Ícone
-        JLabel logoLabel = new JLabel("📋");
-        logoLabel.setFont(new Font("Arial", Font.PLAIN, 60));
-        cardPanel.add(logoLabel, "center, wrap 10");
+        cardPanel.setBorder(new RoundedBorder(20, new Color(220, 220, 225)));
+        cardPanel.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
 
         // Título
         JLabel titleLabel = new JLabel("Bem-vindo ao ConnectMe");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 22));
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
         cardPanel.add(titleLabel, "center, wrap 3");
 
         JLabel subtitleLabel = new JLabel("Sistema de Gestão de Contactos");
-        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 13));
+        subtitleLabel.setFont(new Font("Arial", Font.PLAIN, 16));
         subtitleLabel.setForeground(new Color(120, 120, 120));
         cardPanel.add(subtitleLabel, "center, wrap 25");
 
         // Username
         cardPanel.add(new JLabel("Username"), "");
-        usernameField = new JTextField();
+        usernameField = new MyTextField();
         usernameField.setFont(new Font("Arial", Font.PLAIN, 12));
         usernameField.setText("admin");
         cardPanel.add(usernameField, "grow, wrap 15");
 
         // Senha
         cardPanel.add(new JLabel("Senha"), "");
-        senhaField = new JPasswordField();
+        senhaField = new MyPasswordField();
         senhaField.setFont(new Font("Arial", Font.PLAIN, 12));
         cardPanel.add(senhaField, "grow, wrap 15");
 
@@ -75,33 +76,12 @@ public class LoginScreen extends JFrame {
         cardPanel.add(errorLabel, "grow, wrap 15");
 
         // Botão Login
-        loginBtn = new JButton("Entrar");
-        loginBtn.setBackground(new Color(25, 118, 210));
-        loginBtn.setForeground(Color.WHITE);
-        loginBtn.setFont(new Font("Arial", Font.BOLD, 13));
-        loginBtn.setPreferredSize(new Dimension(0, 45));
+        loginBtn = new MyButton();
+        loginBtn.setText("Entrar");
+        loginBtn.setPreferredSize(new Dimension(120, 45));
         loginBtn.setFocusPainted(false);
         loginBtn.setBorder(BorderFactory.createEmptyBorder());
         cardPanel.add(loginBtn, "grow, wrap 20");
-
-        // Credenciais de Teste
-        JPanel testPanel = new JPanel(new MigLayout("wrap, insets 15", "[fill]", "[]5[]5[]"));
-        testPanel.setBackground(new Color(230, 240, 255));
-        testPanel.setBorder(BorderFactory.createLineBorder(new Color(25, 118, 210), 1));
-
-        JLabel testTitle = new JLabel("Credenciais de teste:");
-        testTitle.setFont(new Font("Arial", Font.BOLD, 12));
-        testPanel.add(testTitle);
-
-        JLabel adminCreds = new JLabel("Admin: admin / admin123");
-        adminCreds.setFont(new Font("Arial", Font.PLAIN, 11));
-        testPanel.add(adminCreds);
-
-        JLabel userCreds = new JLabel("Usuário: usuario / user123");
-        userCreds.setFont(new Font("Arial", Font.PLAIN, 11));
-        testPanel.add(userCreds);
-
-        cardPanel.add(testPanel, "grow");
 
         mainPanel.add(cardPanel);
         add(mainPanel);

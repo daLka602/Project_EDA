@@ -222,9 +222,6 @@ public class ContactPanel extends JPanel {
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    /**
-     * Atualiza o estado visual dos botões Undo/Redo
-     */
     private void updateUndoRedoButtons() {
         // Atualizar botão Undo
         if (contactController.canUndo()) {
@@ -259,9 +256,6 @@ public class ContactPanel extends JPanel {
         }
     }
 
-    /**
-     * Desfaz última operação
-     */
     private void handleUndo() {
         if (!contactController.canUndo()) {
             JOptionPane.showMessageDialog(this,
@@ -291,9 +285,6 @@ public class ContactPanel extends JPanel {
         }
     }
 
-    /**
-     * Refaz operação desfeita
-     */
     private void handleRedo() {
         if (!contactController.canRedo()) {
             JOptionPane.showMessageDialog(this,
@@ -352,7 +343,7 @@ public class ContactPanel extends JPanel {
     private void showSortDialog() {
         JDialog sortDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Organizar Contactos", true);
         sortDialog.setLayout(new MigLayout("fill, insets 25", "[fill]", "[]15[]15[]15[]20[]"));
-        sortDialog.setSize(450, 380);
+        sortDialog.setSize(450, 480);
         sortDialog.setLocationRelativeTo(this);
 
         JLabel titleLabel = new JLabel("⬍ Organizar Contactos");
