@@ -63,9 +63,7 @@ public class ContactBST {
         else return searchRec(node.right, name);
     }
 
-    /**
-     * NOVO: Busca parcial por nome (case-insensitive)
-     */
+     //Busca parcial por nome (case-insensitive)
     public List<Contact> searchPartial(String partialName) {
         List<Contact> results = new ArrayList<>();
         searchPartialRec(root, partialName.toLowerCase(), results);
@@ -79,27 +77,22 @@ public class ContactBST {
         if (contactName.contains(partial)) {
             results.add(node.data);
         }
-        
-        // Continuar busca em ambas subárvores
+
         searchPartialRec(node.left, partial, results);
         searchPartialRec(node.right, partial, results);
     }
 
-    /**
-     * NOVO: Remover contacto por ID
-     */
     public boolean remove(int contactId) {
         if (root == null) return false;
         
         Node parent = null;
         Node current = root;
         boolean isLeftChild = false;
-        
-        // Encontrar o nó a remover
+
         while (current != null && current.data.getId() != contactId) {
             parent = current;
             int cmp = current.data.getName().compareToIgnoreCase(
-                String.valueOf(contactId)); // Simplificação
+                String.valueOf(contactId));
             
             if (cmp > 0) {
                 current = current.left;
@@ -110,7 +103,7 @@ public class ContactBST {
             }
         }
         
-        if (current == null) return false; // Não encontrado
+        if (current == null) return false;
         
         return removeNode(parent, current, isLeftChild);
     }

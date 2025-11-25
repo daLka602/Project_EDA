@@ -8,10 +8,6 @@ import com.connectme.model.entities.Contact;
  */
 public class ContactSearchAlgorithm {
 
-    /**
-     * Busca otimizada que usa múltiplos critérios
-     * Retorna lista de contatos que correspondem à query
-     */
     public static ContactArrayList search(ContactLinkedList list, String query) {
         ContactArrayList results = new ContactArrayList();
 
@@ -32,9 +28,6 @@ public class ContactSearchAlgorithm {
         return results;
     }
 
-    /**
-     * Busca por telefone (parcial ou exata)
-     */
     public static ContactArrayList searchByPhone(ContactLinkedList list, String phoneQuery) {
         ContactArrayList results = new ContactArrayList();
 
@@ -80,7 +73,6 @@ public class ContactSearchAlgorithm {
             }
         }
 
-        // Ordenar por score (maior primeiro)
         results.sortByScore();
 
         // Converter para ContactArrayList
@@ -116,32 +108,6 @@ public class ContactSearchAlgorithm {
         return null;
     }
 
-    /**
-     * Busca por telefone (exata)
-     */
-   /* public static Contact searchByPhone(ContactLinkedList list, String phone) {
-        if (list == null || list.isEmpty() || phone == null) {
-            return null;
-        }
-
-        String cleanPhone = cleanPhoneNumber(phone);
-
-        ContactLinkedList.ContactIterator it = list.iterator();
-        while (it.hasNext()) {
-            Contact c = it.next();
-            if (c != null && c.getPhone() != null) {
-                if (cleanPhoneNumber(c.getPhone()).equals(cleanPhone)) {
-                    return c;
-                }
-            }
-        }
-
-        return null;
-    }*/
-
-    /**
-     * Busca com filtro de tipo
-     */
     public static ContactArrayList searchWithTypeFilter(ContactLinkedList list,
                                                         String query,
                                                         com.connectme.model.enums.ContactType type) {
@@ -164,9 +130,6 @@ public class ContactSearchAlgorithm {
         return filtered;
     }
 
-    /**
-     * Verifica se o contato corresponde à query
-     */
     private static boolean matches(Contact c, String normalizedQuery) {
         // Busca no nome
         if (c.getName() != null && contains(normalizeString(c.getName()), normalizedQuery)) {
@@ -312,7 +275,7 @@ public class ContactSearchAlgorithm {
         }
 
         /**
-         * Ordena por score usando Insertion Sort (eficiente para pequenas listas)
+         * Ordena por score usando Insertion Sort
          */
         void sortByScore() {
             for (int i = 1; i < size; i++) {

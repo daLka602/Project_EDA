@@ -80,9 +80,6 @@ public class ContactHashTable {
         return null;
     }
 
-    /**
-     * NOVO: Remover por telefone
-     */
     public boolean remove(String phone) {
         if (phone == null) return false;
         
@@ -106,9 +103,6 @@ public class ContactHashTable {
         return false;
     }
 
-    /**
-     * NOVO: Remover por ID do contacto
-     */
     public boolean removeByContactId(int contactId) {
         boolean removed = false;
         for (int i = 0; i < table.length; i++) {
@@ -124,7 +118,6 @@ public class ContactHashTable {
                     }
                     size--;
                     removed = true;
-                    // Continuar pois pode haver múltiplas entradas? (não deveria)
                     break;
                 }
                 prev = cur;

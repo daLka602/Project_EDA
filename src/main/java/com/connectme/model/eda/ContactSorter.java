@@ -201,10 +201,6 @@ public class ContactSorter {
         return s1.compareToIgnoreCase(s2);
     }
 
-    /**
-     * Busca binária em lista ordenada (requer lista ordenada por NAME)
-     * Complexidade: O(log n)
-     */
     public static Contact binarySearch(ContactLinkedList sortedList, String name) {
         if (sortedList == null || sortedList.isEmpty() || name == null) {
             return null;
@@ -214,9 +210,6 @@ public class ContactSorter {
         return binarySearchArray(arr, name, 0, arr.length - 1);
     }
 
-    /**
-     * Implementação recursiva da busca binária
-     */
     private static Contact binarySearchArray(Contact[] arr, String name, int low, int high) {
         if (low > high) return null;
 
@@ -236,10 +229,6 @@ public class ContactSorter {
         }
     }
 
-    /**
-     * Busca sequencial em lista não ordenada
-     * Complexidade: O(n)
-     */
     public static Contact linearSearch(ContactLinkedList list, String name) {
         if (list == null || list.isEmpty() || name == null) {
             return null;
@@ -257,9 +246,6 @@ public class ContactSorter {
         return null;
     }
 
-    /**
-     * Verifica se a lista está ordenada
-     */
     public static boolean isSorted(ContactLinkedList list, SortField field, SortOrder order) {
         if (list == null || list.size() <= 1) {
             return true;
@@ -279,63 +265,5 @@ public class ContactSorter {
         }
 
         return true;
-    }
-
-    /**
-     * Retorna estatísticas sobre a ordenação (útil para debug/análise)
-     */
-    public static class SortStats {
-        public long timeMs;
-        public int comparisons;
-        public int swaps;
-        public String algorithm;
-
-        public SortStats(String algorithm) {
-            this.algorithm = algorithm;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("%s: %dms, Comparações: %d, Trocas: %d",
-                    algorithm, timeMs, comparisons, swaps);
-        }
-    }
-
-    /**
-     * Ordena com estatísticas de performance
-     */
-    public static SortResult sortWithStats(ContactLinkedList list, SortField field,
-                                           SortOrder order, String algorithm) {
-        long startTime = System.currentTimeMillis();
-        ContactLinkedList sorted;
-
-        if ("MergeSort".equalsIgnoreCase(algorithm)) {
-            sorted = mergeSort(list, field, order);
-        } else {
-            sorted = quickSort(list, field, order);
-        }
-
-        long endTime = System.currentTimeMillis();
-
-        SortResult result = new SortResult();
-        result.sortedList = sorted;
-        result.timeMs = endTime - startTime;
-        result.algorithm = algorithm;
-        result.size = list.size();
-
-        return result;
-    }
-
-    public static class SortResult {
-        public ContactLinkedList sortedList;
-        public long timeMs;
-        public String algorithm;
-        public int size;
-
-        @Override
-        public String toString() {
-            return String.format("Algoritmo: %s | Tamanho: %d | Tempo: %dms",
-                    algorithm, size, timeMs);
-        }
     }
 }

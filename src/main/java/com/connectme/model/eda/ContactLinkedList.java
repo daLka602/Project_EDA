@@ -97,17 +97,11 @@ public class ContactLinkedList {
         }
     }
 
-    /**
-     * Limpa toda a lista
-     */
     public void clear() {
         head = null;
         size = 0;
     }
 
-    /**
-     * Obtém o contato na posição index
-     */
     public Contact get(int index) {
         if (index < 0 || index >= size) return null;
 
@@ -145,9 +139,6 @@ public class ContactLinkedList {
         return list;
     }
 
-    /**
-     * Iterador personalizado
-     */
     public ContactIterator iterator() {
         return new ContactIterator(head);
     }
