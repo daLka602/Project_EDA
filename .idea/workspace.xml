@@ -7,12 +7,12 @@
     <list default="true" id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Diagram/ProjectMap_EDA.txt" beforeDir="false" afterPath="$PROJECT_DIR$/Diagram/ProjectMap_EDA.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/controller/ContactController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/controller/ContactController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/ContactLinkedList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/ContactLinkedList.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$1.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/UserDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/dao/UserDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/AdminPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/AdminPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/UserFormDialog.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/UserFormDialog.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/AdminPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/AdminPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/UserFormDialog.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/UserFormDialog.class" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

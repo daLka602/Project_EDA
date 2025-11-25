@@ -1,5 +1,4 @@
-src
-├── main
+main
 │   ├── java
 │   │   └── com
 │   │       └── connectme
@@ -19,9 +18,14 @@ src
 │   │           │   │   ├── IUserDAO.java
 │   │           │   │   └── UserDAO.java
 │   │           │   ├── eda
+│   │           │   │   ├── ContactArrayList.java
 │   │           │   │   ├── ContactBST.java
 │   │           │   │   ├── ContactHashTable.java
-│   │           │   │   └── ContactLinkedList.java
+│   │           │   │   ├── ContactLinkedList.java
+│   │           │   │   ├── ContactSearchAlgorithm.java
+│   │           │   │   ├── ContactSorter.java
+│   │           │   │   ├── ContactStack.java
+│   │           │   │   └── ContactStateManager.java
 │   │           │   ├── entities
 │   │           │   │   ├── Contact.java
 │   │           │   │   └── User.java
@@ -53,6 +57,4 @@ src
 │   │               ├── MainFrame.java
 │   │               ├── UserCardPanel.java
 │   │               └── UserFormDialog.java
-│   └── resources
-│       └── aplication.properties
-└── 
+

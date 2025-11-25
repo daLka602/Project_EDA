@@ -4,6 +4,7 @@ import com.connectme.controller.AdminController;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.AccessLevel;
 import com.connectme.model.enums.UserStatus;
+import com.connectme.model.util.HashUtil; // ADICIONAR ESTA IMPORT
 import com.connectme.view.componet.MyButton;
 import com.connectme.view.componet.MyPasswordField;
 import com.connectme.view.componet.MyTextField;
@@ -129,6 +130,12 @@ public class UserFormDialog extends JDialog {
         passwordField.setBorder(new RoundedFormBorder(6, new Color(220, 220, 225)));
         passwordField.setMargin(new Insets(8, 12, 8, 12));
         passwordField.setPreferredSize(new Dimension(200, 36));
+
+        // Se estiver editando, mostrar placeholder diferente
+        if (user != null) {
+            passwordField.setText("********"); // Placeholder para edição
+        }
+
         formPanel.add(passwordField, "grow, wrap");
 
         // Função
@@ -209,15 +216,32 @@ public class UserFormDialog extends JDialog {
         String role = funcaoCombo.getSelectedItem().toString();
         boolean isActive = contaAtivaCheck.isSelected();
 
-        if (username.isEmpty() || email.isEmpty() || password.isEmpty()) {
+        // Validações
+        if (username.isEmpty() || email.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Preencha todos os campos obrigatórios", "Validação", JOptionPane.WARNING_MESSAGE);
             return;
+        }
+
+        // Se for novo usuário, password é obrigatória
+        if (user == null && password.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "A senha é obrigatória para novo usuário", "Validação", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // Se estiver editando e password estiver vazia ou for o placeholder, manter a senha atual
+        String passwordHash;
+        if (user != null && (password.isEmpty() || password.equals("********"))) {
+            // Manter a senha atual
+            passwordHash = user.getPasswordHash();
+        } else {
+            // Gerar hash da nova senha
+            passwordHash = HashUtil.sha256(password);
         }
 
         User newUser = user != null ? user : new User();
         newUser.setUsername(username);
         newUser.setEmail(email);
-        newUser.setPasswordHash(password);
+        newUser.setPasswordHash(passwordHash); // AGORA GUARDA O HASH
 
         switch (role) {
             case "Administrador": newUser.setRole(AccessLevel.ADMIN); break;

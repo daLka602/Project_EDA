@@ -91,7 +91,7 @@ public class AuthService {
         boolean created = userDAO.create(user);
 
         if (created) {
-            logger.info("Usuário registrado com sucesso: " + username);
+            logger.info("Usuário1 registrado com sucesso: " + username);
         } else {
             logger.severe("Falha ao registrar usuário: " + username);
         }

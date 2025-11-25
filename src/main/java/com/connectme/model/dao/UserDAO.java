@@ -131,21 +131,22 @@ public class UserDAO implements IUserDAO {
             return false;
         }
 
-        String sql = "UPDATE users SET username=?, email=?, role=?, status=? WHERE id=?";
+        String sql = "UPDATE users SET username=?, email=?, passwordHash=?, role=?, status=? WHERE id=?";
 
         try (Connection conn = DbConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
             stmt.setString(1, user.getUsername().trim().toLowerCase());
             stmt.setString(2, user.getEmail().trim().toLowerCase());
-            stmt.setString(3, user.getRole() != null ? user.getRole().name() : AccessLevel.STAFF.name());
-            stmt.setString(4, user.getStatus() != null ? user.getStatus().name() : UserStatus.ATIVE.name());
-            stmt.setInt(5, user.getId());
+            stmt.setString(3, user.getPasswordHash());
+            stmt.setString(4, user.getRole() != null ? user.getRole().name() : AccessLevel.STAFF.name());
+            stmt.setString(5, user.getStatus() != null ? user.getStatus().name() : UserStatus.ATIVE.name());
+            stmt.setInt(6, user.getId());
 
             int affectedRows = stmt.executeUpdate();
 
             if (affectedRows > 0) {
-                logger.info("Usuário atualizado com sucesso: " + user.getUsername());
+                logger.info("Usuário4 atualizado com sucesso: " + user.getUsername());
             }
             return affectedRows > 0;
 
