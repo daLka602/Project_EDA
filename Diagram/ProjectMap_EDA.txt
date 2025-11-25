@@ -6,8 +6,12 @@ src
 │   │           ├── config
 │   │           │   └── DbConnection.java
 │   │           ├── controller
-│   │           │   └── UserController.java
-│   │           ├── MainApp.java
+│   │           │   ├── AdminController.java
+│   │           │   ├── AuthController.java
+│   │           │   ├── ContactController.java
+│   │           │   └── ExportController.java
+│   │           ├── GenerateHashes.java
+│   │           ├── Main.java
 │   │           ├── model
 │   │           │   ├── dao
 │   │           │   │   ├── ContactDAO.java
@@ -31,13 +35,24 @@ src
 │   │           │       ├── HashUtil.java
 │   │           │       └── PdfUtil.java
 │   │           └── view
-│   │               
+│   │               ├── AdminPanel.java
+│   │               ├── componet
+│   │               │   ├── MyButton.java
+│   │               │   ├── MyPasswordField.java
+│   │               │   ├── MyTextField.java
+│   │               │   ├── NavButton.java
+│   │               │   ├── RoundedBorder.java
+│   │               │   └── RoundedFormBorder.java
+│   │               ├── ContactForm.java
+│   │               ├── ContactPanel.java
+│   │               ├── icons
+│   │               │   ├── IconGeneratorPNG.java
+│   │               │   ├── IconUtils.java
+│   │               │   └── search.png
+│   │               ├── LoginScreen.java
+│   │               ├── MainFrame.java
+│   │               ├── UserCardPanel.java
+│   │               └── UserFormDialog.java
 │   └── resources
 │       └── aplication.properties
-└── test
-    └── java
-        └── com
-            └── connectme
-                └── dao
-                    └── ContactDAOTest.java
-
+└── 

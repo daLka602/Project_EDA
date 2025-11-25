@@ -1,8 +1,8 @@
-// src/main/java/com/connectme/view/ContactPanel.java
 package com.connectme.view;
 
 import com.connectme.controller.ContactController;
 import com.connectme.controller.ExportController;
+import com.connectme.model.eda.*;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.ContactType;
@@ -22,9 +22,11 @@ public class ContactPanel extends JPanel {
     private ExportController exportController;
     private JTextField searchField;
     private JPanel cardsPanel;
-    private List<Contact> allContacts;
+    private ContactLinkedList currentContacts;
     private JLabel countLabel;
     private JButton currentFilterBtn;
+    private NavButton undoBtn;
+    private NavButton redoBtn;
 
     public ContactPanel(User user) {
         this.currentUser = user;
@@ -40,9 +42,8 @@ public class ContactPanel extends JPanel {
 
     private void initComponents() {
         // Header Panel
-        JPanel headerPanel = new JPanel(new MigLayout("fill, insets 60 90 30 80", "[]15[]push[100]10[100]", "[]"));
+        JPanel headerPanel = new JPanel(new MigLayout("fill, insets 60 90 30 80", "[]15[]push[]10[]", "[]"));
         headerPanel.setBackground(new Color(248, 249, 252));
-        //headerPanel.setMaximumSize(new Dimension(1700, 160));
 
         JLabel iconLabel = new JLabel("📋");
         iconLabel.setFont(new Font("Segoe UI", Font.PLAIN, 32));
@@ -63,18 +64,48 @@ public class ContactPanel extends JPanel {
 
         headerPanel.add(titlePanel, "grow");
 
-        headerPanel.add(new JLabel(), "grow");
+        // Botões de controle
+        JPanel controlPanel = new JPanel(new MigLayout("insets 0, gap 10", "[][][][]", "[]"));
+        controlPanel.setBackground(new Color(248, 249, 252));
 
-        JButton anteriorBtn = createNavButton("Anterior");
-        headerPanel.add(anteriorBtn, "w 120!, h 45!");
+        // Botão Atualizar
+        NavButton refreshBtn = new NavButton("🔄 Atualizar", true);
+        refreshBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        refreshBtn.setToolTipText("Recarregar contatos do banco de dados");
+        refreshBtn.addActionListener(e -> handleRefresh());
+        controlPanel.add(refreshBtn, "w 130!, h 45!");
 
-        JButton depoisBtn = createNavButton("Depois");
-        headerPanel.add(depoisBtn, "w 120!, h 45!, gapleft 10");
+        undoBtn = new NavButton("⬅ Anterior", true);
+        undoBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        undoBtn.setBackground(new Color(225, 220, 220));
+        undoBtn.setForeground(new Color(30, 34, 44));
+        undoBtn.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        undoBtn.setToolTipText("Desfazer última operação");
+        undoBtn.addActionListener(e -> handleUndo());
+        controlPanel.add(undoBtn, "w 120!, h 45!");
 
-        JButton exportBtn = new NavButton("Exportar", true);
+        redoBtn = new NavButton("➡ Depois", true);
+        redoBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        redoBtn.setBackground(new Color(225, 220, 220));
+        redoBtn.setForeground(new Color(30, 34, 44));
+        redoBtn.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+        redoBtn.setToolTipText("Refazer operação desfeita");
+        redoBtn.addActionListener(e -> handleRedo());
+        controlPanel.add(redoBtn, "w 120!, h 45!");
+
+        NavButton sortBtn = new NavButton("⬍ Organizar", true);
+        sortBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        sortBtn.setToolTipText("Ordenar contatos");
+        sortBtn.addActionListener(e -> showSortDialog());
+        controlPanel.add(sortBtn, "w 160!, h 45!");
+
+        NavButton exportBtn = new NavButton("📤 Exportar", true);
         exportBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        exportBtn.setToolTipText("Exportar contatos");
         exportBtn.addActionListener(e -> handleExport());
-        headerPanel.add(exportBtn, "w 140!, h 45!, gapleft 10");
+        controlPanel.add(exportBtn, "w 130!, h 45!");
+
+        headerPanel.add(controlPanel, "right");
 
         add(headerPanel, BorderLayout.NORTH);
 
@@ -82,7 +113,6 @@ public class ContactPanel extends JPanel {
         JPanel searchPanel = new JPanel(new MigLayout("fill, insets 20 40 20 40", "[][][]0[grow][]", "center"));
         searchPanel.setBackground(Color.WHITE);
         searchPanel.setBorder(new RoundedBorder(1, new Color(220, 220, 225)));
-        searchPanel.setMaximumSize(new Dimension(1500, 160));
 
         ImageIcon originalSearchIcon = new ImageIcon("src/main/java/com/connectme/view/icons/search.png");
         ImageIcon searchIcon = IconUtils.colorizeIcon(originalSearchIcon, Color.WHITE);
@@ -121,10 +151,8 @@ public class ContactPanel extends JPanel {
             searchPanel.add(filterBtn, "grow, h 43!, gapleft 15");
         }
 
-        // Espaço vazio
         searchPanel.add(new JLabel(), "grow");
 
-        // Add contact button (right)
         NavButton addBtn = new NavButton(" + Adicionar", true);
         addBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         addBtn.addActionListener(e -> openContactForm(null));
@@ -146,21 +174,10 @@ public class ContactPanel extends JPanel {
         add(scrollPane, "grow, SOUTH");
     }
 
-    private JButton createNavButton(String text) {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        btn.setBackground(Color.WHITE);
-        btn.setForeground(new Color(100, 100, 100));
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 225), 1));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        return btn;
-    }
-
     private JButton createFilterButton(String text) {
-        NavButton btn = new NavButton(text,true);
+        NavButton btn = new NavButton(text, true);
         btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        btn.setBackground(new Color(225,220,220));
+        btn.setBackground(new Color(225, 220, 220));
         btn.setForeground(new Color(9, 30, 30));
         btn.setFocusPainted(false);
         return btn;
@@ -187,9 +204,123 @@ public class ContactPanel extends JPanel {
     }
 
     private void loadContacts() {
-        allContacts = contactController.listAll();
-        updateCards(allContacts);
+        currentContacts = contactController.listAllAsLinkedList();
+        updateCards(currentContacts);
         updateCountLabel();
+        updateUndoRedoButtons();
+    }
+
+    /**
+     * Atualiza contatos do banco de dados
+     */
+    private void handleRefresh() {
+        contactController.refreshCache();
+        loadContacts();
+        JOptionPane.showMessageDialog(this,
+                "Contatos atualizados com sucesso!",
+                "Atualização",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    /**
+     * Atualiza o estado visual dos botões Undo/Redo
+     */
+    private void updateUndoRedoButtons() {
+        // Atualizar botão Undo
+        if (contactController.canUndo()) {
+            undoBtn.setBackground(new Color(73, 80, 243));
+            undoBtn.setForeground(Color.WHITE);
+            undoBtn.setBorder(BorderFactory.createEmptyBorder());
+            undoBtn.setEnabled(true);
+            String desc = contactController.getUndoDescription();
+            undoBtn.setToolTipText(desc != null ? "Desfazer: " + desc : "Desfazer última operação");
+        } else {
+            undoBtn.setBackground(new Color(225, 220, 220));
+            undoBtn.setForeground(new Color(30, 34, 44));
+            undoBtn.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+            undoBtn.setEnabled(false);
+            undoBtn.setToolTipText("Nenhuma operação para desfazer");
+        }
+
+        // Atualizar botão Redo
+        if (contactController.canRedo()) {
+            redoBtn.setBackground(new Color(73, 80, 243));
+            redoBtn.setForeground(Color.WHITE);
+            redoBtn.setBorder(BorderFactory.createEmptyBorder());
+            redoBtn.setEnabled(true);
+            String desc = contactController.getRedoDescription();
+            redoBtn.setToolTipText(desc != null ? "Refazer: " + desc : "Refazer operação desfeita");
+        } else {
+            redoBtn.setBackground(new Color(225, 220, 220));
+            redoBtn.setForeground(new Color(30, 34, 44));
+            redoBtn.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
+            redoBtn.setEnabled(false);
+            redoBtn.setToolTipText("Nenhuma operação para refazer");
+        }
+    }
+
+    /**
+     * Desfaz última operação
+     */
+    private void handleUndo() {
+        if (!contactController.canUndo()) {
+            JOptionPane.showMessageDialog(this,
+                    "Não há operações para desfazer",
+                    "Undo",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String description = contactController.getUndoDescription();
+
+        if (contactController.undo()) {
+            currentContacts = contactController.listAllAsLinkedList();
+            updateCards(currentContacts);
+            updateCountLabel();
+            updateUndoRedoButtons();
+
+            JOptionPane.showMessageDialog(this,
+                    "Operação desfeita: " + (description != null ? description : ""),
+                    "Undo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao desfazer operação",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
+    /**
+     * Refaz operação desfeita
+     */
+    private void handleRedo() {
+        if (!contactController.canRedo()) {
+            JOptionPane.showMessageDialog(this,
+                    "Não há operações para refazer",
+                    "Redo",
+                    JOptionPane.INFORMATION_MESSAGE);
+            return;
+        }
+
+        String description = contactController.getRedoDescription();
+
+        if (contactController.redo()) {
+            currentContacts = contactController.listAllAsLinkedList();
+            updateCards(currentContacts);
+            updateCountLabel();
+            updateUndoRedoButtons();
+
+            JOptionPane.showMessageDialog(this,
+                    "Operação refeita: " + (description != null ? description : ""),
+                    "Redo",
+                    JOptionPane.INFORMATION_MESSAGE);
+        } else {
+            JOptionPane.showMessageDialog(this,
+                    "Erro ao refazer operação",
+                    "Erro",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     private void performSearch() {
@@ -197,8 +328,9 @@ public class ContactPanel extends JPanel {
         if (query.isEmpty() || query.equals("Pesquisar contactos...")) {
             loadContacts();
         } else {
-            List<Contact> results = contactController.search(query);
-            updateCards(results);
+            ContactArrayList results = contactController.search(query);
+            currentContacts = arrayListToLinkedList(results);
+            updateCards(currentContacts);
         }
     }
 
@@ -212,13 +344,112 @@ public class ContactPanel extends JPanel {
         selectedBtn.setForeground(Color.WHITE);
         currentFilterBtn = selectedBtn;
 
-        List<Contact> filtered = type == null
-                ? contactController.listAll()
-                : contactController.filterByType(type);
-        updateCards(filtered);
+        ContactArrayList filtered = contactController.filterByType(type);
+        currentContacts = arrayListToLinkedList(filtered);
+        updateCards(currentContacts);
     }
 
-    private void updateCards(List<Contact> contacts) {
+    private void showSortDialog() {
+        JDialog sortDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Organizar Contactos", true);
+        sortDialog.setLayout(new MigLayout("fill, insets 25", "[fill]", "[]15[]15[]15[]20[]"));
+        sortDialog.setSize(450, 380);
+        sortDialog.setLocationRelativeTo(this);
+
+        JLabel titleLabel = new JLabel("⬍ Organizar Contactos");
+        titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 20));
+        sortDialog.add(titleLabel, "wrap");
+
+        // Campo de ordenação
+        JLabel fieldLabel = new JLabel("Ordenar por:");
+        fieldLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        sortDialog.add(fieldLabel, "wrap");
+
+        JComboBox<String> fieldCombo = new JComboBox<>(new String[]{
+                "Nome", "Telefone", "Email", "Empresa", "Tipo"
+        });
+        fieldCombo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        sortDialog.add(fieldCombo, "grow, h 40!, wrap");
+
+        // Ordem
+        JLabel orderLabel = new JLabel("Ordem:");
+        orderLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        sortDialog.add(orderLabel, "wrap");
+
+        JComboBox<String> orderCombo = new JComboBox<>(new String[]{"Crescente (A-Z)", "Decrescente (Z-A)"});
+        orderCombo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        sortDialog.add(orderCombo, "grow, h 40!, wrap");
+
+        // Algoritmo
+        JLabel algoLabel = new JLabel("Algoritmo:");
+        algoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        sortDialog.add(algoLabel, "wrap");
+
+        JComboBox<String> algoCombo = new JComboBox<>(new String[]{"MergeSort", "QuickSort"});
+        algoCombo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        sortDialog.add(algoCombo, "grow, h 40!, wrap");
+
+        // Botões
+        JPanel btnPanel = new JPanel(new MigLayout("", "[grow][grow]", "[]"));
+        btnPanel.setOpaque(false);
+
+        JButton cancelBtn = new JButton("Cancelar");
+        cancelBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        cancelBtn.addActionListener(e -> sortDialog.dispose());
+        btnPanel.add(cancelBtn, "grow, h 45!");
+
+        NavButton sortBtn = new NavButton("Organizar", true);
+        sortBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
+        sortBtn.addActionListener(e -> {
+            performSort(
+                    fieldCombo.getSelectedIndex(),
+                    orderCombo.getSelectedIndex(),
+                    algoCombo.getSelectedIndex()
+            );
+            sortDialog.dispose();
+        });
+        btnPanel.add(sortBtn, "grow, h 45!");
+
+        sortDialog.add(btnPanel, "grow");
+        sortDialog.setVisible(true);
+    }
+
+    private void performSort(int fieldIndex, int orderIndex, int algoIndex) {
+        ContactSorter.SortField field;
+        switch (fieldIndex) {
+            case 0: field = ContactSorter.SortField.NAME; break;
+            case 1: field = ContactSorter.SortField.PHONE; break;
+            case 2: field = ContactSorter.SortField.EMAIL; break;
+            case 3: field = ContactSorter.SortField.COMPANY; break;
+            case 4: field = ContactSorter.SortField.TYPE; break;
+            default: field = ContactSorter.SortField.NAME;
+        }
+
+        ContactSorter.SortOrder order = orderIndex == 0
+                ? ContactSorter.SortOrder.ASC
+                : ContactSorter.SortOrder.DESC;
+
+        long startTime = System.currentTimeMillis();
+        ContactLinkedList sorted;
+
+        if (algoIndex == 0) {
+            sorted = contactController.sortWithMergeSort(field, order);
+        } else {
+            sorted = contactController.sortWithQuickSort(field, order);
+        }
+
+        long endTime = System.currentTimeMillis();
+
+        currentContacts = sorted;
+        updateCards(currentContacts);
+
+        String algoName = algoIndex == 0 ? "MergeSort" : "QuickSort";
+        JOptionPane.showMessageDialog(this,
+                "Ordenação concluída com " + algoName + "\nTempo: " + (endTime - startTime) + "ms",
+                "Sucesso",
+                JOptionPane.INFORMATION_MESSAGE);
+    }
+
+    private void updateCards(ContactLinkedList contacts) {
         cardsPanel.removeAll();
 
         if (contacts.isEmpty()) {
@@ -237,14 +468,16 @@ public class ContactPanel extends JPanel {
 
             cardsPanel.add(emptyPanel, "grow");
         } else {
-            for (Contact contact : contacts) {
-                JPanel contactCard = createContactCard(contact);
-                contactCard.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contactCard.setMaximumSize(new Dimension(1400, 140));
-                cardsPanel.add(contactCard, BorderLayout.CENTER);
-
-                // Adicionar um pequeno espaço entre os cards
-                cardsPanel.add(Box.createVerticalStrut(10));
+            ContactLinkedList.ContactIterator it = contacts.iterator();
+            while (it.hasNext()) {
+                Contact contact = it.next();
+                if (contact != null) {
+                    JPanel contactCard = createContactCard(contact);
+                    contactCard.setAlignmentX(Component.CENTER_ALIGNMENT);
+                    contactCard.setMaximumSize(new Dimension(1400, 140));
+                    cardsPanel.add(contactCard, BorderLayout.CENTER);
+                    cardsPanel.add(Box.createVerticalStrut(10));
+                }
             }
         }
 
@@ -266,7 +499,7 @@ public class ContactPanel extends JPanel {
         JLabel nameLabel = new JLabel(contact.getName());
         nameLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
         nameLabel.setForeground(new Color(33, 33, 33));
-        namePanel.add(nameLabel );
+        namePanel.add(nameLabel);
 
         JLabel badgeLabel = new JLabel(getTypeDisplay(contact.getType()));
         badgeLabel.setFont(new Font("Segoe UI", Font.BOLD, 14));
@@ -281,21 +514,18 @@ public class ContactPanel extends JPanel {
         JPanel detailsPanel = new JPanel(new MigLayout("insets 0, gap 15", "[][][][]", "center"));
         detailsPanel.setBackground(Color.WHITE);
 
-        // Empresa
         if (contact.getCompany() != null && !contact.getCompany().isEmpty()) {
-            JLabel companyLabel = new JLabel("📁 " + contact.getCompany());
+            JLabel companyLabel = new JLabel("🏢 " + contact.getCompany());
             companyLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
             companyLabel.setForeground(new Color(100, 100, 100));
             detailsPanel.add(companyLabel, "grow");
         }
 
-        // Telefone
         JLabel phoneLabel = new JLabel("📞 " + contact.getPhone());
         phoneLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         phoneLabel.setForeground(new Color(100, 100, 100));
         detailsPanel.add(phoneLabel, "grow");
 
-        // Email
         if (contact.getEmail() != null && !contact.getEmail().isEmpty()) {
             JLabel emailLabel = new JLabel("📧 " + contact.getEmail());
             emailLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -303,7 +533,6 @@ public class ContactPanel extends JPanel {
             detailsPanel.add(emailLabel, "grow, wrap");
         }
 
-        // Descrição
         if (contact.getDescription() != null && !contact.getDescription().isEmpty()) {
             JLabel descLabel = new JLabel(contact.getDescription());
             descLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
@@ -313,7 +542,7 @@ public class ContactPanel extends JPanel {
 
         card.add(detailsPanel, "grow");
 
-        // Botões de ação (direita)
+        // Botões de ação
         JPanel actionsPanel = new JPanel(new MigLayout("insets 0, gap 12", "[][]", "center"));
         actionsPanel.setBackground(Color.WHITE);
         actionsPanel.setOpaque(false);
@@ -338,45 +567,40 @@ public class ContactPanel extends JPanel {
         deleteBtn.addActionListener(e -> deleteContact(contact));
         actionsPanel.add(deleteBtn, "w 120!, h 40!");
 
-        card.add(actionsPanel,"right");
+        card.add(actionsPanel, "right");
 
         return card;
     }
 
     private Color getTypeBadgeColor(ContactType type) {
         switch (type) {
-            case CUSTOMER:
-                return new Color(76, 175, 80);
-            case PARTNER:
-                return new Color(255, 152, 0);
-            case SUPPLIER:
-                return new Color(156, 39, 176);
-            default:
-                return new Color(33, 150, 243);
+            case CUSTOMER: return new Color(76, 175, 80);
+            case PARTNER: return new Color(255, 152, 0);
+            case SUPPLIER: return new Color(156, 39, 176);
+            default: return new Color(33, 150, 243);
         }
     }
 
     private String getTypeDisplay(ContactType type) {
         if (type == null) return "-";
         switch (type) {
-            case CUSTOMER:
-                return "Cliente";
-            case PARTNER:
-                return "Parceiro";
-            case SUPPLIER:
-                return "Fornecedor";
-            default:
-                return type.name();
+            case CUSTOMER: return "Cliente";
+            case PARTNER: return "Parceiro";
+            case SUPPLIER: return "Fornecedor";
+            default: return type.name();
         }
     }
 
     private void updateCountLabel() {
-        int count = allContacts.size();
+        int count = currentContacts.size();
         countLabel.setText(count + " contacto" + (count != 1 ? "s" : "") + " guardado" + (count != 1 ? "s" : ""));
     }
 
     private void openContactForm(Contact contact) {
-        new ContactForm(this, contact, currentUser, contactController, this::loadContacts).setVisible(true);
+        new ContactForm(this, contact, currentUser, contactController, () -> {
+            loadContacts();
+            updateUndoRedoButtons();
+        }).setVisible(true);
     }
 
     private void deleteContact(Contact contact) {
@@ -391,6 +615,7 @@ public class ContactPanel extends JPanel {
             if (contactController.delete(contact.getId())) {
                 JOptionPane.showMessageDialog(this, "Contacto deletado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
                 loadContacts();
+                updateUndoRedoButtons();
             } else {
                 JOptionPane.showMessageDialog(this, "Erro ao deletar contacto!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
@@ -416,13 +641,21 @@ public class ContactPanel extends JPanel {
                     options[2]
             );
 
+            // Converter LinkedList para List para exportação
+            ContactArrayList arrayList = new ContactArrayList();
+            ContactLinkedList.ContactIterator it = currentContacts.iterator();
+            while (it.hasNext()) {
+                Contact c = it.next();
+                if (c != null) arrayList.add(c);
+            }
+
             boolean success = false;
             if (choice == 0) {
-                success = exportController.exportToTxt(allContacts, selectedDir);
+                success = exportController.exportToTxt(linkedListToList(currentContacts), selectedDir);
             } else if (choice == 1) {
-                success = exportController.exportToHtml(allContacts, selectedDir);
+                success = exportController.exportToHtml(linkedListToList(currentContacts), selectedDir);
             } else if (choice == 2) {
-                success = exportController.exportMultiple(allContacts, selectedDir, "txt", "html");
+                success = exportController.exportMultiple(linkedListToList(currentContacts), selectedDir, "txt", "html");
             }
 
             if (success) {
@@ -431,5 +664,29 @@ public class ContactPanel extends JPanel {
                 JOptionPane.showMessageDialog(this, "Erro ao exportar contactos!", "Erro", JOptionPane.ERROR_MESSAGE);
             }
         }
+    }
+
+    private ContactLinkedList arrayListToLinkedList(ContactArrayList arrayList) {
+        ContactLinkedList linkedList = new ContactLinkedList();
+        ContactArrayList.ContactIterator it = arrayList.iterator();
+        while (it.hasNext()) {
+            Contact c = it.next();
+            if (c != null) {
+                linkedList.add(c);
+            }
+        }
+        return linkedList;
+    }
+
+    private List<Contact> linkedListToList(ContactLinkedList linkedList) {
+        java.util.ArrayList<Contact> list = new java.util.ArrayList<>();
+        ContactLinkedList.ContactIterator it = linkedList.iterator();
+        while (it.hasNext()) {
+            Contact c = it.next();
+            if (c != null) {
+                list.add(c);
+            }
+        }
+        return list;
     }
 }

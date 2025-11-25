@@ -2,16 +2,13 @@ package com.connectme.model.eda;
 
 import com.connectme.model.entities.Contact;
 
-/**
- * Lista ligada com métodos melhorados
- */
 public class ContactLinkedList {
 
-    private static class Node {
-        Contact data;
-        Node next;
+    public static class Node {
+        public Contact data;
+        public Node next;
 
-        Node(Contact data) {
+        public Node(Contact data) {
             this.data = data;
         }
     }
@@ -34,7 +31,6 @@ public class ContactLinkedList {
     public boolean remove(int contactId) {
         if (head == null) return false;
 
-        // Caso especial: remover head
         if (head.data.getId() == contactId) {
             head = head.next;
             size--;
@@ -64,9 +60,6 @@ public class ContactLinkedList {
         return null;
     }
 
-    /**
-     * NOVO: Busca por ID
-     */
     public Contact findById(int contactId) {
         Node cur = head;
         while (cur != null) {
@@ -82,16 +75,99 @@ public class ContactLinkedList {
         return size;
     }
 
-    /**
-     * NOVO: Converter para lista (útil para iteração)
-     */
-    public java.util.List<Contact> toList() {
-        java.util.List<Contact> list = new java.util.ArrayList<>();
+    public boolean isEmpty() {
+        return head == null;
+    }
+
+    public Node getHead() {
+        return head;
+    }
+
+    public void setHead(Node newHead) {
+        this.head = newHead;
+        recalculateSize();
+    }
+
+    private void recalculateSize() {
+        size = 0;
         Node cur = head;
         while (cur != null) {
-            list.add(cur.data);
+            size++;
             cur = cur.next;
         }
+    }
+
+    /**
+     * Limpa toda a lista
+     */
+    public void clear() {
+        head = null;
+        size = 0;
+    }
+
+    /**
+     * Obtém o contato na posição index
+     */
+    public Contact get(int index) {
+        if (index < 0 || index >= size) return null;
+
+        Node cur = head;
+        for (int i = 0; i < index; i++) {
+            cur = cur.next;
+        }
+        return cur.data;
+    }
+
+    /**
+     * Converte para array de Contacts
+     */
+    public Contact[] toArray() {
+        Contact[] arr = new Contact[size];
+        Node cur = head;
+        int i = 0;
+        while (cur != null) {
+            arr[i++] = cur.data;
+            cur = cur.next;
+        }
+        return arr;
+    }
+
+    /**
+     * Cria uma lista a partir de um array
+     */
+    public static ContactLinkedList fromArray(Contact[] arr) {
+        ContactLinkedList list = new ContactLinkedList();
+        for (Contact c : arr) {
+            if (c != null) {
+                list.add(c);
+            }
+        }
         return list;
+    }
+
+    /**
+     * Iterador personalizado
+     */
+    public ContactIterator iterator() {
+        return new ContactIterator(head);
+    }
+
+    public static class ContactIterator {
+        private Node current;
+
+        public ContactIterator(Node head) {
+            this.current = head;
+        }
+
+        public boolean hasNext() {
+            return current != null;
+        }
+
+        public Contact next() {
+            if (!hasNext()) return null;
+            Contact data = current.data;
+            current = current.next;
+            return data;
+        }
     }
 }
