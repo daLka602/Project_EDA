@@ -101,7 +101,7 @@ public class ContactPanel extends JPanel {
         searchBtn.addActionListener(e -> performSearch());
         searchPanel.add(searchBtn, "w 160!, h 45!, gapleft 10");
 
-        searchPanel.add(new JLabel(), "w 30!");
+        searchPanel.add(new JLabel(), "w 90!");
 
         String[] filterLabels = {"Todos", "Clientes", "Parceiros", "Fornecedores"};
         ContactType[] filterTypes = {null, ContactType.CUSTOMER, ContactType.PARTNER, ContactType.SUPPLIER};
@@ -110,14 +110,15 @@ public class ContactPanel extends JPanel {
             final int index = i;
             JButton filterBtn = createFilterButton(filterLabels[i]);
             filterBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+            filterBtn.setBorder(BorderFactory.createEmptyBorder(15, 20, 15, 20));
             if (i == 0) {
                 currentFilterBtn = filterBtn;
-                filterBtn.setBackground(new Color(33, 150, 243));
+                filterBtn.setBackground(new Color(73, 80, 243));
                 filterBtn.setForeground(Color.WHITE);
             }
             final JButton finalFilterBtn = filterBtn;
             filterBtn.addActionListener(e -> applyFilter(filterTypes[index], finalFilterBtn));
-            searchPanel.add(filterBtn, "w 110!, h 40!, gapleft 10");
+            searchPanel.add(filterBtn, "grow, h 43!, gapleft 15");
         }
 
         // Espaço vazio
@@ -127,7 +128,7 @@ public class ContactPanel extends JPanel {
         NavButton addBtn = new NavButton(" + Adicionar", true);
         addBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         addBtn.addActionListener(e -> openContactForm(null));
-        searchPanel.add(addBtn, "w 140!, h 45!");
+        searchPanel.add(addBtn, "w 140!, h 45!, gapleft 10");
 
         add(searchPanel, BorderLayout.CENTER);
 
@@ -157,13 +158,11 @@ public class ContactPanel extends JPanel {
     }
 
     private JButton createFilterButton(String text) {
-        JButton btn = new JButton(text);
+        NavButton btn = new NavButton(text,true);
         btn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        btn.setBackground(Color.WHITE);
-        btn.setForeground(new Color(100, 100, 100));
+        btn.setBackground(new Color(225,220,220));
+        btn.setForeground(new Color(9, 30, 30));
         btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 225), 1));
-        btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         return btn;
     }
 
@@ -205,14 +204,12 @@ public class ContactPanel extends JPanel {
 
     private void applyFilter(ContactType type, JButton selectedBtn) {
         if (currentFilterBtn != null && currentFilterBtn != selectedBtn) {
-            currentFilterBtn.setBackground(new Color(245, 245, 245));
-            currentFilterBtn.setForeground(new Color(33, 150, 243));
-            currentFilterBtn.setBorder(BorderFactory.createLineBorder(new Color(245, 245, 245), 1));
+            currentFilterBtn.setBackground(new Color(225, 220, 220));
+            currentFilterBtn.setForeground(new Color(30, 34, 44));
         }
 
-        selectedBtn.setBackground(new Color(33, 150, 243));
+        selectedBtn.setBackground(new Color(73, 80, 249));
         selectedBtn.setForeground(Color.WHITE);
-        selectedBtn.setBorder(BorderFactory.createLineBorder(new Color(33, 150, 243), 1));
         currentFilterBtn = selectedBtn;
 
         List<Contact> filtered = type == null
@@ -243,7 +240,7 @@ public class ContactPanel extends JPanel {
             for (Contact contact : contacts) {
                 JPanel contactCard = createContactCard(contact);
                 contactCard.setAlignmentX(Component.CENTER_ALIGNMENT);
-                contactCard.setMaximumSize(new Dimension(1400, 140)); // Largura máxima de 1000px (≈85% de 1200px)
+                contactCard.setMaximumSize(new Dimension(1400, 140));
                 cardsPanel.add(contactCard, BorderLayout.CENTER);
 
                 // Adicionar um pequeno espaço entre os cards

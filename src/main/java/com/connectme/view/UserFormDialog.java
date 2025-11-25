@@ -4,6 +4,9 @@ import com.connectme.controller.AdminController;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.AccessLevel;
 import com.connectme.model.enums.UserStatus;
+import com.connectme.view.componet.MyButton;
+import com.connectme.view.componet.MyPasswordField;
+import com.connectme.view.componet.MyTextField;
 import com.connectme.view.componet.RoundedFormBorder;
 import net.miginfocom.swing.MigLayout;
 
@@ -17,8 +20,8 @@ public class UserFormDialog extends JDialog {
     private Runnable onSaveCallback;
 
     private JTextField nomeField;
-    private JTextField emailField;
-    private JPasswordField passwordField;
+    private MyTextField emailField;
+    private MyPasswordField passwordField;
     private JComboBox<String> funcaoCombo;
     private JCheckBox contaAtivaCheck;
 
@@ -29,7 +32,7 @@ public class UserFormDialog extends JDialog {
         this.adminController = controller;
         this.onSaveCallback = onSave;
 
-        setSize(1050, 600);
+        setSize(800, 620);
         setLocationRelativeTo(parent);
         setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
         getContentPane().setBackground(Color.WHITE);
@@ -110,7 +113,7 @@ public class UserFormDialog extends JDialog {
 
         // Email
         formPanel.add(new JLabel("Email *"));
-        emailField = new JTextField();
+        emailField = new MyTextField();
         emailField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         emailField.setText("exemplo@connectme.mz");
         emailField.setBorder(new RoundedFormBorder(6, new Color(220, 220, 225)));
@@ -121,7 +124,7 @@ public class UserFormDialog extends JDialog {
 
         // Senha
         formPanel.add(new JLabel("Senha *"));
-        passwordField = new JPasswordField();
+        passwordField = new MyPasswordField();
         passwordField.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         passwordField.setBorder(new RoundedFormBorder(6, new Color(220, 220, 225)));
         passwordField.setMargin(new Insets(8, 12, 8, 12));
@@ -164,25 +167,22 @@ public class UserFormDialog extends JDialog {
         JPanel buttonPanel = new JPanel(new MigLayout("fill", "[fill]20[fill]", "[]"));
         buttonPanel.setBackground(Color.WHITE);
 
-        JButton cancelBtn = new JButton("Cancelar");
-        cancelBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        MyButton cancelBtn = new MyButton();
+        cancelBtn.setText("Cancelar");
         cancelBtn.setBackground(new Color(245, 245, 245));
         cancelBtn.setForeground(new Color(100, 100, 100));
         cancelBtn.setBorder(new RoundedFormBorder(6, new Color(220, 220, 225)));
-        cancelBtn.setFocusPainted(false);
-        cancelBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        cancelBtn.setPreferredSize(new Dimension(120, 40));
         cancelBtn.addActionListener(e -> dispose());
         buttonPanel.add(cancelBtn, "grow");
 
-        JButton saveBtn = new JButton(user != null ? "Atualizar" : "Adicionar Usuário");
-        saveBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        MyButton saveBtn = new MyButton();
+        if (user != null) {
+            saveBtn.setText("Atualizar");
+        } else {
+            saveBtn.setText("Adicionar Usuário");
+        }
         saveBtn.setBackground(new Color(33, 150, 243));
         saveBtn.setForeground(Color.WHITE);
-        saveBtn.setBorder(BorderFactory.createEmptyBorder());
-        saveBtn.setFocusPainted(false);
-        saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        saveBtn.setPreferredSize(new Dimension(150, 40));
         saveBtn.addActionListener(e -> saveUser());
         buttonPanel.add(saveBtn, "grow");
 
@@ -194,7 +194,7 @@ public class UserFormDialog extends JDialog {
         infoBox.setBackground(new Color(255, 248, 225));
         infoBox.setBorder(BorderFactory.createLineBorder(new Color(255, 193, 7), 1));
 
-        JLabel infoLabel = new JLabel("<html><b>Importante:</b> Os dados são armazenados localmente no navegador. Em produção, implemente autenticação segura com backend.</html>");
+        JLabel infoLabel = new JLabel("<html><b>Importante:</b> Os dados são armazenados localmente no banco de dados.</html>");
         infoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 11));
         infoLabel.setForeground(new Color(240, 124, 0));
         infoBox.add(infoLabel, "grow");

@@ -22,7 +22,7 @@ public class Main {
                 logger.info("Banco de dados inicializado");
 
                 // Configurar Look and Feel
-                //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
                 // Criar controller de autenticação
                 AuthController authController = new AuthController();

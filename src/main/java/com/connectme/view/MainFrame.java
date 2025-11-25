@@ -52,7 +52,7 @@ public class MainFrame extends JFrame {
             contentPanel.add(adminPanel, "ADMIN");
         }
 
-        mainPanel.add(contentPanel, "grow");
+        mainPanel.add(contentPanel, "grow, wmax 85%, center");
 
         add(mainPanel);
 

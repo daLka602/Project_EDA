@@ -1,10 +1,10 @@
-// src/main/java/com/connectme/view/ContactForm.java
 package com.connectme.view;
 
 import com.connectme.controller.ContactController;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.ContactType;
+import com.connectme.view.componet.MyButton;
 import com.connectme.view.componet.RoundedFormBorder;
 import net.miginfocom.swing.MigLayout;
 
@@ -136,24 +136,24 @@ public class ContactForm extends JDialog {
         JPanel buttonPanel = new JPanel(new MigLayout("fill", "[fill]15[fill]", "[]"));
         buttonPanel.setBackground(Color.WHITE);
 
-        JButton cancelBtn = new JButton("Cancelar");
-        cancelBtn.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        MyButton cancelBtn = new MyButton();
+        cancelBtn.setText("Cancelar");
+        cancelBtn.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         cancelBtn.setBackground(new Color(245, 245, 245));
         cancelBtn.setForeground(new Color(100, 100, 100));
         cancelBtn.setBorder(new RoundedFormBorder(6, new Color(220, 220, 225)));
-        cancelBtn.setFocusPainted(false);
-        cancelBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         cancelBtn.setPreferredSize(new Dimension(120, 40));
         cancelBtn.addActionListener(e -> dispose());
         buttonPanel.add(cancelBtn, "grow");
 
-        JButton saveBtn = new JButton(contact != null ? "Atualizar" : "Adicionar Contacto");
-        saveBtn.setFont(new Font("Segoe UI", Font.BOLD, 12));
+        MyButton saveBtn = new MyButton();
+        if (contact != null) {
+            saveBtn.setText("Atualizar");
+        } else {
+            saveBtn.setText("Adicionar Contacto");
+        }
+        saveBtn.setFont(new Font("Segoe UI", Font.BOLD, 14));
         saveBtn.setBackground(new Color(33, 150, 243));
-        saveBtn.setForeground(Color.WHITE);
-        saveBtn.setBorder(BorderFactory.createEmptyBorder());
-        saveBtn.setFocusPainted(false);
-        saveBtn.setCursor(new Cursor(Cursor.HAND_CURSOR));
         saveBtn.setPreferredSize(new Dimension(140, 40));
         saveBtn.addActionListener(e -> saveContact());
         buttonPanel.add(saveBtn, "grow");

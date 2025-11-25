@@ -27,7 +27,7 @@ public class NavButton extends JButton {
             setBackground(new Color(73, 80, 249));
             setForeground(Color.WHITE);
         } else {
-            setBackground(Color.WHITE);
+            setBackground(new Color(225,220,220));
             setForeground(new Color(9, 9, 30));
         }
     }
