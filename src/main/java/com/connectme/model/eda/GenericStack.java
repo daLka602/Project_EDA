@@ -4,7 +4,7 @@ package com.connectme.model.eda;
  * Stack (Pilha) genérica para implementação de Undo/Redo
  * LIFO - Last In First Out
  */
-public class ContactStack<T> {
+public class GenericStack<T> {
 
     private static class Node<T> {
         T data;
@@ -19,11 +19,11 @@ public class ContactStack<T> {
     private int size;
     private int maxSize;
 
-    public ContactStack() {
+    public GenericStack() {
         this(100); // Limite padrão de 100 operações
     }
 
-    public ContactStack(int maxSize) {
+    public GenericStack(int maxSize) {
         this.top = null;
         this.size = 0;
         this.maxSize = maxSize;
@@ -67,23 +67,14 @@ public class ContactStack<T> {
         return top.data;
     }
 
-    /**
-     * Verifica se a pilha está vazia
-     */
     public boolean isEmpty() {
         return top == null;
     }
 
-    /**
-     * Retorna o tamanho da pilha
-     */
     public int size() {
         return size;
     }
 
-    /**
-     * Limpa toda a pilha
-     */
     public void clear() {
         top = null;
         size = 0;
@@ -129,9 +120,6 @@ public class ContactStack<T> {
         return arr;
     }
 
-    /**
-     * Retorna representação em string
-     */
     @Override
     public String toString() {
         if (isEmpty()) {

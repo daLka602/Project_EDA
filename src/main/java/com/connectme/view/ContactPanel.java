@@ -22,7 +22,8 @@ public class ContactPanel extends JPanel {
     private ExportController exportController;
     private JTextField searchField;
     private JPanel cardsPanel;
-    private ContactLinkedList currentContacts;
+    private GenericLinkedList<Contact> currentContacts;
+    private boolean isSorted = false;
     private JLabel countLabel;
     private JButton currentFilterBtn;
     private NavButton undoBtn;
@@ -41,7 +42,7 @@ public class ContactPanel extends JPanel {
     }
 
     private void initComponents() {
-        // Header Panel
+        // Header Panel (mantém o mesmo)
         JPanel headerPanel = new JPanel(new MigLayout("fill, insets 60 90 30 80", "[]15[]push[]10[]", "[]"));
         headerPanel.setBackground(new Color(248, 249, 252));
 
@@ -109,7 +110,7 @@ public class ContactPanel extends JPanel {
 
         add(headerPanel, BorderLayout.NORTH);
 
-        // Search and Filter Panel
+        // Search and Filter Panel (mantém o mesmo)
         JPanel searchPanel = new JPanel(new MigLayout("fill, insets 20 40 20 40", "[][][]0[grow][]", "center"));
         searchPanel.setBackground(Color.WHITE);
         searchPanel.setBorder(new RoundedBorder(1, new Color(220, 220, 225)));
@@ -205,14 +206,12 @@ public class ContactPanel extends JPanel {
 
     private void loadContacts() {
         currentContacts = contactController.listAllAsLinkedList();
+        isSorted = false;
         updateCards(currentContacts);
         updateCountLabel();
         updateUndoRedoButtons();
     }
 
-    /**
-     * Atualiza contatos do banco de dados
-     */
     private void handleRefresh() {
         contactController.refreshCache();
         loadContacts();
@@ -314,17 +313,6 @@ public class ContactPanel extends JPanel {
         }
     }
 
-    private void performSearch() {
-        String query = searchField.getText().trim();
-        if (query.isEmpty() || query.equals("Pesquisar contactos...")) {
-            loadContacts();
-        } else {
-            ContactArrayList results = contactController.search(query);
-            currentContacts = arrayListToLinkedList(results);
-            updateCards(currentContacts);
-        }
-    }
-
     private void applyFilter(ContactType type, JButton selectedBtn) {
         if (currentFilterBtn != null && currentFilterBtn != selectedBtn) {
             currentFilterBtn.setBackground(new Color(225, 220, 220));
@@ -335,15 +323,15 @@ public class ContactPanel extends JPanel {
         selectedBtn.setForeground(Color.WHITE);
         currentFilterBtn = selectedBtn;
 
-        ContactArrayList filtered = contactController.filterByType(type);
+        GenericArrayList<Contact> filtered = contactController.filterByType(type);
         currentContacts = arrayListToLinkedList(filtered);
         updateCards(currentContacts);
     }
 
     private void showSortDialog() {
         JDialog sortDialog = new JDialog((JFrame) SwingUtilities.getWindowAncestor(this), "Organizar Contactos", true);
-        sortDialog.setLayout(new MigLayout("fill, insets 25", "[fill]", "[]15[]15[]15[]20[]"));
-        sortDialog.setSize(450, 480);
+        sortDialog.setLayout(new MigLayout("fill, insets 25", "[fill]", "[]15[]15[]20[]"));
+        sortDialog.setSize(400, 450);
         sortDialog.setLocationRelativeTo(this);
 
         JLabel titleLabel = new JLabel("⬍ Organizar Contactos");
@@ -370,14 +358,11 @@ public class ContactPanel extends JPanel {
         orderCombo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
         sortDialog.add(orderCombo, "grow, h 40!, wrap");
 
-        // Algoritmo
-        JLabel algoLabel = new JLabel("Algoritmo:");
-        algoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 14));
+        // Info algoritmo
+        JLabel algoLabel = new JLabel("Algoritmo: MergeSort");
+        algoLabel.setFont(new Font("Segoe UI", Font.PLAIN, 12));
+        algoLabel.setForeground(new Color(100, 100, 100));
         sortDialog.add(algoLabel, "wrap");
-
-        JComboBox<String> algoCombo = new JComboBox<>(new String[]{"MergeSort", "QuickSort"});
-        algoCombo.setFont(new Font("Segoe UI", Font.PLAIN, 14));
-        sortDialog.add(algoCombo, "grow, h 40!, wrap");
 
         // Botões
         JPanel btnPanel = new JPanel(new MigLayout("", "[grow][grow]", "[]"));
@@ -393,8 +378,7 @@ public class ContactPanel extends JPanel {
         sortBtn.addActionListener(e -> {
             performSort(
                     fieldCombo.getSelectedIndex(),
-                    orderCombo.getSelectedIndex(),
-                    algoCombo.getSelectedIndex()
+                    orderCombo.getSelectedIndex()
             );
             sortDialog.dispose();
         });
@@ -404,43 +388,58 @@ public class ContactPanel extends JPanel {
         sortDialog.setVisible(true);
     }
 
-    private void performSort(int fieldIndex, int orderIndex, int algoIndex) {
-        ContactSorter.SortField field;
+    private void performSort(int fieldIndex, int orderIndex) {
+        String field;
         switch (fieldIndex) {
-            case 0: field = ContactSorter.SortField.NAME; break;
-            case 1: field = ContactSorter.SortField.PHONE; break;
-            case 2: field = ContactSorter.SortField.EMAIL; break;
-            case 3: field = ContactSorter.SortField.COMPANY; break;
-            case 4: field = ContactSorter.SortField.TYPE; break;
-            default: field = ContactSorter.SortField.NAME;
+            case 0: field = "name"; break;
+            case 1: field = "phone"; break;
+            case 2: field = "email"; break;
+            case 3: field = "company"; break;
+            case 4: field = "type"; break;
+            default: field = "name";
         }
 
-        ContactSorter.SortOrder order = orderIndex == 0
-                ? ContactSorter.SortOrder.ASC
-                : ContactSorter.SortOrder.DESC;
+        // Determinar ordem
+        MergeSort.SortOrder order = (orderIndex == 0) ? MergeSort.SortOrder.ASC : MergeSort.SortOrder.DESC;
 
         long startTime = System.currentTimeMillis();
-        ContactLinkedList sorted;
 
-        if (algoIndex == 0) {
-            sorted = contactController.sortWithMergeSort(field, order);
-        } else {
-            sorted = contactController.sortWithQuickSort(field, order);
-        }
+        // Obter lista ordenada (NÃO modifica o cache)
+        GenericLinkedList<Contact> sorted = contactController.sortWithMergeSort(field, order);
 
         long endTime = System.currentTimeMillis();
 
+        // Atualizar display com lista ordenada
         currentContacts = sorted;
+        isSorted = true;
         updateCards(currentContacts);
 
-        String algoName = algoIndex == 0 ? "MergeSort" : "QuickSort";
+        String orderText = (order == MergeSort.SortOrder.ASC) ? "Crescente (A-Z)" : "Decrescente (Z-A)";
         JOptionPane.showMessageDialog(this,
-                "Ordenação concluída com " + algoName + "\nTempo: " + (endTime - startTime) + "ms",
+                "Ordenação concluída com MergeSort\n" +
+                        "Campo: " + field + "\n" +
+                        "Ordem: " + orderText + "\n" +
+                        "Tempo: " + (endTime - startTime) + "ms",
                 "Sucesso",
                 JOptionPane.INFORMATION_MESSAGE);
     }
 
-    private void updateCards(ContactLinkedList contacts) {
+    private void performSearch() {
+        String query = searchField.getText().trim();
+        if (query.isEmpty() || query.equals("Pesquisar contactos...")) {
+            // Se estava ordenado, manter ordenação, senão recarregar original
+            if (!isSorted) {
+                loadContacts();
+            }
+        } else {
+            GenericArrayList<Contact> results = contactController.search(query);
+            currentContacts = arrayListToLinkedList(results);
+            isSorted = false; // Resultados de busca não são considerados ordenação
+            updateCards(currentContacts);
+        }
+    }
+
+    private void updateCards(GenericLinkedList<Contact> contacts) {
         cardsPanel.removeAll();
 
         if (contacts.isEmpty()) {
@@ -459,7 +458,7 @@ public class ContactPanel extends JPanel {
 
             cardsPanel.add(emptyPanel, "grow");
         } else {
-            ContactLinkedList.ContactIterator it = contacts.iterator();
+            GenericLinkedList.Iterator<Contact> it = contacts.iterator();
             while (it.hasNext()) {
                 Contact contact = it.next();
                 if (contact != null) {
@@ -477,6 +476,7 @@ public class ContactPanel extends JPanel {
     }
 
     private JPanel createContactCard(Contact contact) {
+        // Mantém a mesma implementação do card
         JPanel card = new JPanel(new MigLayout("fill, insets 20 40 20 40", "[]", "center"));
         card.setBackground(Color.WHITE);
         card.setBorder(new RoundedBorder(5, new Color(220, 220, 225)));
@@ -632,21 +632,16 @@ public class ContactPanel extends JPanel {
                     options[2]
             );
 
-            // Converter LinkedList para List para exportação
-            ContactArrayList arrayList = new ContactArrayList();
-            ContactLinkedList.ContactIterator it = currentContacts.iterator();
-            while (it.hasNext()) {
-                Contact c = it.next();
-                if (c != null) arrayList.add(c);
-            }
+            // Converter GenericLinkedList para List para exportação
+            List<Contact> contactList = linkedListToList(currentContacts);
 
             boolean success = false;
             if (choice == 0) {
-                success = exportController.exportToTxt(linkedListToList(currentContacts), selectedDir);
+                success = exportController.exportToTxt(contactList, selectedDir);
             } else if (choice == 1) {
-                success = exportController.exportToHtml(linkedListToList(currentContacts), selectedDir);
+                success = exportController.exportToHtml(contactList, selectedDir);
             } else if (choice == 2) {
-                success = exportController.exportMultiple(linkedListToList(currentContacts), selectedDir, "txt", "html");
+                success = exportController.exportMultiple(contactList, selectedDir, "txt", "html");
             }
 
             if (success) {
@@ -657,9 +652,9 @@ public class ContactPanel extends JPanel {
         }
     }
 
-    private ContactLinkedList arrayListToLinkedList(ContactArrayList arrayList) {
-        ContactLinkedList linkedList = new ContactLinkedList();
-        ContactArrayList.ContactIterator it = arrayList.iterator();
+    private GenericLinkedList<Contact> arrayListToLinkedList(GenericArrayList<Contact> arrayList) {
+        GenericLinkedList<Contact> linkedList = new GenericLinkedList<>();
+        GenericArrayList.Iterator<Contact> it = arrayList.iterator();
         while (it.hasNext()) {
             Contact c = it.next();
             if (c != null) {
@@ -669,9 +664,9 @@ public class ContactPanel extends JPanel {
         return linkedList;
     }
 
-    private List<Contact> linkedListToList(ContactLinkedList linkedList) {
+    private List<Contact> linkedListToList(GenericLinkedList<Contact> linkedList) {
         java.util.ArrayList<Contact> list = new java.util.ArrayList<>();
-        ContactLinkedList.ContactIterator it = linkedList.iterator();
+        GenericLinkedList.Iterator<Contact> it = linkedList.iterator();
         while (it.hasNext()) {
             Contact c = it.next();
             if (c != null) {

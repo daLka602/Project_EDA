@@ -5,67 +5,48 @@ import com.connectme.model.eda.*;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.enums.ContactType;
 
-import java.util.List;
-import java.util.logging.Logger;
+import java.util.Comparator;
+import java.util.function.Predicate;
 
 public class ContactController {
 
-    private static final Logger logger = Logger.getLogger(ContactController.class.getName());
     private final ContactDAO contactDAO;
-    private ContactLinkedList cachedContacts;
-    private ContactBST searchIndex;
-    private ContactHashTable phoneIndex;
+    private GenericLinkedList<Contact> cachedContacts;
+    private GenericBST<Contact> searchIndex;
+    private GenericHashTable<Contact> phoneIndex;
     private ContactStateManager stateManager;
 
     public ContactController() {
         this.contactDAO = new ContactDAO();
-        this.cachedContacts = new ContactLinkedList();
-        this.searchIndex = new ContactBST();
-        this.phoneIndex = new ContactHashTable();
+        this.cachedContacts = new GenericLinkedList<>();
+        this.searchIndex = new GenericBST<>(Contact::getName);
+        this.phoneIndex = new GenericHashTable<>(Contact::getPhone);
         this.stateManager = new ContactStateManager();
         loadCache();
     }
 
-    /**
-     * Carrega todos os contatos em cache usando estruturas EDA
-     */
     private void loadCache() {
-        List<Contact> dbContacts = contactDAO.findAll();
+        java.util.List<Contact> dbContacts = contactDAO.findAll();
         cachedContacts.clear();
 
         for (Contact c : dbContacts) {
             cachedContacts.add(c);
             searchIndex.insert(c);
             if (c.getPhone() != null) {
-                phoneIndex.put(c.getPhone(), c);
+                phoneIndex.put(c);
             }
         }
 
-        logger.info("Cache carregado com " + cachedContacts.size() + " contatos");
+        stateManager.setCurrentState(cachedContacts);
     }
 
-    /**
-     * Recarrega o cache
-     */
-    public void refreshCache() {
-        searchIndex = new ContactBST();
-        phoneIndex = new ContactHashTable();
-        loadCache();
-    }
-
-    /**
-     * Retorna lista encadeada de contatos
-     */
-    public ContactLinkedList listAllAsLinkedList() {
+    public GenericLinkedList<Contact> listAllAsLinkedList() {
         return cachedContacts;
     }
 
-    /**
-     * Retorna array de contatos
-     */
-    public ContactArrayList listAllAsArrayList() {
-        ContactArrayList arrayList = new ContactArrayList();
-        ContactLinkedList.ContactIterator it = cachedContacts.iterator();
+    public GenericArrayList<Contact> listAllAsArrayList() {
+        GenericArrayList<Contact> arrayList = new GenericArrayList<>();
+        GenericLinkedList.Iterator<Contact> it = cachedContacts.iterator();
 
         while (it.hasNext()) {
             Contact c = it.next();
@@ -77,148 +58,128 @@ public class ContactController {
         return arrayList;
     }
 
-    /**
-     * Buscar contato por ID
-     */
     public Contact findById(int id) {
-        return cachedContacts.findById(id);
+        return LinearSearch.search(cachedContacts, c -> c != null && c.getId() == id);
     }
 
-    /**
-     * Busca rápida por nome usando BST
-     */
     public Contact searchByNameFast(String name) {
         return searchIndex.search(name);
     }
 
-    /**
-     * Busca parcial por nome usando BST
-     */
-    public ContactArrayList searchPartialName(String partialName) {
-        ContactArrayList results = new ContactArrayList();
-        List<Contact> found = searchIndex.searchPartial(partialName);
-
-        for (Contact c : found) {
-            results.add(c);
-        }
-
-        return results;
+    public GenericArrayList<Contact> searchPartialName(String partialName) {
+        return searchIndex.searchPartial(partialName);
     }
 
-    /**
-     * Busca por telefone usando HashTable
-     */
-    public Contact searchByPhone(String phone) {
-        return phoneIndex.get(phone);
-    }
-
-    /**
-     * Pesquisar contatos (busca geral com ranking)
-     */
-    public ContactArrayList search(String query) {
+    public GenericArrayList<Contact> search(String query) {
         if (query == null || query.trim().isEmpty()) {
             return listAllAsArrayList();
         }
 
-        return ContactSearchAlgorithm.searchWithRanking(cachedContacts, query);
+        final String finalQuery = StringUtils.normalize(query);
+
+        // Usar LinearSearch genérico
+        GenericLinkedList<Contact> results = LinearSearch.searchAll(cachedContacts,
+                contact -> contact != null && matchesContact(contact, finalQuery));
+
+        return linkedListToArrayList(results);
     }
 
-    /**
-     * Filtrar por tipo de contato
-     */
-    public ContactArrayList filterByType(ContactType type) {
-        ContactArrayList results = new ContactArrayList();
-        ContactLinkedList.ContactIterator it = cachedContacts.iterator();
-
-        while (it.hasNext()) {
-            Contact c = it.next();
-            if (c != null && (type == null || c.getType() == type)) {
-                results.add(c);
-            }
+    private boolean matchesContact(Contact contact, String normalizedQuery) {
+        // Busca no nome
+        if (contact.getName() != null &&
+                StringUtils.containsIgnoreCase(contact.getName(), normalizedQuery)) {
+            return true;
         }
 
-        return results;
+        // Busca no telefone
+        if (contact.getPhone() != null &&
+                StringUtils.cleanPhoneNumber(contact.getPhone()).contains(normalizedQuery)) {
+            return true;
+        }
+
+        // Busca no email
+        if (contact.getEmail() != null &&
+                StringUtils.containsIgnoreCase(contact.getEmail(), normalizedQuery)) {
+            return true;
+        }
+
+        // Busca na empresa
+        if (contact.getCompany() != null &&
+                StringUtils.containsIgnoreCase(contact.getCompany(), normalizedQuery)) {
+            return true;
+        }
+
+        return false;
     }
 
-    /**
-     * Criar novo contato
-     */
+    public GenericArrayList<Contact> filterByType(ContactType type) {
+        Predicate<Contact> predicate = type == null ?
+                c -> c != null :
+                c -> c != null && c.getType() == type;
+
+        GenericLinkedList<Contact> results = LinearSearch.searchAll(cachedContacts, predicate);
+        return linkedListToArrayList(results);
+    }
+
     public boolean create(Contact contact) {
-        if (!isValidContact(contact)) {
-            logger.warning("Tentativa de criar contato inválido");
-            return false;
-        }
+        if (!isValidContact(contact)) return false;
 
-        // Salvar estado antes da operação
         stateManager.saveState(cachedContacts, "Adicionar: " + contact.getName());
 
         if (contactDAO.create(contact)) {
             cachedContacts.add(contact);
             searchIndex.insert(contact);
             if (contact.getPhone() != null) {
-                phoneIndex.put(contact.getPhone(), contact);
+                phoneIndex.put(contact);
             }
-            stateManager.updateCurrentState(cachedContacts);
+            stateManager.setCurrentState(cachedContacts);
             return true;
         }
+
+        cachedContacts = stateManager.getCurrentState();
         return false;
     }
 
-    /**
-     * Atualizar contato existente
-     */
     public boolean update(Contact contact) {
-        if (!isValidContact(contact) || contact.getId() <= 0) {
-            logger.warning("Tentativa de atualizar contato inválido");
-            return false;
-        }
+        if (!isValidContact(contact) || contact.getId() <= 0) return false;
 
-        // Salvar estado antes da operação
         stateManager.saveState(cachedContacts, "Atualizar: " + contact.getName());
 
         if (contactDAO.update(contact)) {
             refreshCache();
-            stateManager.updateCurrentState(cachedContacts);
+            stateManager.setCurrentState(cachedContacts);
             return true;
         }
+
+        cachedContacts = stateManager.getCurrentState();
         return false;
     }
 
-    /**
-     * Deletar contato
-     */
     public boolean delete(int contactId) {
         if (contactId <= 0) return false;
 
         Contact contact = findById(contactId);
         if (contact == null) return false;
 
-        // Salvar estado antes da operação
         stateManager.saveState(cachedContacts, "Deletar: " + contact.getName());
 
         if (contactDAO.delete(contactId)) {
-            cachedContacts.remove(contactId);
-            searchIndex.remove(contactId);
-            if (contact.getPhone() != null) {
-                phoneIndex.remove(contact.getPhone());
-            }
-            stateManager.updateCurrentState(cachedContacts);
+            cachedContacts.remove(contact);
+            rebuildIndexes();
+            stateManager.setCurrentState(cachedContacts);
             return true;
         }
+
+        cachedContacts = stateManager.getCurrentState();
         return false;
     }
 
-    /**
-     * Desfazer última operação (Undo)
-     */
     public boolean undo() {
         if (!stateManager.canUndo()) {
             return false;
         }
 
-        ContactLinkedList restoredState = stateManager.undo();
-
-        // Sincronizar BD com o estado restaurado
+        GenericLinkedList<Contact> restoredState = stateManager.undo();
         boolean success = syncDatabaseWithState(restoredState);
 
         if (success) {
@@ -230,17 +191,12 @@ public class ContactController {
         return false;
     }
 
-    /**
-     * Refazer operação desfeita (Redo)
-     */
     public boolean redo() {
         if (!stateManager.canRedo()) {
             return false;
         }
 
-        ContactLinkedList restoredState = stateManager.redo();
-
-        // Sincronizar BD com o estado restaurado
+        GenericLinkedList<Contact> restoredState = stateManager.redo();
         boolean success = syncDatabaseWithState(restoredState);
 
         if (success) {
@@ -252,88 +208,195 @@ public class ContactController {
         return false;
     }
 
-    /**
-     * Verifica se pode desfazer
-     */
     public boolean canUndo() {
         return stateManager.canUndo();
     }
 
-    /**
-     * Verifica se pode refazer
-     */
     public boolean canRedo() {
         return stateManager.canRedo();
     }
 
-    /**
-     * Retorna descrição da operação de undo
-     */
     public String getUndoDescription() {
         return stateManager.getUndoDescription();
     }
 
-    /**
-     * Retorna descrição da operação de redo
-     */
     public String getRedoDescription() {
         return stateManager.getRedoDescription();
     }
 
     /**
-     * Sincroniza banco de dados com o estado fornecido
-     * Remove contatos que não estão no estado
-     * Adiciona/atualiza contatos que estão no estado
+     * Ordenar contatos usando MergeSort genérico
      */
-    private boolean syncDatabaseWithState(ContactLinkedList targetState) {
+    public GenericLinkedList<Contact> sortWithMergeSort() {
+        // Usar apenas MergeSort genérico
+        return MergeSort.sort(cachedContacts, Comparators.stringComparator(Contact::getName));
+    }
+
+    /**
+     * Ordenar contatos usando MergeSort genérico
+     * CORREÇÃO: Sempre trabalhar com cópia da lista
+     */
+    public GenericLinkedList<Contact> sortWithMergeSort(MergeSort.SortOrder order) {
+        // IMPORTANTE: Não modificar cachedContacts, trabalhar com cópia
+        GenericLinkedList<Contact> listToSort = cloneContactList(cachedContacts);
+        return MergeSort.sort(listToSort, Comparators.stringComparator(Contact::getName), order);
+    }
+
+    /**
+     * Ordenar por campo específico usando MergeSort
+     */
+    public GenericLinkedList<Contact> sortWithMergeSort(String field, MergeSort.SortOrder order) {
+        // IMPORTANTE: Não modificar cachedContacts, trabalhar com cópia
+        GenericLinkedList<Contact> listToSort = cloneContactList(cachedContacts);
+        Comparator<Contact> comparator = getComparatorForField(field);
+        return MergeSort.sort(listToSort, comparator, order);
+    }
+
+    /**
+     * Clona a lista de contatos (IMPORTANTE para não afetar o cache)
+     */
+    private GenericLinkedList<Contact> cloneContactList(GenericLinkedList<Contact> original) {
+        GenericLinkedList<Contact> cloned = new GenericLinkedList<>();
+        if (original == null) return cloned;
+
+        GenericLinkedList.Iterator<Contact> it = original.iterator();
+        while (it.hasNext()) {
+            Contact c = it.next();
+            if (c != null) {
+                cloned.add(cloneContact(c));
+            }
+        }
+        return cloned;
+    }
+
+    /**
+     * Clona um contato individual
+     */
+    private Contact cloneContact(Contact original) {
+        Contact cloned = new Contact();
+        cloned.setId(original.getId());
+        cloned.setName(original.getName());
+        cloned.setCompany(original.getCompany());
+        cloned.setPhone(original.getPhone());
+        cloned.setEmail(original.getEmail());
+        cloned.setType(original.getType());
+        cloned.setAddress(original.getAddress());
+        cloned.setDescription(original.getDescription());
+        cloned.setCreateDate(original.getCreateDate());
+        return cloned;
+    }
+
+    /**
+     * Ordenar por campo específico (apenas crescente)
+     */
+    public GenericLinkedList<Contact> sortWithMergeSort(String field) {
+        return sortWithMergeSort(field, MergeSort.SortOrder.ASC);
+    }
+
+    private Comparator<Contact> getComparatorForField(String field) {
+        switch (field.toLowerCase()) {
+            case "phone":
+                return Comparators.stringComparator(Contact::getPhone);
+            case "email":
+                return Comparators.stringComparator(Contact::getEmail);
+            case "company":
+                return Comparators.stringComparator(Contact::getCompany);
+            case "type":
+                return (c1, c2) -> {
+                    if (c1.getType() == null && c2.getType() == null) return 0;
+                    if (c1.getType() == null) return -1;
+                    if (c2.getType() == null) return 1;
+                    return c1.getType().name().compareTo(c2.getType().name());
+                };
+            default: // name
+                return Comparators.stringComparator(Contact::getName);
+        }
+    }
+
+    public GenericArrayList<Contact> searchByPhone(String phone) {
+        GenericLinkedList<Contact> results = LinearSearch.searchAll(cachedContacts,
+                c -> c != null && c.getPhone() != null &&
+                        StringUtils.cleanPhoneNumber(c.getPhone()).contains(StringUtils.cleanPhoneNumber(phone)));
+
+        return linkedListToArrayList(results);
+    }
+
+    public boolean phoneExists(String phone) {
+        return phone != null && phoneIndex.get(phone) != null;
+    }
+
+    public boolean emailExists(String email) {
+        return LinearSearch.search(cachedContacts,
+                c -> c != null && email.equalsIgnoreCase(c.getEmail())) != null;
+    }
+
+    public int countAll() {
+        return cachedContacts.size();
+    }
+
+    public int countByType(ContactType type) {
+        GenericLinkedList<Contact> results = LinearSearch.searchAll(cachedContacts,
+                c -> c != null && c.getType() == type);
+        return results.size();
+    }
+
+    public void refreshCache() {
+        searchIndex = new GenericBST<>(Contact::getName);
+        phoneIndex = new GenericHashTable<>(Contact::getPhone);
+        loadCache();
+    }
+
+    private void rebuildIndexes() {
+        searchIndex = new GenericBST<>(Contact::getName);
+        phoneIndex = new GenericHashTable<>(Contact::getPhone);
+
+        GenericLinkedList.Iterator<Contact> it = cachedContacts.iterator();
+        while (it.hasNext()) {
+            Contact c = it.next();
+            if (c != null) {
+                searchIndex.insert(c);
+                if (c.getPhone() != null) {
+                    phoneIndex.put(c);
+                }
+            }
+        }
+    }
+
+    private GenericArrayList<Contact> linkedListToArrayList(GenericLinkedList<Contact> linkedList) {
+        GenericArrayList<Contact> arrayList = new GenericArrayList<>();
+        GenericLinkedList.Iterator<Contact> it = linkedList.iterator();
+        while (it.hasNext()) {
+            Contact c = it.next();
+            if (c != null) {
+                arrayList.add(c);
+            }
+        }
+        return arrayList;
+    }
+
+    private boolean syncDatabaseWithState(GenericLinkedList<Contact> targetState) {
         try {
-            // 1. Obter todos os contatos atuais do BD
-            List<Contact> dbContacts = contactDAO.findAll();
-            ContactHashTable dbMap = new ContactHashTable();
+            java.util.List<Contact> dbContacts = contactDAO.findAll();
 
-            for (Contact c : dbContacts) {
-                dbMap.put(String.valueOf(c.getId()), c);
-            }
-
-            // 2. Criar mapa do estado alvo
-            ContactHashTable targetMap = new ContactHashTable();
-            ContactLinkedList.ContactIterator it = targetState.iterator();
-
-            while (it.hasNext()) {
-                Contact c = it.next();
-                if (c != null) {
-                    targetMap.put(String.valueOf(c.getId()), c);
-                }
-            }
-
-            // 3. Deletar contatos que não estão no estado alvo
+            // Deletar contatos que não estão no estado alvo
             for (Contact dbContact : dbContacts) {
-                String id = String.valueOf(dbContact.getId());
-                if (targetMap.get(id) == null) {
-                    // Contato está no BD mas não no estado alvo - deletar
+                boolean exists = LinearSearch.search(targetState,
+                        c -> c != null && c.getId() == dbContact.getId()) != null;
+                if (!exists) {
                     contactDAO.delete(dbContact.getId());
-                    logger.info("Undo/Redo: Deletado contato ID " + dbContact.getId());
                 }
             }
 
-            // 4. Adicionar/Atualizar contatos do estado alvo
-            ContactLinkedList.ContactIterator targetIt = targetState.iterator();
+            // Adicionar/Atualizar contatos do estado alvo
+            GenericLinkedList.Iterator<Contact> targetIt = targetState.iterator();
             while (targetIt.hasNext()) {
                 Contact targetContact = targetIt.next();
                 if (targetContact != null) {
-                    String id = String.valueOf(targetContact.getId());
-                    Contact dbContact = dbMap.get(id);
-
+                    Contact dbContact = contactDAO.findById(targetContact.getId());
                     if (dbContact == null) {
-                        // Contato não existe no BD - adicionar
                         contactDAO.create(targetContact);
-                        logger.info("Undo/Redo: Adicionado contato " + targetContact.getName());
-                    } else {
-                        // Contato existe - verificar se precisa atualizar
-                        if (needsUpdate(dbContact, targetContact)) {
-                            contactDAO.update(targetContact);
-                            logger.info("Undo/Redo: Atualizado contato " + targetContact.getName());
-                        }
+                    } else if (needsUpdate(dbContact, targetContact)) {
+                        contactDAO.update(targetContact);
                     }
                 }
             }
@@ -341,15 +404,11 @@ public class ContactController {
             return true;
 
         } catch (Exception e) {
-            logger.severe("Erro ao sincronizar BD com estado: " + e.getMessage());
             e.printStackTrace();
             return false;
         }
     }
 
-    /**
-     * Verifica se um contato precisa ser atualizado
-     */
     private boolean needsUpdate(Contact dbContact, Contact targetContact) {
         if (!equals(dbContact.getName(), targetContact.getName())) return true;
         if (!equals(dbContact.getPhone(), targetContact.getPhone())) return true;
@@ -361,93 +420,10 @@ public class ContactController {
         return false;
     }
 
-    /**
-     * Compara duas strings considerando nulos
-     */
     private boolean equals(String s1, String s2) {
         if (s1 == null && s2 == null) return true;
         if (s1 == null || s2 == null) return false;
         return s1.equals(s2);
-    }
-
-    /**
-     * Reconstrói os índices de busca
-     */
-    private void rebuildIndexes() {
-        searchIndex = new ContactBST();
-        phoneIndex = new ContactHashTable();
-
-        ContactLinkedList.ContactIterator it = cachedContacts.iterator();
-        while (it.hasNext()) {
-            Contact c = it.next();
-            if (c != null) {
-                searchIndex.insert(c);
-                if (c.getPhone() != null) {
-                    phoneIndex.put(c.getPhone(), c);
-                }
-            }
-        }
-    }
-
-    /**
-     * Contar total de contatos
-     */
-    public int countAll() {
-        return cachedContacts.size();
-    }
-
-    /**
-     * Contar contatos por tipo
-     */
-    public int countByType(ContactType type) {
-        int count = 0;
-        ContactLinkedList.ContactIterator it = cachedContacts.iterator();
-
-        while (it.hasNext()) {
-            Contact c = it.next();
-            if (c != null && c.getType() == type) {
-                count++;
-            }
-        }
-
-        return count;
-    }
-
-    /**
-     * Verificar se telefone já existe
-     */
-    public boolean phoneExists(String phone) {
-        return phone != null && phoneIndex.get(phone) != null;
-    }
-
-    /**
-     * Verificar se email já existe
-     */
-    public boolean emailExists(String email) {
-        if (email == null || email.isEmpty()) return false;
-
-        ContactLinkedList.ContactIterator it = cachedContacts.iterator();
-        while (it.hasNext()) {
-            Contact c = it.next();
-            if (c != null && email.equalsIgnoreCase(c.getEmail())) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Ordenar contatos usando MergeSort
-     */
-    public ContactLinkedList sortWithMergeSort(ContactSorter.SortField field, ContactSorter.SortOrder order) {
-        return ContactSorter.mergeSort(cachedContacts, field, order);
-    }
-
-    /**
-     * Ordenar contatos usando QuickSort
-     */
-    public ContactLinkedList sortWithQuickSort(ContactSorter.SortField field, ContactSorter.SortOrder order) {
-        return ContactSorter.quickSort(cachedContacts, field, order);
     }
 
     private boolean isValidContact(Contact contact) {

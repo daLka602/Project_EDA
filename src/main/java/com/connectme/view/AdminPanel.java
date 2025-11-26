@@ -1,7 +1,9 @@
 package com.connectme.view;
 
-import com.connectme.model.eda.ContactArrayList;
-import com.connectme.model.eda.ContactLinkedList;
+import com.connectme.model.eda.GenericArrayList;
+import com.connectme.model.eda.GenericLinkedList;
+import com.connectme.model.eda.LinearSearch;
+import com.connectme.model.eda.StringUtils;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.view.componet.NavButton;
@@ -9,8 +11,6 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;
 import java.awt.*;
-
-import static com.connectme.model.eda.ContactSearchAlgorithm.cleanPhoneNumber;
 
 public class AdminPanel extends JPanel {
     private User currentUser;
@@ -120,23 +120,34 @@ public class AdminPanel extends JPanel {
     /**
      * Busca por telefone (parcial ou exata)
      */
-    public static ContactArrayList searchByPhone(ContactLinkedList list, String phoneQuery) {
-        ContactArrayList results = new ContactArrayList();
+    /**
+     * Busca por telefone (parcial ou exata)
+     */
+    /**
+     * Busca por telefone usando LinearSearch genérico
+     */
+    public static GenericArrayList<Contact> searchByPhone(GenericLinkedList<Contact> list, String phoneQuery) {
+        GenericArrayList<Contact> results = new GenericArrayList<>();
 
         if (list == null || list.isEmpty() || phoneQuery == null || phoneQuery.trim().isEmpty()) {
             return results;
         }
 
-        String cleanQuery = cleanPhoneNumber(phoneQuery);
+        String cleanQuery = StringUtils.cleanPhoneNumber(phoneQuery);
 
-        ContactLinkedList.ContactIterator it = list.iterator();
+        // Usar LinearSearch genérico
+        GenericLinkedList<Contact> found = LinearSearch.searchAll(list, contact -> {
+            if (contact == null || contact.getPhone() == null) return false;
+            String cleanPhone = StringUtils.cleanPhoneNumber(contact.getPhone());
+            return cleanPhone.contains(cleanQuery);
+        });
+
+        // Converter para ArrayList
+        GenericLinkedList.Iterator<Contact> it = found.iterator();
         while (it.hasNext()) {
             Contact c = it.next();
-            if (c != null && c.getPhone() != null) {
-                String cleanPhone = cleanPhoneNumber(c.getPhone());
-                if (cleanPhone.contains(cleanQuery)) {
-                    results.add(c);
-                }
+            if (c != null) {
+                results.add(c);
             }
         }
 

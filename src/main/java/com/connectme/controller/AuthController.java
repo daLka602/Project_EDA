@@ -2,7 +2,6 @@ package com.connectme.controller;
 
 import com.connectme.model.entities.User;
 import com.connectme.model.service.AuthService;
-import com.connectme.model.util.HashUtil;
 import java.util.logging.Logger;
 
 public class AuthController {
