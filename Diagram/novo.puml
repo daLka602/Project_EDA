@@ -2,7 +2,6 @@
 class com.connectme.view.componet.RoundedFormBorder {
 - int radius
 - Color color
-+ <<Create>> RoundedFormBorder(int,Color)
 + void paintBorder(Component,Graphics,int,int,int,int)
 + Insets getBorderInsets(Component)
 + boolean isBorderOpaque()
@@ -21,7 +20,6 @@ class com.connectme.view.ContactForm {
 - JComboBox<ContactType> typeCombo
 - JTextField addressField
 - JTextArea descriptionArea
-+ <<Create>> ContactForm(JPanel,Contact,User,ContactController,Runnable)
 - void initComponents()
 - JLabel createLabel(String)
 - JTextField createTextField(String)
@@ -37,7 +35,6 @@ class com.connectme.controller.AdminController {
 - {static} Logger logger
 - UserDAO userDAO
 - ContactDAO contactDAO
-+ <<Create>> AdminController()
 + List<User> listAllUsers()
 + User findUserById(int)
 + User findUserByUsername(String)
@@ -60,7 +57,6 @@ class com.connectme.controller.AdminController$SystemStats {
 + int customers
 + int partners
 + int suppliers
-+ <<Create>> SystemStats(int,int,int,double,int,int,int)
 + String toString()
 }
 
@@ -76,8 +72,6 @@ class com.connectme.model.eda.GenericStack {
 - Node<T> top
 - int size
 - int maxSize
-+ <<Create>> GenericStack()
-+ <<Create>> GenericStack(int)
 + void push(T)
 + T pop()
 + T peek()
@@ -93,60 +87,15 @@ class com.connectme.model.eda.GenericStack {
 class com.connectme.model.eda.GenericStack$Node {
 ~ T data
 ~ Node<T> next
-~ <<Create>> Node(T)
 }
 
-
-class com.connectme.model.eda.StringUtils {
+class com.connectme.model.util.StringUtils {
 + {static} String normalize(String)
 + {static} String cleanPhoneNumber(String)
 + {static} boolean containsIgnoreCase(String,String)
 + {static} boolean equalsIgnoreCaseAndAccents(String,String)
 + {static} boolean startsWithIgnoreCase(String,String)
 }
-
-class com.connectme.model.eda.ContactStateManager {
-- GenericStack<ListState> undoStack
-- GenericStack<ListState> redoStack
-- GenericLinkedList<Contact> currentState
-+ <<Create>> ContactStateManager()
-+ <<Create>> ContactStateManager(int)
-+ void saveState(GenericLinkedList<Contact>,String)
-+ GenericLinkedList<Contact> undo()
-+ GenericLinkedList<Contact> redo()
-+ GenericLinkedList<Contact> getCurrentState()
-+ void setCurrentState(GenericLinkedList<Contact>)
-+ boolean canUndo()
-+ boolean canRedo()
-+ String getUndoDescription()
-+ String getRedoDescription()
-+ int getUndoStackSize()
-+ int getRedoStackSize()
-+ void clearHistory()
-+ String getStateInfo()
-+ String[] getUndoHistory()
-+ String[] getRedoHistory()
-+ GenericLinkedList<Contact> undoMultiple(int)
-+ GenericLinkedList<Contact> redoMultiple(int)
-+ String toString()
-- GenericLinkedList<Contact> cloneList(GenericLinkedList<Contact>)
-- Contact cloneContact(Contact)
-}
-
-
-class com.connectme.model.eda.ContactStateManager$ListState {
-- GenericLinkedList<Contact> snapshot
-- String description
-- long timestamp
-+ <<Create>> ListState(GenericLinkedList<Contact>,String)
-+ GenericLinkedList<Contact> getSnapshot()
-+ String getDescription()
-+ long getTimestamp()
-- GenericLinkedList<Contact> cloneList(GenericLinkedList<Contact>)
-- Contact cloneContact(Contact)
-+ String toString()
-}
-
 
 class com.connectme.GenerateHashes {
 + {static} void main(String[])
@@ -156,7 +105,6 @@ class com.connectme.view.componet.MyPasswordField {
 - Icon prefixIcon
 - Icon suffixIcon
 - String hint
-+ <<Create>> MyPasswordField()
 + String getHint()
 + void setHint(String)
 + Icon getPrefixIcon()
@@ -180,7 +128,6 @@ class com.connectme.view.componet.MyTextField {
 - Icon prefixIcon
 - Icon suffixIcon
 - String hint
-+ <<Create>> MyTextField()
 + String getHint()
 + void setHint(String)
 + Icon getPrefixIcon()
@@ -194,31 +141,6 @@ class com.connectme.view.componet.MyTextField {
 }
 
 
-class com.connectme.view.icons.IconGeneratorPNG {
-- {static} Color PRIMARY_COLOR
-- {static} Color SUCCESS_COLOR
-- {static} Color WARNING_COLOR
-- {static} Color DANGER_COLOR
-- {static} Color DARK_COLOR
-+ {static} void main(String[])
-+ {static} void generateAllIcons(int)
-+ {static} void generateIcon(int,String,Color)
-- {static} void drawConnectMeIcon(Graphics2D,int,Color)
-- {static} void drawAgendaIcon(Graphics2D,int,Color)
-- {static} void drawContactsIcon(Graphics2D,int,Color)
-- {static} void drawAdminIcon(Graphics2D,int,Color)
-- {static} void drawLogoutIcon(Graphics2D,int,Color)
-- {static} void drawSearchIcon(Graphics2D,int,Color)
-- {static} void drawAddIcon(Graphics2D,int,Color)
-- {static} void drawImportIcon(Graphics2D,int,Color)
-- {static} void drawAllContactsIcon(Graphics2D,int,Color)
-- {static} void drawClientsIcon(Graphics2D,int,Color)
-- {static} void drawPartnersIcon(Graphics2D,int,Color)
-- {static} void drawSuppliersIcon(Graphics2D,int,Color)
-- {static} void drawUserIcon(Graphics2D,int,Color)
-}
-
-
 class com.connectme.view.componet.MyButton {
 - Animator animator
 - int targetSize
@@ -226,7 +148,6 @@ class com.connectme.view.componet.MyButton {
 - Point pressedPoint
 - float alpha
 - Color effectColor
-+ <<Create>> MyButton()
 # void paintComponent(Graphics)
 }
 
@@ -277,7 +198,6 @@ class com.connectme.controller.ContactController {
 - GenericBST<Contact> searchIndex
 - GenericHashTable<Contact> phoneIndex
 - ContactStateManager stateManager
-+ <<Create>> ContactController()
 - void loadCache()
 + GenericLinkedList<Contact> listAllAsLinkedList()
 + GenericArrayList<Contact> listAllAsArrayList()
@@ -341,7 +261,6 @@ class com.connectme.view.LoginScreen {
 - AuthController authController
 - Runnable onLoginSuccess
 - User authenticatedUser
-+ <<Create>> LoginScreen()
 - void initComponents()
 - void setupListeners()
 - void handleLogin()
@@ -353,7 +272,6 @@ class com.connectme.view.LoginScreen {
 class com.connectme.model.eda.GenericBST {
 - Node<T> root
 - Function<T,String> keyExtractor
-+ <<Create>> GenericBST(Function<T,String>)
 + void insert(T)
 - Node<T> insertRec(Node<T>,T)
 + T search(String)
@@ -366,20 +284,21 @@ class com.connectme.model.eda.GenericBST {
 class com.connectme.model.eda.GenericBST$Node {
 ~ T data
 ~ Node<T> left
-~ <<Create>> Node(T)
 }
-
 
 class com.connectme.view.UserManagementPanel {
 - AdminController adminController
 - JPanel cardsPanel
 - JLabel countLabel
-+ <<Create>> UserManagementPanel()
 - void initComponents()
 - void loadUserCards()
 + void refreshUsers()
 }
 
+
+class com.connectme.model.util.IconUtils {
++ {static} ImageIcon colorizeIcon(ImageIcon,Color)
+}
 
 class com.connectme.model.eda.GenericLinkedList {
 - Node<T> head
@@ -405,13 +324,10 @@ class com.connectme.model.eda.GenericLinkedList {
 class com.connectme.model.eda.GenericLinkedList$Node {
 + T data
 + Node<T> next
-+ <<Create>> Node(T)
 }
-
 
 class com.connectme.model.eda.GenericLinkedList$Iterator {
 - Node<E> current
-+ <<Create>> Iterator(Node<E>)
 + boolean hasNext()
 + E next()
 }
@@ -433,7 +349,6 @@ class com.connectme.view.AdminPanel {
 - JPanel contentPanel
 - StatisticsPanel statisticsPanel
 - UserManagementPanel userManagementPanel
-+ <<Create>> AdminPanel(User)
 - void initComponents()
 - void showStatistics()
 - void showUsers()
@@ -468,7 +383,6 @@ class com.connectme.view.MainFrame {
 - AdminPanel adminPanel
 - NavButton contactsBtn
 - NavButton adminBtn
-+ <<Create>> MainFrame(User,AuthController)
 - void initComponents()
 - JPanel createNavBar()
 - String getRoleDisplay(AccessLevel)
@@ -483,8 +397,6 @@ class com.connectme.model.eda.GenericArrayList {
 - Object[] data
 - int size
 - {static} int INITIAL_CAPACITY
-+ <<Create>> GenericArrayList()
-+ <<Create>> GenericArrayList(int)
 + void add(T)
 + void add(int,T)
 + T get(int)
@@ -522,9 +434,6 @@ class com.connectme.model.entities.User {
 - UserStatus status
 - LocalDateTime createDate
 - LocalDateTime lastLogin
-+ <<Create>> User()
-+ <<Create>> User(int,String,String,String,AccessLevel,UserStatus,LocalDateTime,LocalDateTime)
-+ <<Create>> User(String,String)
 + int getId()
 + void setId(int)
 + String getUsername()
@@ -548,7 +457,6 @@ class com.connectme.controller.AuthController {
 - {static} Logger logger
 - AuthService authService
 - User loggedInUser
-+ <<Create>> AuthController()
 + boolean login(String,String)
 + void logout()
 + boolean isAuthenticated()
@@ -564,7 +472,6 @@ class com.connectme.view.UserCardPanel {
 - AdminController adminController
 - Runnable onEditCallback
 - Runnable onDeleteCallback
-+ <<Create>> UserCardPanel(User,AdminController,Runnable,Runnable)
 - void initComponents()
 - String getRoleDisplay(AccessLevel)
 - Color getRoleBadgeColor(AccessLevel)
@@ -584,7 +491,6 @@ class com.connectme.view.ContactPanel {
 - JButton currentFilterBtn
 - NavButton undoBtn
 - NavButton redoBtn
-+ <<Create>> ContactPanel(User)
 - void initComponents()
 - JButton createFilterButton(String)
 - void setupPlaceholder(JTextField,String)
@@ -628,10 +534,6 @@ class com.connectme.model.dao.UserDAO {
 }
 
 
-class com.connectme.view.icons.IconUtils {
-+ {static} ImageIcon colorizeIcon(ImageIcon,Color)
-}
-
 class com.connectme.model.entities.Contact {
 - int id
 - String name
@@ -642,8 +544,6 @@ class com.connectme.model.entities.Contact {
 - String address
 - String description
 - LocalDateTime createDate
-+ <<Create>> Contact()
-+ <<Create>> Contact(int,String,String,String,String,ContactType,String,String,LocalDateTime)
 + int getId()
 + void setId(int)
 + String getName()
@@ -691,13 +591,51 @@ class com.connectme.model.eda.BinarySearch {
 + {static} T searchArray(T[],String,Function<T,String>)
 }
 
+class com.connectme.model.service.ContactStateManager {
+- GenericStack<ListState> undoStack
+- GenericStack<ListState> redoStack
+- GenericLinkedList<Contact> currentState
++ void saveState(GenericLinkedList<Contact>,String)
++ GenericLinkedList<Contact> undo()
++ GenericLinkedList<Contact> redo()
++ GenericLinkedList<Contact> getCurrentState()
++ void setCurrentState(GenericLinkedList<Contact>)
++ boolean canUndo()
++ boolean canRedo()
++ String getUndoDescription()
++ String getRedoDescription()
++ int getUndoStackSize()
++ int getRedoStackSize()
++ void clearHistory()
++ String getStateInfo()
++ String[] getUndoHistory()
++ String[] getRedoHistory()
++ GenericLinkedList<Contact> undoMultiple(int)
++ GenericLinkedList<Contact> redoMultiple(int)
++ String toString()
+- GenericLinkedList<Contact> cloneList(GenericLinkedList<Contact>)
+- Contact cloneContact(Contact)
+}
+
+
+class com.connectme.model.service.ContactStateManager$ListState {
+- GenericLinkedList<Contact> snapshot
+- String description
+- long timestamp
++ GenericLinkedList<Contact> getSnapshot()
++ String getDescription()
++ long getTimestamp()
+- GenericLinkedList<Contact> cloneList(GenericLinkedList<Contact>)
+- Contact cloneContact(Contact)
++ String toString()
+}
+
+
 class com.connectme.model.service.AuthService {
 - {static} Logger logger
 - IUserDAO userDAO
 - {static} Pattern USERNAME_PATTERN
 - {static} Pattern PASSWORD_PATTERN
-+ <<Create>> AuthService()
-+ <<Create>> AuthService(IUserDAO)
 + boolean login(String,String)
 + boolean register(String,String)
 + boolean userExists(String)
@@ -718,7 +656,6 @@ enum com.connectme.model.service.PasswordStrength {
 
 class com.connectme.view.StatisticsPanel {
 - AdminController adminController
-+ <<Create>> StatisticsPanel()
 - void initComponents()
 - JPanel createStatCard(String,String,String,Color)
 - JPanel createDistributionItemTop(String,int,Color)
@@ -736,7 +673,6 @@ class com.connectme.view.UserFormDialog {
 - MyPasswordField passwordField
 - JComboBox<String> funcaoCombo
 - JCheckBox contaAtivaCheck
-+ <<Create>> UserFormDialog(JFrame,User,AdminController,Runnable)
 - void initComponents()
 - JPanel createHeader()
 - JPanel createFormFields()
@@ -787,7 +723,6 @@ class com.connectme.view.componet.NavButton {
 - Point pressedPoint
 - float alpha
 - Color effectColor
-+ <<Create>> NavButton(String,boolean)
 # void paintComponent(Graphics)
 }
 
@@ -798,7 +733,6 @@ class com.connectme.model.eda.GenericHashTable {
 - Entry<T>[] table
 - int size
 - Function<T,String> keyExtractor
-+ <<Create>> GenericHashTable(Function<T,String>)
 - int hash(String)
 + void put(T)
 + T get(String)
@@ -812,14 +746,11 @@ class com.connectme.model.eda.GenericHashTable$Entry {
 ~ String key
 ~ T value
 ~ Entry<T> next
-~ <<Create>> Entry(String,T)
 }
-
 
 class com.connectme.view.componet.RoundedBorder {
 - int radius
 - Color color
-+ <<Create>> RoundedBorder(int,Color)
 + void paintBorder(Component,Graphics,int,int,int,int)
 + Insets getBorderInsets(Component)
 + boolean isBorderOpaque()
@@ -832,7 +763,6 @@ javax.swing.border.Border <|.. com.connectme.view.componet.RoundedFormBorder
 com.connectme.view.JDialog <|-- com.connectme.view.ContactForm
 com.connectme.controller.AdminController +.. com.connectme.controller.AdminController$SystemStats
 com.connectme.model.eda.GenericStack +.. com.connectme.model.eda.GenericStack$Node
-com.connectme.model.eda.ContactStateManager +.. com.connectme.model.eda.ContactStateManager$ListState
 javax.swing.JPasswordField <|-- com.connectme.view.componet.MyPasswordField
 javax.swing.JTextField <|-- com.connectme.view.componet.MyTextField
 com.connectme.view.componet.JButton <|-- com.connectme.view.componet.MyButton
@@ -848,6 +778,7 @@ com.connectme.model.eda.GenericArrayList +.. com.connectme.model.eda.GenericArra
 com.connectme.view.JPanel <|-- com.connectme.view.UserCardPanel
 com.connectme.view.JPanel <|-- com.connectme.view.ContactPanel
 com.connectme.model.dao.IUserDAO <|.. com.connectme.model.dao.UserDAO
+com.connectme.model.service.ContactStateManager +.. com.connectme.model.service.ContactStateManager$ListState
 com.connectme.view.JPanel <|-- com.connectme.view.StatisticsPanel
 com.connectme.view.JDialog <|-- com.connectme.view.UserFormDialog
 com.connectme.view.componet.JButton <|-- com.connectme.view.componet.NavButton
