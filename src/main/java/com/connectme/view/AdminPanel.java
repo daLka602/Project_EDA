@@ -3,7 +3,7 @@ package com.connectme.view;
 import com.connectme.model.eda.GenericArrayList;
 import com.connectme.model.eda.GenericLinkedList;
 import com.connectme.model.eda.LinearSearch;
-import com.connectme.model.eda.StringUtils;
+import com.connectme.model.util.StringUtils;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.view.componet.NavButton;

@@ -4,6 +4,8 @@ import com.connectme.model.dao.ContactDAO;
 import com.connectme.model.eda.*;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.enums.ContactType;
+import com.connectme.model.service.ContactStateManager;
+import com.connectme.model.util.StringUtils;
 
 import java.util.Comparator;
 import java.util.function.Predicate;

@@ -1,5 +1,7 @@
-package com.connectme.model.eda;
+package com.connectme.model.service;
 
+import com.connectme.model.eda.GenericLinkedList;
+import com.connectme.model.eda.GenericStack;
 import com.connectme.model.entities.Contact;
 
 public class ContactStateManager {

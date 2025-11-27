@@ -1,4 +1,4 @@
-package com.connectme.view.icons;
+package com.connectme.model.util;
 
 import javax.swing.*;
 import java.awt.*;

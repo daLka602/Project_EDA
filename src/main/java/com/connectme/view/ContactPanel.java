@@ -8,7 +8,7 @@ import com.connectme.model.entities.User;
 import com.connectme.model.enums.ContactType;
 import com.connectme.view.componet.NavButton;
 import com.connectme.view.componet.RoundedBorder;
-import com.connectme.view.icons.IconUtils;
+import com.connectme.model.util.IconUtils;
 import net.miginfocom.swing.MigLayout;
 
 import javax.swing.*;

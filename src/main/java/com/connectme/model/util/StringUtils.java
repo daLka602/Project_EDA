@@ -1,4 +1,4 @@
-package com.connectme.model.eda;
+package com.connectme.model.util;
 
 /**
  * Utilitários genéricos para manipulação de strings
