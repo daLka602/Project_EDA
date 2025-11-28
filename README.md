@@ -9,8 +9,8 @@ ConnectMe é um sistema de agenda telefónica digital desenvolvido para moderniz
 ## 📸 Screenshots
 
 <div align="center">
-  <img src="docs/screenshot/screenshot1.png" alt="Interface Principal" width="45%">
-  <img src="docs/screenshot/screenshot2.png" alt="Gestão de Contactos" width="45%">
+  <img src="docs/screenshot/HomePage.png" alt="Gestão de Contactos" width="45%">
+  <img src="docs/screenshot/AdminPage.png" alt="AdminPAge" width="45%">
 </div>
 
 ## ✨ Funcionalidades
