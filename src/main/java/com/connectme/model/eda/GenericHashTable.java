@@ -1,23 +1,13 @@
 package com.connectme.model.eda;
 
+import com.connectme.model.eda.componets.Entry;
+
 import java.util.function.Function;
 
 public class GenericHashTable<T> {
 
-    private static class Entry<T> {
-        String key;
-        T value;
-        Entry<T> next;
-
-        Entry(String key, T value) {
-            this.key = key;
-            this.value = value;
-        }
-    }
-
     private static final int INITIAL_SIZE = 16;
     private static final double LOAD_FACTOR = 0.75;
-
     private Entry<T>[] table;
     private int size;
     private final Function<T, String> keyExtractor;
@@ -50,18 +40,18 @@ public class GenericHashTable<T> {
         Entry<T> prev = null;
 
         while (cur != null) {
-            if (cur.key.equals(key)) {
-                cur.value = value;
+            if (cur.getKey().equals(key)) {
+                cur.setValue(value);
                 return;
             }
             prev = cur;
-            cur = cur.next;
+            cur = cur.getNext();
         }
 
         if (prev == null) {
             table[index] = newEntry;
         } else {
-            prev.next = newEntry;
+            prev.setNext(newEntry);
         }
         size++;
     }
@@ -73,8 +63,8 @@ public class GenericHashTable<T> {
         Entry<T> cur = table[index];
 
         while (cur != null) {
-            if (cur.key.equals(key)) return cur.value;
-            cur = cur.next;
+            if (cur.getKey().equals(key)) return cur.getValue();
+            cur = cur.getNext();
         }
         return null;
     }
@@ -87,17 +77,17 @@ public class GenericHashTable<T> {
         Entry<T> prev = null;
 
         while (cur != null) {
-            if (cur.key.equals(key)) {
+            if (cur.getKey().equals(key)) {
                 if (prev == null) {
-                    table[index] = cur.next;
+                    table[index] = cur.getNext();
                 } else {
-                    prev.next = cur.next;
+                    prev.setNext(cur.getNext());
                 }
                 size--;
                 return true;
             }
             prev = cur;
-            cur = cur.next;
+            cur = cur.getNext();
         }
         return false;
     }
@@ -111,8 +101,8 @@ public class GenericHashTable<T> {
         for (Entry<T> entry : oldTable) {
             Entry<T> cur = entry;
             while (cur != null) {
-                put(cur.value);
-                cur = cur.next;
+                put(cur.getValue());
+                cur = cur.getNext();
             }
         }
     }

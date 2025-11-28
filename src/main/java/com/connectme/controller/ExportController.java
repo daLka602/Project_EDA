@@ -1,7 +1,7 @@
 package com.connectme.controller;
 
 import com.connectme.model.entities.Contact;
-import com.connectme.model.util.PdfUtil;
+import com.connectme.model.util.ExportUtil;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -11,9 +11,6 @@ public class ExportController {
 
     private static final Logger logger = Logger.getLogger(ExportController.class.getName());
 
-    /**
-     * Exportar contactos para TXT
-     */
     public boolean exportToTxt(List<Contact> contacts, File destFile) {
         if (contacts == null || destFile == null) {
             logger.warning("Parâmetros inválidos para exportação TXT");
@@ -21,7 +18,7 @@ public class ExportController {
         }
 
         try {
-            PdfUtil.exportContactsToTxt(contacts, destFile);
+            ExportUtil.exportContactsToTxt(contacts, destFile);
             logger.info("Contactos exportados para TXT: " + destFile.getAbsolutePath());
             return true;
         } catch (IOException e) {
@@ -30,9 +27,6 @@ public class ExportController {
         }
     }
 
-    /**
-     * Exportar contactos para HTML
-     */
     public boolean exportToHtml(List<Contact> contacts, File destFile) {
         if (contacts == null || destFile == null) {
             logger.warning("Parâmetros inválidos para exportação HTML");
@@ -40,11 +34,27 @@ public class ExportController {
         }
 
         try {
-            PdfUtil.exportContactsToHtml(contacts, destFile);
+            ExportUtil.exportContactsToHtml(contacts, destFile);
             logger.info("Contactos exportados para HTML: " + destFile.getAbsolutePath());
             return true;
         } catch (IOException e) {
             logger.severe("Erro ao exportar para HTML: " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean exportToPDF(List<Contact> contacts, File destFile) {
+        if (contacts == null || destFile == null) {
+            logger.warning("Parâmetros inválidos para exportação PDF");
+            return false;
+        }
+
+        try {
+            ExportUtil.exportContactsToPdf(contacts, destFile);
+            logger.info("Contactos exportados para PDF: " + destFile.getAbsolutePath());
+            return true;
+        } catch (IOException e) {
+            logger.severe("Erro ao exportar para PDF: " + e.getMessage());
             return false;
         }
     }
@@ -71,6 +81,8 @@ public class ExportController {
                     exportToTxt(contacts, file);
                 } else if ("html".equalsIgnoreCase(format)) {
                     exportToHtml(contacts, file);
+                } else if ("pdf".equalsIgnoreCase(format)) {
+                    exportToPDF(contacts, file);
                 } else {
                     logger.warning("Formato não suportado: " + format);
                     allSuccess = false;

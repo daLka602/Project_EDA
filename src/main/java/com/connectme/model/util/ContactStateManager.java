@@ -1,4 +1,4 @@
-package com.connectme.model.service;
+package com.connectme.model.util;
 
 import com.connectme.model.eda.GenericLinkedList;
 import com.connectme.model.eda.GenericStack;
@@ -6,70 +6,8 @@ import com.connectme.model.entities.Contact;
 
 public class ContactStateManager {
 
-    public static class ListState {
-        private GenericLinkedList<Contact> snapshot;
-        private String description;
-        private long timestamp;
-
-        public ListState(GenericLinkedList<Contact> list, String description) {
-            this.snapshot = cloneList(list);
-            this.description = description;
-            this.timestamp = System.currentTimeMillis();
-        }
-
-        public GenericLinkedList<Contact> getSnapshot() {
-            return snapshot;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public long getTimestamp() {
-            return timestamp;
-        }
-
-        private GenericLinkedList<Contact> cloneList(GenericLinkedList<Contact> original) {
-            GenericLinkedList<Contact> cloned = new GenericLinkedList<>();
-            if (original == null || original.isEmpty()) {
-                return cloned;
-            }
-
-            GenericLinkedList.Iterator<Contact> it = original.iterator();
-            while (it.hasNext()) {
-                Contact c = it.next();
-                if (c != null) {
-                    cloned.add(cloneContact(c));
-                }
-            }
-            return cloned;
-        }
-
-        private Contact cloneContact(Contact original) {
-            Contact cloned = new Contact();
-            cloned.setId(original.getId());
-            cloned.setName(original.getName());
-            cloned.setCompany(original.getCompany());
-            cloned.setPhone(original.getPhone());
-            cloned.setEmail(original.getEmail());
-            cloned.setType(original.getType());
-            cloned.setAddress(original.getAddress());
-            cloned.setDescription(original.getDescription());
-            cloned.setCreateDate(original.getCreateDate());
-            return cloned;
-        }
-
-        @Override
-        public String toString() {
-            return String.format("State[%s, %d contatos, %tF %<tT]",
-                    description,
-                    snapshot.size(),
-                    timestamp);
-        }
-    }
-
-    private GenericStack<ListState> undoStack;
-    private GenericStack<ListState> redoStack;
+    private GenericStack<ListStateUtil> undoStack;
+    private GenericStack<ListStateUtil> redoStack;
     private GenericLinkedList<Contact> currentState;
 
     public ContactStateManager() {
@@ -90,7 +28,7 @@ public class ContactStateManager {
     public void saveState(GenericLinkedList<Contact> list, String description) {
         if (list != null) {
             // Salva o estado atual no undo stack
-            undoStack.push(new ListState(list, description));
+            undoStack.push(new ListStateUtil(list, description));
             // Limpa redo ao fazer nova operação
             redoStack.clear();
             // Atualiza o estado atual
@@ -108,11 +46,11 @@ public class ContactStateManager {
 
         // Salva estado atual no redo antes de desfazer
         if (currentState != null) {
-            redoStack.push(new ListState(currentState, "Redo point"));
+            redoStack.push(new ListStateUtil(currentState, "Redo point"));
         }
 
         // Recupera estado anterior do undo
-        ListState previousState = undoStack.pop();
+        ListStateUtil previousState = undoStack.pop();
         this.currentState = previousState.getSnapshot();
 
         return currentState;
@@ -128,11 +66,11 @@ public class ContactStateManager {
 
         // Salva estado atual no undo antes de refazer
         if (currentState != null) {
-            undoStack.push(new ListState(currentState, "Undo point"));
+            undoStack.push(new ListStateUtil(currentState, "Undo point"));
         }
 
         // Recupera próximo estado do redo
-        ListState nextState = redoStack.pop();
+        ListStateUtil nextState = redoStack.pop();
         this.currentState = nextState.getSnapshot();
 
         return currentState;
@@ -164,7 +102,7 @@ public class ContactStateManager {
         if (!canUndo()) {
             return null;
         }
-        ListState state = undoStack.peek();
+        ListStateUtil state = undoStack.peek();
         return state != null ? state.getDescription() : null;
     }
 
@@ -172,7 +110,7 @@ public class ContactStateManager {
         if (!canRedo()) {
             return null;
         }
-        ListState state = redoStack.peek();
+        ListStateUtil state = redoStack.peek();
         return state != null ? state.getDescription() : null;
     }
 
@@ -206,8 +144,8 @@ public class ContactStateManager {
         String[] descriptions = new String[statesArray.length];
 
         for (int i = 0; i < statesArray.length; i++) {
-            if (statesArray[i] instanceof ListState) {
-                descriptions[i] = ((ListState) statesArray[i]).getDescription();
+            if (statesArray[i] instanceof ListStateUtil) {
+                descriptions[i] = ((ListStateUtil) statesArray[i]).getDescription();
             }
         }
 
@@ -223,8 +161,8 @@ public class ContactStateManager {
         String[] descriptions = new String[statesArray.length];
 
         for (int i = 0; i < statesArray.length; i++) {
-            if (statesArray[i] instanceof ListState) {
-                descriptions[i] = ((ListState) statesArray[i]).getDescription();
+            if (statesArray[i] instanceof ListStateUtil) {
+                descriptions[i] = ((ListStateUtil) statesArray[i]).getDescription();
             }
         }
 

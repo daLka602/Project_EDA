@@ -6,6 +6,7 @@ import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.ContactType;
 import com.connectme.model.enums.UserStatus;
+import com.connectme.model.util.SystemStatsUtil;
 
 import java.util.List;
 import java.util.logging.Logger;
@@ -110,7 +111,7 @@ public class AdminController {
     /**
      * Obter estatísticas do sistema
      */
-    public SystemStats getSystemStats() {
+    public SystemStatsUtil getSystemStats() {
         List<User> users = userDAO.findAll();
         List<Contact> contacts = contactDAO.findAll();
 
@@ -131,7 +132,7 @@ public class AdminController {
                 .filter(c -> c.getType() == ContactType.SUPPLIER)
                 .count();
 
-        return new SystemStats(totalUsers, activeUsers, totalContacts, activationRate,
+        return new SystemStatsUtil(totalUsers, activeUsers, totalContacts, activationRate,
                 (int) customers, (int) partners, (int) suppliers);
     }
 
@@ -141,36 +142,5 @@ public class AdminController {
         if (user.getPasswordHash() == null || user.getPasswordHash().isEmpty()) return false;
         if (user.getUsername().length() < 3) return false;
         return true;
-    }
-
-    // ===== CLASSE INTERNA =====
-
-    public static class SystemStats {
-        public final int totalUsers;
-        public final int activeUsers;
-        public final int totalContacts;
-        public final double activationRate;
-        public final int customers;
-        public final int partners;
-        public final int suppliers;
-
-        public SystemStats(int totalUsers, int activeUsers, int totalContacts,
-                           double activationRate, int customers, int partners, int suppliers) {
-            this.totalUsers = totalUsers;
-            this.activeUsers = activeUsers;
-            this.totalContacts = totalContacts;
-            this.activationRate = activationRate;
-            this.customers = customers;
-            this.partners = partners;
-            this.suppliers = suppliers;
-        }
-
-        @Override
-        public String toString() {
-            return String.format(
-                    "SystemStats{users=%d, active=%d, contacts=%d, rate=%.1f%%, customers=%d, partners=%d, suppliers=%d}",
-                    totalUsers, activeUsers, totalContacts, activationRate, customers, partners, suppliers
-            );
-        }
     }
 }

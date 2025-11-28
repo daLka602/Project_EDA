@@ -1,17 +1,10 @@
 package com.connectme.model.eda;
 
+import com.connectme.model.eda.componets.Node;
+
 import java.util.function.Function;
 
 public class GenericBST<T> {
-
-    private static class Node<T> {
-        T data;
-        Node<T> left, right;
-
-        Node(T data) {
-            this.data = data;
-        }
-    }
 
     private Node<T> root;
     private final Function<T, String> keyExtractor;
@@ -28,14 +21,14 @@ public class GenericBST<T> {
         if (node == null) return new Node<>(data);
 
         String key = keyExtractor.apply(data);
-        String nodeKey = keyExtractor.apply(node.data);
+        String nodeKey = keyExtractor.apply(node.getData());
 
         int cmp = key.compareToIgnoreCase(nodeKey);
 
         if (cmp < 0)
-            node.left = insertRec(node.left, data);
+            node.setLeft(insertRec(node.getLeft(), data));
         else
-            node.right = insertRec(node.right, data);
+            node.setRight(insertRec(node.getRight(), data));
 
         return node;
     }
@@ -47,12 +40,12 @@ public class GenericBST<T> {
     private T searchRec(Node<T> node, String key) {
         if (node == null) return null;
 
-        String nodeKey = keyExtractor.apply(node.data);
+        String nodeKey = keyExtractor.apply(node.getData());
         int cmp = key.compareToIgnoreCase(nodeKey);
 
-        if (cmp == 0) return node.data;
-        if (cmp < 0) return searchRec(node.left, key);
-        else return searchRec(node.right, key);
+        if (cmp == 0) return node.getData();
+        if (cmp < 0) return searchRec(node.getLeft(), key);
+        else return searchRec(node.getRight(), key);
     }
 
     public GenericArrayList<T> searchPartial(String partialKey) {
@@ -64,12 +57,12 @@ public class GenericBST<T> {
     private void searchPartialRec(Node<T> node, String partial, GenericArrayList<T> results) {
         if (node == null) return;
 
-        String key = keyExtractor.apply(node.data).toLowerCase();
+        String key = keyExtractor.apply(node.getData()).toLowerCase();
         if (key.contains(partial)) {
-            results.add(node.data);
+            results.add(node.getData());
         }
 
-        searchPartialRec(node.left, partial, results);
-        searchPartialRec(node.right, partial, results);
+        searchPartialRec(node.getLeft(), partial, results);
+        searchPartialRec(node.getRight(), partial, results);
     }
 }

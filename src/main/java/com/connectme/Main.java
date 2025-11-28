@@ -17,14 +17,12 @@ public class Main {
             try {
                 logger.info("Inicializando ConnectMe...");
 
-                // Inicializar banco de dados
                 DbConnection.initialize();
                 logger.info("Banco de dados inicializado");
 
                 // Configurar Look and Feel
                 UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-                // Criar controller de autenticação
                 AuthController authController = new AuthController();
 
                 // Criar e mostrar LoginScreen

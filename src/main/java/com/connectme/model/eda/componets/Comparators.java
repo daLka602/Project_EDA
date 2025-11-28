@@ -1,4 +1,6 @@
-package com.connectme.model.eda;
+package com.connectme.model.eda.componets;
+
+import com.connectme.model.enums.SortOrder;
 
 import java.util.Comparator;
 import java.util.function.Function;
@@ -50,10 +52,10 @@ public class Comparators {
     /**
      * Cria comparator com ordenação especificada
      */
-    public static <T> Comparator<T> withOrder(Comparator<T> comparator, MergeSort.SortOrder order) {
+    public static <T> Comparator<T> withOrder(Comparator<T> comparator, SortOrder order) {
         return (c1, c2) -> {
             int result = comparator.compare(c1, c2);
-            return (order == MergeSort.SortOrder.DESC) ? -result : result;
+            return (order == SortOrder.DESC) ? -result : result;
         };
     }
 

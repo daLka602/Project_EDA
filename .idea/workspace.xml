@@ -4,7 +4,52 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="" />
+    <list default="true" id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/controller/AdminController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/controller/AdminController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/controller/AuthController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/controller/AuthController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/controller/ContactController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/controller/ContactController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/controller/ExportController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/controller/ExportController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/BinarySearch.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/BinarySearch.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/Comparators.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/componets/Comparators.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericBST.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericBST.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericHashTable.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericHashTable.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericLinkedList.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericLinkedList.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericStack.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/GenericStack.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/MergeSort.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/eda/MergeSort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/service/AuthService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/service/AuthService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/service/ContactStateManager.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/util/ContactStateManager.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/util/HashUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/util/HashUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/model/util/PdfUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/model/util/ExportUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/ContactPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/view/StatisticsPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/view/StatisticsPanel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/Main.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/controller/AuthController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/controller/AuthController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/controller/ContactController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/controller/ContactController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/controller/ExportController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/controller/ExportController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/BinarySearch.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/BinarySearch.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/Comparators.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericBST$Node.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericBST.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericBST.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericLinkedList$Iterator.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericLinkedList$Iterator.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericLinkedList$Node.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericLinkedList.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericLinkedList.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericStack$Node.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericStack.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/GenericStack.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/MergeSort$SortOrder.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/MergeSort.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/eda/MergeSort.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService$PasswordStrength.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/service/AuthService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/ContactStateManager$ListState.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/service/ContactStateManager.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/util/HashUtil.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/util/HashUtil.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/util/IconUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/util/IconUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/model/util/StringUtils.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/model/util/StringUtils.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/AdminPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/AdminPanel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/com/connectme/view/ContactPanel.class" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +58,7 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
+        <option value="Exception" />
         <option value="Enum" />
         <option value="Interface" />
         <option value="Class" />
@@ -45,11 +91,11 @@
     &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
     &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/mirrine/Projectos/EDA/Project_EDA/src/main/java/com/connectme/view/icons&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/mirrine/Projectos/EDA/Project_EDA/Diagram&quot;,
     &quot;project.structure.last.edited&quot;: &quot;Project&quot;,
     &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
     &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;org.plantuml.idea.settings.PlantUmlSettingsPage&quot;
+    &quot;settings.editor.selected.configurable&quot;: &quot;editor.preferences.fonts.default&quot;
   }
 }</component>
   <component name="RecentsManager">

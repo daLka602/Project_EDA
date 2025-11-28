@@ -6,6 +6,7 @@ import com.connectme.model.eda.*;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.entities.User;
 import com.connectme.model.enums.ContactType;
+import com.connectme.model.enums.SortOrder;
 import com.connectme.view.componet.NavButton;
 import com.connectme.view.componet.RoundedBorder;
 import com.connectme.model.util.IconUtils;
@@ -400,7 +401,7 @@ public class ContactPanel extends JPanel {
         }
 
         // Determinar ordem
-        MergeSort.SortOrder order = (orderIndex == 0) ? MergeSort.SortOrder.ASC : MergeSort.SortOrder.DESC;
+        SortOrder order = (orderIndex == 0) ? SortOrder.ASC : SortOrder.DESC;
 
         long startTime = System.currentTimeMillis();
 
@@ -414,7 +415,7 @@ public class ContactPanel extends JPanel {
         isSorted = true;
         updateCards(currentContacts);
 
-        String orderText = (order == MergeSort.SortOrder.ASC) ? "Crescente (A-Z)" : "Decrescente (Z-A)";
+        String orderText = (order == SortOrder.ASC) ? "Crescente (A-Z)" : "Decrescente (Z-A)";
         JOptionPane.showMessageDialog(this,
                 "Ordenação concluída com MergeSort\n" +
                         "Campo: " + field + "\n" +
@@ -620,7 +621,7 @@ public class ContactPanel extends JPanel {
         if (fileChooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION) {
             File selectedDir = fileChooser.getSelectedFile();
 
-            String[] options = {"TXT", "HTML", "Ambos"};
+            String[] options = {"TXT", "HTML","PDF", "Todos"};
             int choice = JOptionPane.showOptionDialog(
                     this,
                     "Escolha o formato de exportação:",
@@ -629,7 +630,7 @@ public class ContactPanel extends JPanel {
                     JOptionPane.QUESTION_MESSAGE,
                     null,
                     options,
-                    options[2]
+                    options[3]
             );
 
             // Converter GenericLinkedList para List para exportação
@@ -641,7 +642,9 @@ public class ContactPanel extends JPanel {
             } else if (choice == 1) {
                 success = exportController.exportToHtml(contactList, selectedDir);
             } else if (choice == 2) {
-                success = exportController.exportMultiple(contactList, selectedDir, "txt", "html");
+                success = exportController.exportToPDF(contactList, selectedDir);
+            } else if (choice == 3) {
+                success = exportController.exportMultiple(contactList, selectedDir, "txt", "html", "pdf");
             }
 
             if (success) {

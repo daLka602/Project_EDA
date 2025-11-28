@@ -26,31 +26,25 @@ public class HashUtil {
     }
 
     /**
-     * NOVO: Hash com salt para maior segurança
+     * Hash com salt para maior segurança
      */
     public static String sha256WithSalt(String input, String salt) {
         return hash(input + salt, "SHA-256");
     }
 
-    /**
-     * NOVO: Gerar salt aleatório
-     */
     public static String generateSalt() {
         byte[] salt = new byte[16];
         secureRandom.nextBytes(salt);
         return Base64.getEncoder().encodeToString(salt);
     }
 
-    /**
-     * NOVO: Verificar hash com salt
-     */
     public static boolean verifyWithSalt(String input, String hash, String salt) {
         String computedHash = sha256WithSalt(input, salt);
         return computedHash.equals(hash);
     }
 
     /**
-     * NOVO: Hash MD5 (apenas para compatibilidade, não seguro)
+     * Hash MD5 (apenas para compatibilidade, não seguro)
      */
     public static String md5(String input) {
         return hash(input, "MD5");
@@ -88,17 +82,11 @@ public class HashUtil {
         }
     }
 
-    /**
-     * NOVO: Verificar força do hash (para migração futura)
-     */
     public static boolean isHashSecure(String hash) {
         if (hash == null) return false;
         return hash.length() == 64; // SHA-256 tem 64 caracteres hex
     }
 
-    /**
-     * NOVO: Benchmark de performance dos algoritmos
-     */
     public static void benchmarkHash(String input, int iterations) {
         logger.info("Iniciando benchmark de hashing...");
         

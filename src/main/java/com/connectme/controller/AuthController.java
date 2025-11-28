@@ -1,6 +1,7 @@
 package com.connectme.controller;
 
 import com.connectme.model.entities.User;
+import com.connectme.model.enums.PasswordStrength;
 import com.connectme.model.service.AuthService;
 import java.util.logging.Logger;
 
@@ -83,7 +84,7 @@ public class AuthController {
     /**
      * Verificar força da senha
      */
-    public AuthService.PasswordStrength checkPasswordStrength(String password) {
+    public PasswordStrength checkPasswordStrength(String password) {
         return authService.checkPasswordStrength(password);
     }
 

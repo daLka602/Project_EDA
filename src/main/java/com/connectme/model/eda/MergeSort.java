@@ -1,5 +1,8 @@
 package com.connectme.model.eda;
 
+import com.connectme.model.eda.componets.Node;
+import com.connectme.model.enums.SortOrder;
+
 import java.util.Comparator;
 
 /**
@@ -7,10 +10,6 @@ import java.util.Comparator;
  * CORREÇÃO: Problema de perda de nós na lista encadeada
  */
 public class MergeSort {
-
-    public enum SortOrder {
-        ASC, DESC
-    }
 
     /**
      * Ordena uma lista encadeada usando MergeSort com ordem especificada
@@ -20,7 +19,7 @@ public class MergeSort {
             return cloneList(list); // SEMPRE retornar nova lista
         }
 
-        GenericLinkedList.Node<T> sorted = sortRec(list.getHead(), comparator, order);
+        Node<T> sorted = sortRec(list.getHead(), comparator, order);
         GenericLinkedList<T> result = new GenericLinkedList<>();
         result.setHead(sorted);
         return result;
@@ -33,53 +32,52 @@ public class MergeSort {
         return sort(list, comparator, SortOrder.ASC);
     }
 
-    private static <T> GenericLinkedList.Node<T> sortRec(GenericLinkedList.Node<T> head, Comparator<T> comparator, SortOrder order) {
-        if (head == null || head.next == null) {
+    private static <T> Node<T> sortRec(Node<T> head, Comparator<T> comparator, SortOrder order) {
+        if (head == null || head.getNext() == null) {
             return head; // Caso base: lista vazia ou com um elemento
         }
 
         // Dividir a lista
-        GenericLinkedList.Node<T> middle = getMiddle(head);
-        GenericLinkedList.Node<T> nextOfMiddle = middle.next;
-        middle.next = null; // Separar as duas metades
+        Node<T> middle = getMiddle(head);
+        Node<T> nextOfMiddle = middle.getNext();
+        middle.setNext(null); // Separar as duas metades
 
         // Ordenar recursivamente
-        GenericLinkedList.Node<T> left = sortRec(head, comparator, order);
-        GenericLinkedList.Node<T> right = sortRec(nextOfMiddle, comparator, order);
+        Node<T> left = sortRec(head, comparator, order);
+        Node<T> right = sortRec(nextOfMiddle, comparator, order);
 
         // Mesclar as listas ordenadas
         return merge(left, right, comparator, order);
     }
 
-    private static <T> GenericLinkedList.Node<T> getMiddle(GenericLinkedList.Node<T> head) {
+    private static <T> Node<T> getMiddle(Node<T> head) {
         if (head == null) return head;
 
-        GenericLinkedList.Node<T> slow = head;
-        GenericLinkedList.Node<T> fast = head;
+        Node<T> slow = head;
+        Node<T> fast = head;
 
-        // CORREÇÃO: Fast avança 2 passos, slow 1 passo
-        while (fast.next != null && fast.next.next != null) {
-            slow = slow.next;
-            fast = fast.next.next;
+        while (fast.getNext() != null && fast.getNext().getNext() != null) {
+            slow = slow.getNext();
+            fast = fast.getNext().getNext();
         }
 
         return slow;
     }
 
-    private static <T> GenericLinkedList.Node<T> merge(GenericLinkedList.Node<T> left,
-                                                       GenericLinkedList.Node<T> right,
+    private static <T> Node<T> merge(Node<T> left,
+                                                       Node<T> right,
                                                        Comparator<T> comparator,
                                                        SortOrder order) {
         // Nó dummy para facilitar a mesclagem
-        GenericLinkedList.Node<T> dummy = new GenericLinkedList.Node<>(null);
-        GenericLinkedList.Node<T> current = dummy;
+        Node<T> dummy = new Node<>(null);
+        Node<T> current = dummy;
 
-        GenericLinkedList.Node<T> leftPtr = left;
-        GenericLinkedList.Node<T> rightPtr = right;
+        Node<T> leftPtr = left;
+        Node<T> rightPtr = right;
 
         // Mesclar enquanto houver elementos em ambas as listas
         while (leftPtr != null && rightPtr != null) {
-            int comparison = comparator.compare(leftPtr.data, rightPtr.data);
+            int comparison = comparator.compare(leftPtr.getData(), rightPtr.getData());
 
             // Aplicar ordem (crescente ou decrescente)
             if (order == SortOrder.DESC) {
@@ -87,23 +85,23 @@ public class MergeSort {
             }
 
             if (comparison <= 0) {
-                current.next = leftPtr;
-                leftPtr = leftPtr.next;
+                current.setNext(leftPtr);
+                leftPtr = leftPtr.getNext();
             } else {
-                current.next = rightPtr;
-                rightPtr = rightPtr.next;
+                current.setNext(rightPtr);
+                rightPtr = rightPtr.getNext();
             }
-            current = current.next;
+            current = current.getNext();
         }
 
         // Adicionar elementos restantes
         if (leftPtr != null) {
-            current.next = leftPtr;
+            current.setNext(leftPtr);
         } else {
-            current.next = rightPtr;
+            current.setNext(rightPtr);
         }
 
-        return dummy.next;
+        return dummy.getNext();
     }
 
     /**

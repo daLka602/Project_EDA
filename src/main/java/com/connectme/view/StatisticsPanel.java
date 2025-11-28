@@ -1,6 +1,7 @@
 package com.connectme.view;
 
 import com.connectme.controller.AdminController;
+import com.connectme.model.util.SystemStatsUtil;
 import com.connectme.view.componet.RoundedBorder;
 import net.miginfocom.swing.MigLayout;
 
@@ -18,7 +19,7 @@ public class StatisticsPanel extends JPanel {
     }
 
     private void initComponents() {
-        AdminController.SystemStats stats = adminController.getSystemStats();
+        SystemStatsUtil stats = adminController.getSystemStats();
 
         // Cards de estatísticas - 4 colunas
         JPanel statsCardsPanel = new JPanel(new MigLayout("", "[25%]15[25%]15[25%]15[25%]", "[]"));

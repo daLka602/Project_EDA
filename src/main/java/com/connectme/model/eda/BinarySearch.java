@@ -9,9 +9,6 @@ import java.util.function.Function;
  */
 public class BinarySearch {
 
-    /**
-     * Busca binária em lista encadeada ordenada
-     */
     public static <T> T search(GenericLinkedList<T> sortedList, String key, Function<T, String> keyExtractor) {
         if (sortedList == null || sortedList.isEmpty() || key == null) {
             return null;
@@ -40,9 +37,6 @@ public class BinarySearch {
         }
     }
 
-    /**
-     * Busca binária em array ordenado
-     */
     public static <T> T searchArray(T[] sortedArray, T target, Comparator<T> comparator) {
         if (sortedArray == null || sortedArray.length == 0 || target == null) {
             return null;

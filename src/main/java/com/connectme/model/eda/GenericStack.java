@@ -1,19 +1,12 @@
 package com.connectme.model.eda;
 
+import com.connectme.model.eda.componets.Node;
+
 /**
  * Stack (Pilha) genérica para implementação de Undo/Redo
  * LIFO - Last In First Out
  */
 public class GenericStack<T> {
-
-    private static class Node<T> {
-        T data;
-        Node<T> next;
-
-        Node(T data) {
-            this.data = data;
-        }
-    }
 
     private Node<T> top;
     private int size;
@@ -38,7 +31,7 @@ public class GenericStack<T> {
         }
 
         Node<T> newNode = new Node<>(data);
-        newNode.next = top;
+        newNode.setNext(top);
         top = newNode;
         size++;
     }
@@ -51,8 +44,8 @@ public class GenericStack<T> {
             return null;
         }
 
-        T data = top.data;
-        top = top.next;
+        T data = top.getData();
+        top = top.getNext();
         size--;
         return data;
     }
@@ -64,7 +57,7 @@ public class GenericStack<T> {
         if (isEmpty()) {
             return null;
         }
-        return top.data;
+        return top.getData();
     }
 
     public boolean isEmpty() {
@@ -93,13 +86,13 @@ public class GenericStack<T> {
         Node<T> current = top;
         Node<T> prev = null;
 
-        while (current.next != null) {
+        while (current.getNext() != null) {
             prev = current;
-            current = current.next;
+            current = current.getNext();
         }
 
         if (prev != null) {
-            prev.next = null;
+            prev.setNext(null);
             size--;
         }
     }
@@ -113,8 +106,8 @@ public class GenericStack<T> {
         int i = 0;
 
         while (current != null) {
-            arr[i++] = current.data;
-            current = current.next;
+            arr[i++] = current.getData();
+            current = current.getNext();
         }
 
         return arr;
@@ -130,11 +123,11 @@ public class GenericStack<T> {
         Node<T> current = top;
 
         while (current != null) {
-            sb.append(current.data);
-            if (current.next != null) {
+            sb.append(current.getData());
+            if (current.getNext() != null) {
                 sb.append(", ");
             }
-            current = current.next;
+            current = current.getNext();
         }
 
         sb.append("]");

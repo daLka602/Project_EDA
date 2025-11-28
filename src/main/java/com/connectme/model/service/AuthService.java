@@ -4,6 +4,7 @@ package com.connectme.model.service;
 import com.connectme.model.dao.IUserDAO;
 import com.connectme.model.dao.UserDAO;
 import com.connectme.model.entities.User;
+import com.connectme.model.enums.PasswordStrength;
 import com.connectme.model.util.HashUtil;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -155,10 +156,5 @@ public class AuthService {
     private boolean isValidPassword(String password) {
         return password != null &&
                 PASSWORD_PATTERN.matcher(password).matches();
-    }
-
-    // Enum para força da senha
-    public enum PasswordStrength {
-        WEAK, MEDIUM, STRONG, VERY_STRONG
     }
 }

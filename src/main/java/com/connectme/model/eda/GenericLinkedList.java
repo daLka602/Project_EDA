@@ -1,15 +1,8 @@
 package com.connectme.model.eda;
 
+import com.connectme.model.eda.componets.Node;
+
 public class GenericLinkedList<T> {
-
-    public static class Node<T> {
-        public T data;
-        public Node<T> next;
-
-        public Node(T data) {
-            this.data = data;
-        }
-    }
 
     private Node<T> head;
     private int size = 0;
@@ -20,8 +13,8 @@ public class GenericLinkedList<T> {
             head = n;
         } else {
             Node<T> cur = head;
-            while (cur.next != null) cur = cur.next;
-            cur.next = n;
+            while (cur.getNext() != null) cur = cur.getNext();
+            cur.setNext(n);
         }
         size++;
     }
@@ -29,20 +22,20 @@ public class GenericLinkedList<T> {
     public boolean remove(T data) {
         if (head == null) return false;
 
-        if (head.data.equals(data)) {
-            head = head.next;
+        if (head.getData().equals(data)) {
+            head = head.getNext();
             size--;
             return true;
         }
 
         Node<T> cur = head;
-        while (cur.next != null) {
-            if (cur.next.data.equals(data)) {
-                cur.next = cur.next.next;
+        while (cur.getNext() != null) {
+            if (cur.getNext().getData().equals(data)) {
+                cur.setNext(cur.getNext().getNext());
                 size--;
                 return true;
             }
-            cur = cur.next;
+            cur = cur.getNext();
         }
         return false;
     }
@@ -50,10 +43,10 @@ public class GenericLinkedList<T> {
     public T find(java.util.function.Predicate<T> predicate) {
         Node<T> cur = head;
         while (cur != null) {
-            if (predicate.test(cur.data)) {
-                return cur.data;
+            if (predicate.test(cur.getData())) {
+                return cur.getData();
             }
-            cur = cur.next;
+            cur = cur.getNext();
         }
         return null;
     }
@@ -62,10 +55,10 @@ public class GenericLinkedList<T> {
         GenericLinkedList<T> results = new GenericLinkedList<>();
         Node<T> cur = head;
         while (cur != null) {
-            if (predicate.test(cur.data)) {
-                results.add(cur.data);
+            if (predicate.test(cur.getData())) {
+                results.add(cur.getData());
             }
-            cur = cur.next;
+            cur = cur.getNext();
         }
         return results;
     }
@@ -92,7 +85,7 @@ public class GenericLinkedList<T> {
         Node<T> cur = head;
         while (cur != null) {
             size++;
-            cur = cur.next;
+            cur = cur.getNext();
         }
     }
 
@@ -106,9 +99,9 @@ public class GenericLinkedList<T> {
 
         Node<T> cur = head;
         for (int i = 0; i < index; i++) {
-            cur = cur.next;
+            cur = cur.getNext();
         }
-        return cur.data;
+        return cur.getData();
     }
 
     public T[] toArray(T[] array) {
@@ -120,8 +113,8 @@ public class GenericLinkedList<T> {
         Node<T> cur = head;
         int i = 0;
         while (cur != null) {
-            array[i++] = cur.data;
-            cur = cur.next;
+            array[i++] = cur.getData();
+            cur = cur.getNext();
         }
 
         if (array.length > size) {
@@ -144,8 +137,8 @@ public class GenericLinkedList<T> {
         GenericLinkedList<T> copy = new GenericLinkedList<>();
         Node<T> current = head;
         while (current != null) {
-            copy.add(current.data);
-            current = current.next;
+            copy.add(current.getData());
+            current = current.getNext();
         }
         return copy;
     }
@@ -167,8 +160,8 @@ public class GenericLinkedList<T> {
 
         public E next() {
             if (!hasNext()) return null;
-            E data = current.data;
-            current = current.next;
+            E data = current.getData();
+            current = current.getNext();
             return data;
         }
     }

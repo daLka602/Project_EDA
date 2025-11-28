@@ -1,0 +1,828 @@
+@startuml
+class com.connectme.view.ContactForm {
+- Contact contact
+- User user
+- ContactController contactController
+- Runnable onSaveCallback
+- JTextField nameField
+- JTextField companyField
+- JTextField phoneField
+- JTextField emailField
+- JComboBox<ContactType> typeCombo
+- JTextField addressField
+- JTextArea descriptionArea
++ <<Create>> ContactForm(JPanel,Contact,User,ContactController,Runnable)
+- void initComponents()
+- JLabel createLabel(String)
+- JTextField createTextField(String)
+- void populateFields()
+- boolean validateForm()
+- boolean isValidPhone(String)
+- boolean isValidEmail(String)
+- void saveContact()
+}
+
+
+class com.connectme.model.util.StringUtils {
++ {static} String normalize(String)
++ {static} String cleanPhoneNumber(String)
++ {static} boolean containsIgnoreCase(String,String)
++ {static} boolean equalsIgnoreCaseAndAccents(String,String)
++ {static} boolean startsWithIgnoreCase(String,String)
+}
+
+class com.connectme.model.eda.componets.Node {
+- T data
+- Node<T> next
+- Node<T> left
++ <<Create>> Node()
++ <<Create>> Node(T)
++ Node<T> getLeft()
++ void setLeft(Node<T>)
++ Node<T> getRight()
++ void setRight(Node<T>)
++ T getData()
++ void setData(T)
++ Node<T> getNext()
++ void setNext(Node<T>)
+}
+
+
+class com.connectme.view.componet.MyPasswordField {
+- Icon prefixIcon
+- Icon suffixIcon
+- String hint
++ <<Create>> MyPasswordField()
++ String getHint()
++ void setHint(String)
++ Icon getPrefixIcon()
++ void setPrefixIcon(Icon)
++ Icon getSuffixIcon()
++ void setSuffixIcon(Icon)
+# void paintComponent(Graphics)
++ void paint(Graphics)
+- void paintIcon(Graphics)
+- void initBorder()
+}
+
+
+class com.connectme.Main {
+- {static} Logger logger
++ {static} void main(String[])
+}
+
+
+class com.connectme.view.componet.MyTextField {
+- Icon prefixIcon
+- Icon suffixIcon
+- String hint
++ <<Create>> MyTextField()
++ String getHint()
++ void setHint(String)
++ Icon getPrefixIcon()
++ void setPrefixIcon(Icon)
++ Icon getSuffixIcon()
++ void setSuffixIcon(Icon)
+# void paintComponent(Graphics)
++ void paint(Graphics)
+- void paintIcon(Graphics)
+- void initBorder()
+}
+
+
+class com.connectme.view.componet.MyButton {
+- Animator animator
+- int targetSize
+- float animatSize
+- Point pressedPoint
+- float alpha
+- Color effectColor
++ <<Create>> MyButton()
+# void paintComponent(Graphics)
+}
+
+
+class com.connectme.model.util.HashUtil {
+- {static} Logger logger
+- {static} SecureRandom secureRandom
++ {static} String sha256(String)
++ {static} String sha512(String)
++ {static} String sha256WithSalt(String,String)
++ {static} String generateSalt()
++ {static} boolean verifyWithSalt(String,String,String)
++ {static} String md5(String)
+- {static} String hash(String,String)
++ {static} boolean isHashSecure(String)
++ {static} void benchmarkHash(String,int)
+}
+
+
+class com.connectme.model.eda.GenericBST {
+- Node<T> root
+- Function<T,String> keyExtractor
++ <<Create>> GenericBST(Function<T,String>)
++ void insert(T)
+- Node<T> insertRec(Node<T>,T)
++ T search(String)
+- T searchRec(Node<T>,String)
++ GenericArrayList<T> searchPartial(String)
+- void searchPartialRec(Node<T>,String,GenericArrayList<T>)
+}
+
+
+class com.connectme.model.util.SystemStatsUtil {
++ int totalUsers
++ int activeUsers
++ int totalContacts
++ double activationRate
++ int customers
++ int partners
++ int suppliers
++ <<Create>> SystemStatsUtil(int,int,int,double,int,int,int)
++ String toString()
+}
+
+
+class com.connectme.model.util.IconUtils {
++ {static} ImageIcon colorizeIcon(ImageIcon,Color)
+}
+
+class com.connectme.view.AdminPanel {
+- User currentUser
+- NavButton statsBtn
+- NavButton usersBtn
+- CardLayout cardLayout
+- JPanel contentPanel
+- StatisticsPanel statisticsPanel
+- UserManagementPanel userManagementPanel
++ <<Create>> AdminPanel(User)
+- void initComponents()
+- void showStatistics()
+- void showUsers()
+- void updateTabButtons(boolean)
++ {static} GenericArrayList<Contact> searchByPhone(GenericLinkedList<Contact>,String)
++ void refreshAll()
+}
+
+
+class com.connectme.view.MainFrame {
+- User currentUser
+- AuthController authController
+- CardLayout cardLayout
+- JPanel contentPanel
+- ContactPanel contactPanel
+- AdminPanel adminPanel
+- NavButton contactsBtn
+- NavButton adminBtn
++ <<Create>> MainFrame(User,AuthController)
+- void initComponents()
+- JPanel createNavBar()
+- String getRoleDisplay(AccessLevel)
+- void showContactPanel()
+- void showAdminPanel()
+- void updateNavButtons(boolean)
+- void handleLogout()
+}
+
+
+enum com.connectme.model.enums.SortOrder {
++  ASC
++  DESC
+}
+
+class com.connectme.model.dao.UserDAO {
+- {static} Logger logger
+- {static} int MIN_PASSWORD_LENGTH
++ boolean create(User)
++ User findByUsername(String)
++ User findById(int)
++ List<User> findAll()
++ boolean update(User)
++ boolean delete(int)
++ boolean authenticate(String,String)
++ void updateLastLogin(int)
++ boolean isPasswordStrong(String)
++ int countAll()
++ User mapResultSetToUser(ResultSet)
++ boolean isValidUser(User)
+}
+
+
+class com.connectme.model.entities.Contact {
+- int id
+- String name
+- String company
+- String phone
+- String email
+- ContactType type
+- String address
+- String description
+- LocalDateTime createDate
++ <<Create>> Contact()
++ <<Create>> Contact(int,String,String,String,String,ContactType,String,String,LocalDateTime)
++ int getId()
++ void setId(int)
++ String getName()
++ void setName(String)
++ String getCompany()
++ void setCompany(String)
++ String getPhone()
++ void setPhone(String)
++ String getEmail()
++ void setEmail(String)
++ ContactType getType()
++ void setType(ContactType)
++ String getAddress()
++ void setAddress(String)
++ String getDescription()
++ void setDescription(String)
++ LocalDateTime getCreateDate()
++ void setCreateDate(LocalDateTime)
+}
+
+
+interface com.connectme.model.dao.IContactDAO {
+~ boolean create(Contact)
+~ boolean update(Contact)
+~ boolean delete(int)
+~ Contact findById(int)
+~ List<Contact> findAll()
+~ List<Contact> findByType(ContactType)
+~ List<Contact> search(String)
+~ int countAll()
+~ List<Contact> findPaginated(int,int)
+~ Contact mapResultSetToContact(ResultSet)
+~ boolean isValidContact(Contact)
+}
+
+enum com.connectme.model.enums.UserStatus {
++  ATIVE
++  BLOCKED
+}
+
+class com.connectme.model.service.AuthService {
+- {static} Logger logger
+- IUserDAO userDAO
+- {static} Pattern USERNAME_PATTERN
+- {static} Pattern PASSWORD_PATTERN
++ <<Create>> AuthService()
++ <<Create>> AuthService(IUserDAO)
++ boolean login(String,String)
++ boolean register(String,String)
++ boolean userExists(String)
++ PasswordStrength checkPasswordStrength(String)
++ User findUser(String)
+- boolean isValidUsername(String)
+- boolean isValidUsernameLoose(String)
+- boolean isValidPassword(String)
+}
+
+
+class com.connectme.view.StatisticsPanel {
+- AdminController adminController
++ <<Create>> StatisticsPanel()
+- void initComponents()
+- JPanel createStatCard(String,String,String,Color)
+- JPanel createDistributionItemTop(String,int,Color)
+- JProgressBar createDistributionBar(int,int,Color)
++ void refreshStatistics()
+}
+
+
+class com.connectme.view.UserFormDialog {
+- User user
+- AdminController adminController
+- Runnable onSaveCallback
+- JTextField nomeField
+- MyTextField emailField
+- MyPasswordField passwordField
+- JComboBox<String> funcaoCombo
+- JCheckBox contaAtivaCheck
++ <<Create>> UserFormDialog(JFrame,User,AdminController,Runnable)
+- void initComponents()
+- JPanel createHeader()
+- JPanel createFormFields()
+- JPanel createButtonPanel()
+- JPanel createInfoBox()
+- void saveUser()
+}
+
+
+class com.connectme.model.eda.componets.Comparators {
++ {static} Comparator<T> stringComparator(Function<T,String>)
++ {static} Comparator<T> integerComparator(Function<T,Integer>)
++ {static} Comparator<T> withOrder(Comparator<T>,SortOrder)
++ {static} Comparator<T> reversed(Comparator<T>)
++ {static} Comparator<T> composite(Comparator<T>)
+}
+
+interface com.connectme.model.dao.IUserDAO {
+~ boolean create(User)
+~ User findByUsername(String)
+~ User findById(int)
+~ List<User> findAll()
+~ boolean update(User)
+~ boolean delete(int)
+~ boolean authenticate(String,String)
+~ void updateLastLogin(int)
+~ boolean isPasswordStrong(String)
+~ int countAll()
+~ User mapResultSetToUser(ResultSet)
+~ boolean isValidUser(User)
+}
+
+class com.connectme.model.eda.MergeSort {
++ {static} GenericLinkedList<T> sort(GenericLinkedList<T>,Comparator<T>,SortOrder)
++ {static} GenericLinkedList<T> sort(GenericLinkedList<T>,Comparator<T>)
+- {static} Node<T> sortRec(Node<T>,Comparator<T>,SortOrder)
+- {static} Node<T> getMiddle(Node<T>)
+- {static} Node<T> merge(Node<T>,Node<T>,Comparator<T>,SortOrder)
+- {static} GenericLinkedList<T> cloneList(GenericLinkedList<T>)
+- {static} T cloneItem(T)
++ {static} void sortArray(T[],Comparator<T>,SortOrder)
++ {static} void sortArray(T[],Comparator<T>)
+- {static} void sortArrayRec(T[],int,int,Comparator<T>,SortOrder)
+- {static} void mergeArrays(T[],int,int,int,Comparator<T>,SortOrder)
+}
+
+class com.connectme.view.componet.RoundedBorder {
+- int radius
+- Color color
++ <<Create>> RoundedBorder(int,Color)
++ void paintBorder(Component,Graphics,int,int,int,int)
++ Insets getBorderInsets(Component)
++ boolean isBorderOpaque()
+}
+
+
+class com.connectme.model.util.ContactStateManager {
+- GenericStack<ListStateUtil> undoStack
+- GenericStack<ListStateUtil> redoStack
+- GenericLinkedList<Contact> currentState
++ <<Create>> ContactStateManager()
++ <<Create>> ContactStateManager(int)
++ void saveState(GenericLinkedList<Contact>,String)
++ GenericLinkedList<Contact> undo()
++ GenericLinkedList<Contact> redo()
++ GenericLinkedList<Contact> getCurrentState()
++ void setCurrentState(GenericLinkedList<Contact>)
++ boolean canUndo()
++ boolean canRedo()
++ String getUndoDescription()
++ String getRedoDescription()
++ int getUndoStackSize()
++ int getRedoStackSize()
++ void clearHistory()
++ String getStateInfo()
++ String[] getUndoHistory()
++ String[] getRedoHistory()
++ GenericLinkedList<Contact> undoMultiple(int)
++ GenericLinkedList<Contact> redoMultiple(int)
++ String toString()
+- GenericLinkedList<Contact> cloneList(GenericLinkedList<Contact>)
+- Contact cloneContact(Contact)
+}
+
+
+class com.connectme.view.componet.RoundedFormBorder {
+- int radius
+- Color color
++ <<Create>> RoundedFormBorder(int,Color)
++ void paintBorder(Component,Graphics,int,int,int,int)
++ Insets getBorderInsets(Component)
++ boolean isBorderOpaque()
+}
+
+
+class com.connectme.controller.AdminController {
+- {static} Logger logger
+- UserDAO userDAO
+- ContactDAO contactDAO
++ <<Create>> AdminController()
++ List<User> listAllUsers()
++ User findUserById(int)
++ User findUserByUsername(String)
++ boolean createUser(User)
++ boolean updateUser(User)
++ boolean deleteUser(int)
++ boolean toggleUserStatus(int)
++ int countTotalUsers()
++ long countActiveUsers()
++ SystemStatsUtil getSystemStats()
+- boolean isValidUser(User)
+}
+
+
+class com.connectme.model.eda.LinearSearch {
++ {static} T search(GenericLinkedList<T>,Predicate<T>)
++ {static} T searchArray(T[],Predicate<T>)
++ {static} GenericLinkedList<T> searchAll(GenericLinkedList<T>,Predicate<T>)
++ {static} GenericArrayList<T> searchAllArray(T[],Predicate<T>)
+}
+
+class com.connectme.model.eda.GenericStack {
+- Node<T> top
+- int size
+- int maxSize
++ <<Create>> GenericStack()
++ <<Create>> GenericStack(int)
++ void push(T)
++ T pop()
++ T peek()
++ boolean isEmpty()
++ int size()
++ void clear()
+- void removeBottom()
++ Object[] toArray()
++ String toString()
+}
+
+
+class com.connectme.model.util.ExportUtil {
++ {static} void exportContactsToPdf(List<Contact>,File)
++ {static} void exportContactsToPdf(List<Contact>,File,String)
+- {static} Cell createCell(String)
++ {static} void exportContactsToTxt(List<Contact>,File)
++ {static} void exportContactsToTxt(List<Contact>,File,String)
+- {static} String centerText(String,int)
+- {static} String truncate(String,int)
+- {static} String nullSafe(String)
++ {static} void exportContactsToHtml(List<Contact>,File)
+- {static} String escapeHtml(String)
+}
+
+class com.connectme.GenerateHashes {
++ {static} void main(String[])
+}
+
+class com.connectme.config.DbConnection {
+- {static} String URL
+- {static} String USER
+- {static} String PASSWORD
+- {static} Logger logger
+- {static} HikariDataSource dataSource
++ {static} Connection getConnection()
++ {static} void initialize()
++ {static} void closeDataSource()
+}
+
+
+class com.connectme.controller.ContactController {
+- ContactDAO contactDAO
+- GenericLinkedList<Contact> cachedContacts
+- GenericBST<Contact> searchIndex
+- GenericHashTable<Contact> phoneIndex
+- ContactStateManager stateManager
++ <<Create>> ContactController()
+- void loadCache()
++ GenericLinkedList<Contact> listAllAsLinkedList()
++ GenericArrayList<Contact> listAllAsArrayList()
++ Contact findById(int)
++ Contact searchByNameFast(String)
++ GenericArrayList<Contact> searchPartialName(String)
++ GenericArrayList<Contact> search(String)
+- boolean matchesContact(Contact,String)
++ GenericArrayList<Contact> filterByType(ContactType)
++ boolean create(Contact)
++ boolean update(Contact)
++ boolean delete(int)
++ boolean undo()
++ boolean redo()
++ boolean canUndo()
++ boolean canRedo()
++ String getUndoDescription()
++ String getRedoDescription()
++ GenericLinkedList<Contact> sortWithMergeSort()
++ GenericLinkedList<Contact> sortWithMergeSort(SortOrder)
++ GenericLinkedList<Contact> sortWithMergeSort(String,SortOrder)
+- GenericLinkedList<Contact> cloneContactList(GenericLinkedList<Contact>)
+- Contact cloneContact(Contact)
++ GenericLinkedList<Contact> sortWithMergeSort(String)
+- Comparator<Contact> getComparatorForField(String)
++ GenericArrayList<Contact> searchByPhone(String)
++ boolean phoneExists(String)
++ boolean emailExists(String)
++ int countAll()
++ int countByType(ContactType)
++ void refreshCache()
+- void rebuildIndexes()
+- GenericArrayList<Contact> linkedListToArrayList(GenericLinkedList<Contact>)
+- boolean syncDatabaseWithState(GenericLinkedList<Contact>)
+- boolean needsUpdate(Contact,Contact)
+- boolean equals(String,String)
+- boolean isValidContact(Contact)
+}
+
+
+class com.connectme.controller.ExportController {
+- {static} Logger logger
++ boolean exportToTxt(List<Contact>,File)
++ boolean exportToHtml(List<Contact>,File)
++ boolean exportToPDF(List<Contact>,File)
++ boolean exportMultiple(List<Contact>,File,String)
+}
+
+
+enum com.connectme.model.enums.AccessLevel {
++  STAFF
++  MANAGER
++  ADMIN
+}
+
+class com.connectme.view.LoginScreen {
+- {static} Logger logger
+- MyTextField usernameField
+- MyPasswordField senhaField
+- MyButton loginBtn
+- JLabel errorLabel
+- AuthController authController
+- Runnable onLoginSuccess
+- User authenticatedUser
++ <<Create>> LoginScreen()
+- void initComponents()
+- void setupListeners()
+- void handleLogin()
++ User getAuthenticatedUser()
++ void setOnLoginSuccess(Runnable)
+}
+
+
+class com.connectme.view.UserManagementPanel {
+- AdminController adminController
+- JPanel cardsPanel
+- JLabel countLabel
++ <<Create>> UserManagementPanel()
+- void initComponents()
+- void loadUserCards()
++ void refreshUsers()
+}
+
+
+class com.connectme.model.eda.GenericLinkedList {
+- Node<T> head
+- int size
++ void add(T)
++ boolean remove(T)
++ T find(java.util.function.Predicate<T>)
++ GenericLinkedList<T> findAll(java.util.function.Predicate<T>)
++ int size()
++ boolean isEmpty()
++ Node<T> getHead()
++ void setHead(Node<T>)
+- void recalculateSize()
++ void clear()
++ T get(int)
++ T[] toArray(T[])
++ {static} GenericLinkedList<T> fromArray(T[])
++ GenericLinkedList<T> copy()
++ Iterator<T> iterator()
+}
+
+
+class com.connectme.model.eda.GenericLinkedList$Iterator {
+- Node<E> current
++ <<Create>> Iterator(Node<E>)
++ boolean hasNext()
++ E next()
+}
+
+
+class com.connectme.model.dao.ContactDAO {
+- {static} Logger logger
++ boolean create(Contact)
++ boolean update(Contact)
++ boolean delete(int)
++ Contact findById(int)
++ List<Contact> findAll()
++ List<Contact> findByType(ContactType)
++ List<Contact> search(String)
++ int countAll()
++ List<Contact> findPaginated(int,int)
++ Contact mapResultSetToContact(ResultSet)
++ boolean isValidContact(Contact)
+}
+
+
+class com.connectme.model.eda.GenericArrayList {
+- Object[] data
+- int size
+- {static} int INITIAL_CAPACITY
++ <<Create>> GenericArrayList()
++ <<Create>> GenericArrayList(int)
++ void add(T)
++ void add(int,T)
++ T get(int)
++ void set(int,T)
++ T remove(int)
++ boolean remove(T)
++ boolean contains(T)
++ int indexOf(T)
++ void clear()
++ int size()
++ boolean isEmpty()
++ T[] toArray(T[])
+- void resize()
++ Iterator<T> iterator()
+}
+
+
+interface com.connectme.model.eda.GenericArrayList$Iterator {
+~ boolean hasNext()
+~ E next()
+}
+
+enum com.connectme.model.enums.ContactType {
++  CUSTOMER
++  PARTNER
++  SUPPLIER
+}
+
+class com.connectme.model.entities.User {
+- int id
+- String username
+- String email
+- String passwordHash
+- AccessLevel role
+- UserStatus status
+- LocalDateTime createDate
+- LocalDateTime lastLogin
++ <<Create>> User()
++ <<Create>> User(int,String,String,String,AccessLevel,UserStatus,LocalDateTime,LocalDateTime)
++ <<Create>> User(String,String)
++ int getId()
++ void setId(int)
++ String getUsername()
++ void setUsername(String)
++ String getEmail()
++ void setEmail(String)
++ String getPasswordHash()
++ void setPasswordHash(String)
++ AccessLevel getRole()
++ void setRole(AccessLevel)
++ UserStatus getStatus()
++ void setStatus(UserStatus)
++ LocalDateTime getCreateDate()
++ void setCreateDate(LocalDateTime)
++ LocalDateTime getLastLogin()
++ void setLastLogin(LocalDateTime)
+}
+
+
+class com.connectme.controller.AuthController {
+- {static} Logger logger
+- AuthService authService
+- User loggedInUser
++ <<Create>> AuthController()
++ boolean login(String,String)
++ void logout()
++ boolean isAuthenticated()
++ User getLoggedInUser()
++ boolean register(String,String)
++ PasswordStrength checkPasswordStrength(String)
++ boolean userExists(String)
+}
+
+
+class com.connectme.view.UserCardPanel {
+- User user
+- AdminController adminController
+- Runnable onEditCallback
+- Runnable onDeleteCallback
++ <<Create>> UserCardPanel(User,AdminController,Runnable,Runnable)
+- void initComponents()
+- String getRoleDisplay(AccessLevel)
+- Color getRoleBadgeColor(AccessLevel)
++ User getUser()
+}
+
+
+class com.connectme.model.eda.componets.Entry {
+- String key
+- T value
+- Entry<T> next
++ <<Create>> Entry(String,T)
++ String getKey()
++ void setKey(String)
++ T getValue()
++ void setValue(T)
++ Entry<T> getNext()
++ void setNext(Entry<T>)
+}
+
+
+class com.connectme.view.ContactPanel {
+- User currentUser
+- ContactController contactController
+- ExportController exportController
+- JTextField searchField
+- JPanel cardsPanel
+- GenericLinkedList<Contact> currentContacts
+- boolean isSorted
+- JLabel countLabel
+- JButton currentFilterBtn
+- NavButton undoBtn
+- NavButton redoBtn
++ <<Create>> ContactPanel(User)
+- void initComponents()
+- JButton createFilterButton(String)
+- void setupPlaceholder(JTextField,String)
+- void loadContacts()
+- void handleRefresh()
+- void updateUndoRedoButtons()
+- void handleUndo()
+- void handleRedo()
+- void applyFilter(ContactType,JButton)
+- void showSortDialog()
+- void performSort(int,int)
+- void performSearch()
+- void updateCards(GenericLinkedList<Contact>)
+- JPanel createContactCard(Contact)
+- Color getTypeBadgeColor(ContactType)
+- String getTypeDisplay(ContactType)
+- void updateCountLabel()
+- void openContactForm(Contact)
+- void deleteContact(Contact)
+- void handleExport()
+- GenericLinkedList<Contact> arrayListToLinkedList(GenericArrayList<Contact>)
+- List<Contact> linkedListToList(GenericLinkedList<Contact>)
+}
+
+
+class com.connectme.model.util.ListStateUtil {
+- GenericLinkedList<Contact> snapshot
+- String description
+- long timestamp
++ <<Create>> ListStateUtil(GenericLinkedList<Contact>,String)
++ GenericLinkedList<Contact> getSnapshot()
++ String getDescription()
++ long getTimestamp()
+- GenericLinkedList<Contact> cloneList(GenericLinkedList<Contact>)
+- Contact cloneContact(Contact)
++ String toString()
+}
+
+
+class com.connectme.model.eda.BinarySearch {
++ {static} T search(GenericLinkedList<T>,String,Function<T,String>)
+- {static} T searchArray(T[],String,int,int,Function<T,String>)
++ {static} T searchArray(T[],T,Comparator<T>)
++ {static} T searchArray(T[],String,Function<T,String>)
+}
+
+enum com.connectme.model.enums.PasswordStrength {
++  WEAK
++  MEDIUM
++  STRONG
++  VERY_STRONG
+}
+
+class com.connectme.view.componet.NavButton {
+- Animator animator
+- int targetSize
+- float animatSize
+- Point pressedPoint
+- float alpha
+- Color effectColor
++ <<Create>> NavButton(String,boolean)
+# void paintComponent(Graphics)
+}
+
+
+class com.connectme.model.eda.GenericHashTable {
+- {static} int INITIAL_SIZE
+- {static} double LOAD_FACTOR
+- Entry<T>[] table
+- int size
+- Function<T,String> keyExtractor
++ <<Create>> GenericHashTable(Function<T,String>)
+- int hash(String)
++ void put(T)
++ T get(String)
++ boolean remove(String)
+- void resize()
++ int size()
+}
+
+
+
+
+com.connectme.view.JDialog <|-- com.connectme.view.ContactForm
+javax.swing.JPasswordField <|-- com.connectme.view.componet.MyPasswordField
+javax.swing.JTextField <|-- com.connectme.view.componet.MyTextField
+com.connectme.view.componet.JButton <|-- com.connectme.view.componet.MyButton
+com.connectme.view.JPanel <|-- com.connectme.view.AdminPanel
+com.connectme.view.JFrame <|-- com.connectme.view.MainFrame
+com.connectme.model.dao.IUserDAO <|.. com.connectme.model.dao.UserDAO
+com.connectme.view.JPanel <|-- com.connectme.view.StatisticsPanel
+com.connectme.view.JDialog <|-- com.connectme.view.UserFormDialog
+javax.swing.border.Border <|.. com.connectme.view.componet.RoundedBorder
+javax.swing.border.Border <|.. com.connectme.view.componet.RoundedFormBorder
+com.connectme.view.JFrame <|-- com.connectme.view.LoginScreen
+com.connectme.view.JPanel <|-- com.connectme.view.UserManagementPanel
+com.connectme.model.eda.GenericLinkedList +.. com.connectme.model.eda.GenericLinkedList$Iterator
+com.connectme.model.dao.IContactDAO <|.. com.connectme.model.dao.ContactDAO
+com.connectme.model.eda.GenericArrayList +.. com.connectme.model.eda.GenericArrayList$Iterator
+com.connectme.view.JPanel <|-- com.connectme.view.UserCardPanel
+com.connectme.view.JPanel <|-- com.connectme.view.ContactPanel
+com.connectme.view.componet.JButton <|-- com.connectme.view.componet.NavButton
+@enduml

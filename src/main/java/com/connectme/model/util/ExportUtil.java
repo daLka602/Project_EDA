@@ -20,7 +20,7 @@ import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.kernel.colors.ColorConstants;
 
-public class PdfUtil {
+public class ExportUtil {
 
     public static void exportContactsToPdf(List<Contact> contacts, File destFile) throws IOException {
         exportContactsToPdf(contacts, destFile, "Lista de Contactos - ConnectMe");

@@ -4,7 +4,9 @@ import com.connectme.model.dao.ContactDAO;
 import com.connectme.model.eda.*;
 import com.connectme.model.entities.Contact;
 import com.connectme.model.enums.ContactType;
-import com.connectme.model.service.ContactStateManager;
+import com.connectme.model.enums.SortOrder;
+import com.connectme.model.util.ContactStateManager;
+import com.connectme.model.eda.componets.Comparators;
 import com.connectme.model.util.StringUtils;
 
 import java.util.Comparator;
@@ -238,7 +240,7 @@ public class ContactController {
      * Ordenar contatos usando MergeSort genérico
      * CORREÇÃO: Sempre trabalhar com cópia da lista
      */
-    public GenericLinkedList<Contact> sortWithMergeSort(MergeSort.SortOrder order) {
+    public GenericLinkedList<Contact> sortWithMergeSort(SortOrder order) {
         // IMPORTANTE: Não modificar cachedContacts, trabalhar com cópia
         GenericLinkedList<Contact> listToSort = cloneContactList(cachedContacts);
         return MergeSort.sort(listToSort, Comparators.stringComparator(Contact::getName), order);
@@ -247,7 +249,7 @@ public class ContactController {
     /**
      * Ordenar por campo específico usando MergeSort
      */
-    public GenericLinkedList<Contact> sortWithMergeSort(String field, MergeSort.SortOrder order) {
+    public GenericLinkedList<Contact> sortWithMergeSort(String field, SortOrder order) {
         // IMPORTANTE: Não modificar cachedContacts, trabalhar com cópia
         GenericLinkedList<Contact> listToSort = cloneContactList(cachedContacts);
         Comparator<Contact> comparator = getComparatorForField(field);
@@ -292,7 +294,7 @@ public class ContactController {
      * Ordenar por campo específico (apenas crescente)
      */
     public GenericLinkedList<Contact> sortWithMergeSort(String field) {
-        return sortWithMergeSort(field, MergeSort.SortOrder.ASC);
+        return sortWithMergeSort(field, SortOrder.ASC);
     }
 
     private Comparator<Contact> getComparatorForField(String field) {
