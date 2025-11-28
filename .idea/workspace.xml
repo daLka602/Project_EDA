@@ -4,7 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="" />
+    <list default="true" id="a028cff4-987a-4dc6-8298-3d7f77a9e036" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/sql/create_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/sql/create_db.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/connectme/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/connectme/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/aplication.properties" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/create_db.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/create_db.sql" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

@@ -109,7 +109,7 @@ mysql -u root -p < sql/create_db.sql
 Edite o arquivo `src/main/java/com/connectme/config/DbConnection.java` e ajuste as credenciais:
 
 ```java
-private static final String URL = "jdbc:mysql://localhost:3306/connectme_db";
+private static final String URL = "jdbc:mysql://localhost:3306/connectme";
 private static final String USER = "seu_usuario";
 private static final String PASSWORD = "sua_senha";
 ```

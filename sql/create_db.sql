@@ -1,27 +1,16 @@
--- MySQL dump 10.13  Distrib 8.0.38, for Linux (x86_64)
---
--- Host: localhost    Database: connectme
--- ------------------------------------------------------
--- Server version	8.4.6-0ubuntu3
+-- ===========================================
+--   CONNECTME - BASE DE DADOS OFICIAL
+-- ===========================================
 
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+DROP DATABASE IF EXISTS connectme;
+CREATE DATABASE connectme;
+USE connectme;
 
---
--- Table structure for table `contacts`
---
+-- ===========================================
+--   Tabela: CONTACTS
+-- ===========================================
 
 DROP TABLE IF EXISTS `contacts`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `contacts` (
   `id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -36,7 +25,7 @@ CREATE TABLE `contacts` (
   KEY `idx_name` (`name`),
   KEY `idx_type` (`type`)
 ) ENGINE=InnoDB AUTO_INCREMENT=522 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `contacts`
@@ -53,8 +42,6 @@ UNLOCK TABLES;
 --
 
 DROP TABLE IF EXISTS `users`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `users` (
   `id` int NOT NULL AUTO_INCREMENT,
   `username` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -69,7 +56,7 @@ CREATE TABLE `users` (
   UNIQUE KEY `email` (`email`),
   KEY `idx_username` (`username`)
 ) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Dumping data for table `users`
@@ -77,17 +64,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (4,'admin','admin@connectme.mz','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9','ADMIN','ATIVE','2025-11-23 23:44:27','2025-11-26 01:37:16'),(5,'carlos','usuario@connectme.mz','240be518fabd2724ddb6f04eeb1da5967483060701e9c5a3c7456ca8343ec7a','STAFF','BLOCKED','2025-11-23 23:44:27',NULL),(6,'manager','manager@connectme.mz','c0bd8f9dfb73aa0c18e3614b5f2deae1f6a8bbe8e0844e0ac89e61e8d96ae3c3','MANAGER','ATIVE','2025-11-23 23:44:27',NULL),(7,'staff','staff@connectme.mz','0de7b23c5b2cdb6ae20dcb8a40ef6ea825d88dcc9dafad5c44dd37cce84e52e3','STAFF','ATIVE','2025-11-23 23:44:27',NULL),(10,'lewis','lewis@connectme.mz','77e24c684075c27b2f528a34bf5534e36787e0c30d763f65c41fdc912939f066','MANAGER','ATIVE','2025-11-25 01:15:02','2025-11-25 14:06:29'),(11,'lewis2','lewis2@connectme.mz','7248f923277738de6d36c804c38c92a401fa07cf81cf6d341191bde792a86309','STAFF','ATIVE','2025-11-25 11:41:30','2025-11-25 14:07:39'),(12,'falaque','falaque@connectme.mz','677ae7828fd618f39351e8e2146a1d33167c34724659f0d30032b8a09e6e1342','ADMIN','ATIVE','2025-11-25 11:54:01',NULL),(13,'kira','kira@connectme.mz','25c154ed7f782dda5db3e63ff82b71c426ffd47923b64f0a9f410222f0caa91b','STAFF','ATIVE','2025-11-25 12:02:28',NULL);
-/*!40000 ALTER TABLE `users` ENABLE KEYS */;
+INSERT INTO `users` VALUES (4,'admin','admin@connectme.mz','240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9','ADMIN','ATIVE','2025-11-23 23:44:27','2025-11-26 01:37:16'),(5,'carlos','usuario@connectme.mz','240be518fabd2724ddb6f04eeb1da5967483060701e9c5a3c7456ca8343ec7a','STAFF','BLOCKED','2025-11-23 23:44:27',NULL),(6,'manager','manager@connectme.mz','c0bd8f9dfb73aa0c18e3614b5f2deae1f6a8bbe8e0844e0ac89e61e8d96ae3c3','MANAGER','ATIVE','2025-11-23 23:44:27',NULL),(7,'staff','staff@connectme.mz','10176e7b7b24d317acfcf8d2064cfd2f24e154f7b5a96603077d5ef813d6a6b6','STAFF','ATIVE','2025-11-23 23:44:27',NULL),(10,'lewis','lewis@connectme.mz','77e24c684075c27b2f528a34bf5534e36787e0c30d763f65c41fdc912939f066','MANAGER','ATIVE','2025-11-25 01:15:02','2025-11-25 14:06:29'),(11,'lewis2','lewis2@connectme.mz','7248f923277738de6d36c804c38c92a401fa07cf81cf6d341191bde792a86309','STAFF','ATIVE','2025-11-25 11:41:30','2025-11-25 14:07:39'),(12,'falaque','falaque@connectme.mz','677ae7828fd618f39351e8e2146a1d33167c34724659f0d30032b8a09e6e1342','ADMIN','ATIVE','2025-11-25 11:54:01',NULL),(13,'kira','kira@connectme.mz','25c154ed7f782dda5db3e63ff82b71c426ffd47923b64f0a9f410222f0caa91b','STAFF','ATIVE','2025-11-25 12:02:28',NULL);
 UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
-
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2025-11-26 13:51:37

@@ -1,5 +1,10 @@
 package com.connectme;
 
+/*Credincias de teste
+    * username: admin senha: admin123
+    * username: staff senha: staff123
+*/
+
 import com.connectme.config.DbConnection;
 import com.connectme.controller.AuthController;
 import com.connectme.view.LoginScreen;
