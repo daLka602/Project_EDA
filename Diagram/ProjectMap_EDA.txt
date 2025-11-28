@@ -1,63 +1,182 @@
-src
-├── main
-│   ├── java
-│   │   └── com
-│   │       └── connectme
-│   │           ├── config
-│   │           │   └── DbConnection.java
-│   │           ├── controller
-│   │           │   ├── AdminController.java
-│   │           │   ├── AuthController.java
-│   │           │   ├── ContactController.java
-│   │           │   └── ExportController.java
-│   │           ├── GenerateHashes.java
-│   │           ├── Main.java
-│   │           ├── model
-│   │           │   ├── dao
-│   │           │   │   ├── ContactDAO.java
-│   │           │   │   ├── IContactDAO.java
-│   │           │   │   ├── IUserDAO.java
-│   │           │   │   └── UserDAO.java
-│   │           │   ├── eda
-│   │           │   │   ├── ContactArrayList.java
-│   │           │   │   ├── ContactBST.java
-│   │           │   │   ├── ContactHashTable.java
-│   │           │   │   ├── ContactLinkedList.java
-│   │           │   │   ├── ContactSearchAlgorithm.java
-│   │           │   │   ├── ContactSorter.java
-│   │           │   │   ├── ContactStack.java
-│   │           │   │   └── ContactStateManager.java
-│   │           │   ├── entities
-│   │           │   │   ├── Contact.java
-│   │           │   │   └── User.java
-│   │           │   ├── enums
-│   │           │   │   ├── AccessLevel.java
-│   │           │   │   ├── ContactType.java
-│   │           │   │   └── UserStatus.java
-│   │           │   ├── service
-│   │           │   │   └── AuthService.java
-│   │           │   └── util
-│   │           │       ├── HashUtil.java
-│   │           │       └── PdfUtil.java
-│   │           └── view
-│   │               ├── AdminPanel.java
-│   │               ├── componet
-│   │               │   ├── MyButton.java
-│   │               │   ├── MyPasswordField.java
-│   │               │   ├── MyTextField.java
-│   │               │   ├── NavButton.java
-│   │               │   ├── RoundedBorder.java
-│   │               │   └── RoundedFormBorder.java
-│   │               ├── ContactForm.java
-│   │               ├── ContactPanel.java
-│   │               ├── icons
-│   │               │   ├── IconGeneratorPNG.java
-│   │               │   ├── IconUtils.java
-│   │               │   └── search.png
-│   │               ├── LoginScreen.java
-│   │               ├── MainFrame.java
-│   │               ├── StatisticsPanel.java
-│   │               ├── UserCardPanel.java
-│   │               ├── UserFormDialog.java
-│   │               └── UserManagementPanel.java
+├── bin
+│   └── test
+│       └── java
+│           └── com
+│               └── connectme
+│                   └── AppTest.class
+├── Diagram
+│   ├── ProjectMap_EDA.txt
+│   ├── UML4.puml
+│   └── UML4.svg
+├── docs
+│   └── Slide EDA-1.pdf
+├── pom.xml
+├── README.md
+├── sql
+│   └── create_db.sql
+├── src
+│   └── main
+│       ├── java
+│       │   └── com
+│       │       └── connectme
+│       │           ├── config
+│       │           │   └── DbConnection.java
+│       │           ├── controller
+│       │           │   ├── AdminController.java
+│       │           │   ├── AuthController.java
+│       │           │   ├── ContactController.java
+│       │           │   └── ExportController.java
+│       │           ├── GenerateHashes.java
+│       │           ├── Main.java
+│       │           ├── model
+│       │           │   ├── dao
+│       │           │   │   ├── ContactDAO.java
+│       │           │   │   ├── IContactDAO.java
+│       │           │   │   ├── IUserDAO.java
+│       │           │   │   └── UserDAO.java
+│       │           │   ├── eda
+│       │           │   │   ├── BinarySearch.java
+│       │           │   │   ├── componets
+│       │           │   │   │   ├── Comparators.java
+│       │           │   │   │   ├── Entry.java
+│       │           │   │   │   └── Node.java
+│       │           │   │   ├── GenericArrayList.java
+│       │           │   │   ├── GenericBST.java
+│       │           │   │   ├── GenericHashTable.java
+│       │           │   │   ├── GenericLinkedList.java
+│       │           │   │   ├── GenericStack.java
+│       │           │   │   ├── LinearSearch.java
+│       │           │   │   └── MergeSort.java
+│       │           │   ├── entities
+│       │           │   │   ├── Contact.java
+│       │           │   │   └── User.java
+│       │           │   ├── enums
+│       │           │   │   ├── AccessLevel.java
+│       │           │   │   ├── ContactType.java
+│       │           │   │   ├── PasswordStrength.java
+│       │           │   │   ├── SortOrder.java
+│       │           │   │   └── UserStatus.java
+│       │           │   ├── service
+│       │           │   │   └── AuthService.java
+│       │           │   └── util
+│       │           │       ├── ContactStateManager.java
+│       │           │       ├── ExportUtil.java
+│       │           │       ├── HashUtil.java
+│       │           │       ├── IconUtils.java
+│       │           │       ├── ListStateUtil.java
+│       │           │       ├── StringUtils.java
+│       │           │       └── SystemStatsUtil.java
+│       │           └── view
+│       │               ├── AdminPanel.java
+│       │               ├── componet
+│       │               │   ├── MyButton.java
+│       │               │   ├── MyPasswordField.java
+│       │               │   ├── MyTextField.java
+│       │               │   ├── NavButton.java
+│       │               │   ├── RoundedBorder.java
+│       │               │   └── RoundedFormBorder.java
+│       │               ├── ContactForm.java
+│       │               ├── ContactPanel.java
+│       │               ├── icons
+│       │               │   └── search.png
+│       │               ├── LoginScreen.java
+│       │               ├── MainFrame.java
+│       │               ├── StatisticsPanel.java
+│       │               ├── UserCardPanel.java
+│       │               ├── UserFormDialog.java
+│       │               └── UserManagementPanel.java
+│       └── resources
+│           ├── aplication.properties
+│           └── create_db.sql
+└── target
+    ├── classes
+    │   ├── aplication.properties
+    │   └── com
+    │       └── connectme
+    │           ├── config
+    │           │   └── DbConnection.class
+    │           ├── controller
+    │           │   ├── AdminController.class
+    │           │   ├── AuthController.class
+    │           │   ├── ContactController.class
+    │           │   └── ExportController.class
+    │           ├── GenerateHashes.class
+    │           ├── Main.class
+    │           ├── model
+    │           │   ├── dao
+    │           │   │   ├── ContactDAO.class
+    │           │   │   ├── IContactDAO.class
+    │           │   │   ├── IUserDAO.class
+    │           │   │   └── UserDAO.class
+    │           │   ├── eda
+    │           │   │   ├── BinarySearch.class
+    │           │   │   ├── componets
+    │           │   │   │   ├── Comparators.class
+    │           │   │   │   ├── Entry.class
+    │           │   │   │   └── Node.class
+    │           │   │   ├── GenericArrayList$1.class
+    │           │   │   ├── GenericArrayList$Iterator.class
+    │           │   │   ├── GenericArrayList.class
+    │           │   │   ├── GenericBST.class
+    │           │   │   ├── GenericHashTable.class
+    │           │   │   ├── GenericLinkedList$Iterator.class
+    │           │   │   ├── GenericLinkedList.class
+    │           │   │   ├── GenericStack.class
+    │           │   │   ├── LinearSearch.class
+    │           │   │   └── MergeSort.class
+    │           │   ├── entities
+    │           │   │   ├── Contact.class
+    │           │   │   └── User.class
+    │           │   ├── enums
+    │           │   │   ├── AccessLevel.class
+    │           │   │   ├── ContactType.class
+    │           │   │   ├── PasswordStrength.class
+    │           │   │   ├── SortOrder.class
+    │           │   │   └── UserStatus.class
+    │           │   ├── service
+    │           │   │   └── AuthService.class
+    │           │   └── util
+    │           │       ├── ContactStateManager.class
+    │           │       ├── ExportUtil.class
+    │           │       ├── HashUtil.class
+    │           │       ├── IconUtils.class
+    │           │       ├── ListStateUtil.class
+    │           │       ├── StringUtils.class
+    │           │       └── SystemStatsUtil.class
+    │           └── view
+    │               ├── AdminPanel.class
+    │               ├── componet
+    │               │   ├── MyButton$1.class
+    │               │   ├── MyButton$2.class
+    │               │   ├── MyButton.class
+    │               │   ├── MyPasswordField.class
+    │               │   ├── MyTextField.class
+    │               │   ├── NavButton.class
+    │               │   ├── RoundedBorder.class
+    │               │   └── RoundedFormBorder.class
+    │               ├── ContactForm$1.class
+    │               ├── ContactForm$2.class
+    │               ├── ContactForm.class
+    │               ├── ContactPanel$1.class
+    │               ├── ContactPanel$2.class
+    │               ├── ContactPanel.class
+    │               ├── icons
+    │               │   └── search.png
+    │               ├── LoginScreen.class
+    │               ├── MainFrame.class
+    │               ├── StatisticsPanel.class
+    │               ├── UserCardPanel.class
+    │               ├── UserFormDialog.class
+    │               └── UserManagementPanel.class
+    ├── generated-sources
+    │   └── annotations
+    ├── maven-status
+    │   └── maven-compiler-plugin
+    │       └── compile
+    │           └── default-compile
+    │               ├── createdFiles.lst
+    │               └── inputFiles.lst
+    └── test-classes
+        └── com
+            └── connectme
 
